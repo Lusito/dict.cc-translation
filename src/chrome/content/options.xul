@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ***** BEGIN LICENSE BLOCK *****
+
+  - Author: Santo Pfingsten (Roughael)
+
+  - This file is part of The Firefox Dict.cc Addon.
+
+  - The Firefox Dict.cc Addon is free software: you can redistribute it and/or modify
+  - it under the terms of the GNU General Public License as published by
+  - the Free Software Foundation, either version 3 of the License, or
+  - (at your option) any later version.
+
+  - The Firefox Dict.cc Addon is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  - GNU General Public License for more details.
+
+  - You should have received a copy of the GNU General Public License
+  - along with The Firefox Dict.cc Addon.  If not, see http://www.gnu.org/licenses/.
+
+  - ***** END LICENSE BLOCK ***** -->
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!DOCTYPE prefwindow SYSTEM "chrome://searchdictcc/locale/options.dtd">
+<prefwindow id="searchdictcc-preferences" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="&prefWindow.title;"
+	onload="SearchDictCC_Options.onLoad()" ondialogaccept="return SearchDictCC_Options.onAccept();" onbeforeaccept="return SearchDictCC_Options.onBeforeAccept();" windowtype="searchdict_options">
+	<script type="application/x-javascript">
+		Components.utils.import("resource://searchdictcc-modules/options.jsm");
+		SearchDictCC_Options.init(document);
+	</script>
+
+	<prefpane id="dictcc-preferences-dialog" label="&prefPane.title;">
+		<preferences>
+			<preference id="context.enabled" name="extensions.searchdictcc.context.enabled" type="bool"/>
+			<preference id="context.showFirst" name="extensions.searchdictcc.context.showFirst" type="bool"/>
+			<preference id="context.method" name="extensions.searchdictcc.context.method" type="int"/>
+			<preference id="context.multiWindow" name="extensions.searchdictcc.context.multiWindow" type="bool"/>
+
+			<preference id="quick.enabled" name="extensions.searchdictcc.quick.enabled" type="bool"/>
+			<preference id="quick.ctrl" name="extensions.searchdictcc.quick.ctrl" type="bool"/>
+			<preference id="quick.shift" name="extensions.searchdictcc.quick.shift" type="bool"/>
+			<preference id="quick.alt" name="extensions.searchdictcc.quick.alt" type="bool"/>
+			<preference id="quick.right" name="extensions.searchdictcc.quick.right" type="bool"/>
+			<preference id="quick.selected" name="extensions.searchdictcc.quick.selected" type="bool"/>
+			<preference id="quick.method" name="extensions.searchdictcc.quick.method" type="int"/>
+			<preference id="quick.multiWindow" name="extensions.searchdictcc.quick.multiWindow" type="bool"/>
+			<preference id="quick.fixGestures" name="extensions.searchdictcc.quick.fixGestures" type="bool"/>
+		</preferences>
+		<tabbox>
+			<tabs>
+				<tab label="&tabs.context.title;"/>
+				<tab label="&tabs.quick.title;"/>
+				<tab label="&tabs.language.title;"/>
+			</tabs>
+		<tabpanels>
+			<tabpanel id="menutab">
+				<vbox>
+					<checkbox id="contextEnabled" preference="context.enabled" oncommand="SearchDictCC_Options.updateEnabledItems();"
+							label="&tabs.context.enable;" tooltiptext="&tabs.context.enable.tooltip;"/>
+					<groupbox>
+						<caption label="&tabs.results.title;"/>
+						<radiogroup id="contextMethod" preference="context.method" oncommand="SearchDictCC_Options.updateEnabledItems();">
+							<radio label="&tabs.results.syn;" value="0"/>
+							<radio label="&tabs.results.pocket;" value="1"/>
+							<radio label="&tabs.results.tab;" value="2"/>
+						</radiogroup>
+					</groupbox>
+				</vbox>
+				<vbox>
+					<checkbox id="contextShowFirst" preference="context.showFirst"
+							label="&tabs.context.showFirst;" tooltiptext="&tabs.context.showFirst.tooltip;"/>
+					<checkbox id="contextMultiWindow" preference="context.multiWindow"
+							label="&tabs.context.multiWindow;" tooltiptext="&tabs.context.multiWindow.tooltip;"/>
+				</vbox>
+			</tabpanel>
+			<tabpanel id="quicktab">
+				<vbox>
+					<checkbox id="quickEnabled" preference="quick.enabled" oncommand="SearchDictCC_Options.updateEnabledItems();"
+							label="&tabs.quick.enable;" tooltiptext="&tabs.quick.enable.tooltip;"/>
+					<groupbox>
+						<caption label="&tabs.quick.keys.title;"/>
+						<hbox>
+							<checkbox id="quickCtrl" preference="quick.ctrl" label="&tabs.quick.keys.ctrl;" tooltiptext="&tabs.quick.keys.ctrl.tooltip;"/>
+							<checkbox id="quickShift" preference="quick.shift" label="&tabs.quick.keys.shift;" tooltiptext="&tabs.quick.keys.shift.tooltip;"/>
+							<checkbox id="quickAlt" preference="quick.alt" label="&tabs.quick.keys.alt;" tooltiptext="&tabs.quick.keys.alt.tooltip;"/>
+						</hbox>
+					</groupbox>
+					<groupbox>
+						<caption label="&tabs.results.title;"/>
+						<radiogroup id="quickMethod" preference="quick.method" oncommand="SearchDictCC_Options.updateEnabledItems();">
+							<radio label="&tabs.results.syn;" value="0"/>
+							<radio label="&tabs.results.pocket;" value="1"/>
+							<radio label="&tabs.results.tab;" value="2"/>
+							<radio label="&tabs.results.mini;" value="3"/>
+						</radiogroup>
+					</groupbox>
+				</vbox>
+				<vbox>
+					<checkbox id="quickSelected" preference="quick.selected"
+							label="&tabs.quick.selected;" tooltiptext="&tabs.quick.selected.tooltip;"/>
+					<checkbox id="quickRight" preference="quick.right"
+							label="&tabs.quick.right;" tooltiptext="&tabs.quick.right.tooltip;"/>
+					<checkbox id="quickFixGestures" preference="quick.fixGestures"
+							label="&tabs.quick.fixGestures;" tooltiptext="&tabs.quick.fixGestures.tooltip;"/>
+					<checkbox id="quickMultiWindow" preference="quick.multiWindow"
+							label="&tabs.quick.multiWindow;" tooltiptext="&tabs.quick.multiWindow.tooltip;"/>
+				</vbox>
+			</tabpanel>
+			<tabpanel id="languagetab">
+				<vbox>
+					<listbox id="translations" flex="1" width="200" tooltiptext="&tabs.language.list.tooltip;">
+						<listhead>
+							<listheader label="&tabs.language.list.label;"/>
+							<listheader label="&tabs.language.list.subdomain;"/>
+						</listhead>
+					</listbox>
+				</vbox>
+				<vbox>
+					<groupbox>
+						<caption label="&tabs.language.modify.title;"/>
+						<button id="up" oncommand="SearchDictCC_Options.onMoveUp();"
+									label="&tabs.language.modify.up;" tooltiptext="&tabs.language.modify.up.tooltip;"/>
+						<button id="down" oncommand="SearchDictCC_Options.onMoveDown();"
+									label="&tabs.language.modify.down;" tooltiptext="&tabs.language.modify.down.tooltip;"/>
+						<button id="edit" oncommand="SearchDictCC_Options.onEdit();"
+									label="&tabs.language.modify.edit;" tooltiptext="&tabs.language.modify.edit.tooltip;"/>
+						<hbox>
+							<button id="remove" oncommand="SearchDictCC_Options.onRemove();" flex="1"
+									label="&tabs.language.modify.remove;" tooltiptext="&tabs.language.modify.remove.tooltip;"/>
+							<button id="removeAll" oncommand="SearchDictCC_Options.onRemoveAll();" flex="1"
+									label="&tabs.language.modify.removeAll;" tooltiptext="&tabs.language.modify.removeAll.tooltip;"/>
+						</hbox>
+					</groupbox>
+					<groupbox>
+						<caption label="&tabs.language.add.title;"/>
+						<grid>
+							<columns>
+								<column flex="1"/>
+								<column flex="5"/>
+								<column flex="1"/>
+							</columns>
+							<rows>
+								<row align="center">
+									<label control="firstLanguage" value="&tabs.language.add.first.before;"/>
+									<menulist id="firstLanguage" oncommand="SearchDictCC_Options.updateSecondLanguageList();"
+											label="&tabs.language.add.first;" tooltiptext="&tabs.language.add.first.tooltip;">
+										<menupopup id="firstLanguagePopup">
+											<menuitem label=""/>
+											<menuitem label=""/>
+										</menupopup>
+									</menulist>
+									<button id="manual" oncommand="SearchDictCC_Options.onManualAdd();" style="color:#900"
+											label="&tabs.language.add.manual;" tooltiptext="&tabs.language.add.manual.tooltip;"/>
+								</row>
+								<row align="center">
+									<label control="secondLanguage" value="&tabs.language.add.second.before;"/>
+									<menulist id="secondLanguage" label="&tabs.language.add.second;" tooltiptext="&tabs.language.add.second.tooltip;">
+										<menupopup id="secondLanguagePopup" style="max-height: 300px;">
+											<menuitem label=""/>
+										</menupopup>
+									</menulist>
+									<button id="update" oncommand="SearchDictCC_Options.onRefresh();" style="color:#090"
+											label="&tabs.language.add.refresh;" tooltiptext="&tabs.language.add.refresh.tooltip;"/>
+									<progressmeter hidden="true" id="updateProgress" mode="undetermined" style="min-width:0; width:50px;"/>
+								</row>
+								<row align="center">
+									<label control="languageDirection" value="&tabs.language.add.direction.before;"/>
+									<menulist id="languageDirection" label="&tabs.language.add.direction;" tooltiptext="&tabs.language.add.direction.tooltip;">
+										<menupopup>
+											<menuitem label="&tabs.language.add.direction.toBoth;"/>
+											<menuitem label="&tabs.language.add.direction.toSecond;"/>
+											<menuitem label="&tabs.language.add.direction.toFirst;"/>
+										</menupopup>
+									</menulist>
+									<button id="add" oncommand="SearchDictCC_Options.onAdd();" label="&tabs.language.add.do;" tooltiptext="&tabs.language.add.do.tooltip;"/>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+				</vbox>
+			</tabpanel>
+		</tabpanels>
+		</tabbox>
+	</prefpane>
+</prefwindow>

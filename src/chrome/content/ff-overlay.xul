@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ***** BEGIN LICENSE BLOCK *****
+
+  - Author: Santo Pfingsten (Roughael)
+
+  - This file is part of The Firefox Dict.cc Addon.
+
+  - The Firefox Dict.cc Addon is free software: you can redistribute it and/or modify
+  - it under the terms of the GNU General Public License as published by
+  - the Free Software Foundation, either version 3 of the License, or
+  - (at your option) any later version.
+
+  - The Firefox Dict.cc Addon is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  - GNU General Public License for more details.
+
+  - You should have received a copy of the GNU General Public License
+  - along with The Firefox Dict.cc Addon.  If not, see http://www.gnu.org/licenses/.
+
+  - ***** END LICENSE BLOCK ***** -->
+
+<?xml-stylesheet href="chrome://searchdictcc/skin/overlay.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://searchdictcc/locale/overlay.dtd">
+<overlay id="searchdictcc-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<script type="application/x-javascript" src="ff-overlay.js"/>
+
+	<popup id="contentAreaContextMenu">
+		<menu id="searchdictcc-menu" accesskey="&context.accesskey;"
+				class="menuitem-iconic searchdictcc-icon" label="&context.label;">
+			<menupopup id="searchdictcc-menu-popup">
+				<menuseparator/>
+				<menuitem id="searchdictcc-menu-options" oncommand="Components.utils.import('resource://searchdictcc-modules/options.jsm'); SearchDictCC_Options.show(window);"
+					class="menuitem-iconic searchdictcc-icon" label="&context.options;"/>
+			</menupopup>
+		</menu>
+	</popup>
+</overlay>

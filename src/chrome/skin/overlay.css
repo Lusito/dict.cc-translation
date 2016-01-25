@@ -1,0 +1,80 @@
+/* This is just an example.  You shouldn't do this. */
+.searchdictcc-icon
+{
+  list-style-image: url("chrome://searchdictcc/skin/favicon.ico");
+}
+.searchdictcc-icon-image
+{
+  list-style-image: url("chrome://searchdictcc/skin/dictcc.png");
+}
+
+#ffdictcc_mini, #ffdictcc_mini a, #ffdictcc_mini a:hover, #ffdictcc_mini a:visited,
+#ffdictcc_mini_result, #ffdictcc_mini_extra, #ffdictcc_mini img, #ffdictcc_mini_close {
+	padding: 0;
+	margin: 0;
+	background: none;
+	border: 0;
+	width: auto;
+	height: auto;
+	max-width: none;
+	max-height: none;
+	color: #000;
+	font: 13px Arial;
+	overflow: visible;
+	line-height: 100%;
+	text-align: left;
+}
+
+#ffdictcc_mini {
+	position: absolute;
+	padding: 4px;
+	padding-bottom: 2px;
+	z-index: 999999;
+	background: #F0F0F0;
+	border: 1px solid #C8C8C8;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	white-space: nowrap;
+	display: block;
+}
+
+#ffdictcc_mini a {
+	color: #666;
+	text-decoration: none;
+	cursor: pointer;
+}
+#ffdictcc_mini a:hover {
+	color: #666;
+	text-decoration: underline;
+	cursor: pointer;
+}
+#ffdictcc_mini_result {
+	line-height: 16px;
+	vertical-align: top;
+	padding-right: 4px;
+	padding-left: 4px;
+}
+#ffdictcc_mini_extra {
+	border-top: 1px dotted #C8C8C8;
+	padding-top: 3px;
+	margin: 1px 2px 2px 10px;
+	line-height: 120%;
+}
+#ffdictcc_mini img {
+	bottom: 0;
+	border: 0;
+}
+#ffdictcc_mini_close {
+	position: absolute;
+	right: -5px;
+	top: -5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	background: #F0F0F0;
+	border: 1px solid #C8C8C8;
+	line-height: 100%;
+	padding: 0 2px;
+	margin: auto;
+	text-align: center;
+	cursor: pointer;
+}
