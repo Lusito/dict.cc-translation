@@ -8,10 +8,7 @@
     "author": "Santo Pfingsten",
     "homepage": "https://addons.mozilla.org/en-US/firefox/addon/dictcc-translation/",
     "license": "LGPL-3.0",
-    "icon": {
-        "16": "resource://searchdictcc/data/dictcc.png",
-        "64": "resource://searchdictcc/data/dictcc_big.png"
-    },
+    "icon": "icon.png",
     "engines": {
         "firefox": ">=38.0a1"
     },
