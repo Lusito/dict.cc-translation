@@ -2,59 +2,60 @@
 <html>
     <head>
         <link href="options.css" type="text/css" rel="stylesheet">
-        <title data-l10n-id="options_dialog_title"></title>
+        <title data-l10n-id="prefPane_title"></title>
     </head>
     <body>
-        <div id="title">Dict.cc Translation Settings</div>
+        <div id="tooltip"></div>
+        <div id="title" data-l10n-id="prefPane_title"></div>
         <div id="tabs">
-            <div data-l10n-id="options_tab_context" class="active">Context</div>
-            <div data-l10n-id="options_tab_quick">Quick</div>
-            <div data-l10n-id="options_tab_translation">Translation List</div>
+            <div data-l10n-id="tabs_context_title" class="active"></div>
+            <div data-l10n-id="tabs_quick_title"></div>
+            <div data-l10n-id="tabs_language_title"></div>
         </div>
         <div id="pages">
             <div class="active">
                 <div>
-                    <div><input type="checkbox" id="contextEnable"><label for="contextEnable">Enable context menu</label></div>
+                    <div><input type="checkbox" id="contextEnable"><label for="contextEnable" data-l10n-id="tabs_context_enable"></label></div>
                     <fieldset>
-                        <legend>Show Results in</legend>
-                        <div><input type="radio" name="contextMethod" id="contextMethod0" value="0"><label for="contextMethod0">Overlay Panel (All Details)</label></div>
-                        <div><input type="radio" name="contextMethod" id="contextMethod1" value="1"><label for="contextMethod1">Overlay Panel (Pocket Version)</label></div>
-                        <div><input type="radio" name="contextMethod" id="contextMethod2" value="2"><label for="contextMethod2">New Tab (Regular Dict.cc)</label></div>
+                        <legend data-l10n-id="tabs_results_title"></legend>
+                        <div><input type="radio" name="contextMethod" id="contextMethod0" value="0"><label for="contextMethod0" data-l10n-id="tabs_results_syn"></label></div>
+                        <div><input type="radio" name="contextMethod" id="contextMethod1" value="1"><label for="contextMethod1" data-l10n-id="tabs_results_pocket"></label></div>
+                        <div><input type="radio" name="contextMethod" id="contextMethod2" value="2"><label for="contextMethod2" data-l10n-id="tabs_results_tab"></label></div>
                     </fieldset>
                 </div>
                 <div>
-                    <div><input type="checkbox" id="contextShowFirst"><label for="contextShowFirst">Show first translation at top level</label></div>
-                    <div><input type="checkbox" id="contextMultiwindow"><label for="contextMultiwindow">Create a new tab for every request</label></div>
+                    <div><input type="checkbox" id="contextShowFirst"><label for="contextShowFirst" data-l10n-id="tabs_context_showFirst"></label></div>
+                    <div><input type="checkbox" id="contextMultiwindow"><label for="contextMultiwindow" data-l10n-id="tabs_context_multiWindow"></label></div>
                 </div>
             </div>
             <div>
                 <div>
-                    <div><input type="checkbox" id="quickEnable"><label for="quickEnable">Enable quick click</label></div>
+                    <div><input type="checkbox" id="quickEnable"><label for="quickEnable" data-l10n-id="tabs_quick_enable"></label></div>
                     <fieldset>
-                        <legend>Keys to press (simultaneously)</legend>
-                        <input type="checkbox" id="quickCtrl"><label for="quickCtrl">Ctrl</label>
-                        <input type="checkbox" id="quickShift"><label for="quickShift">Shift</label>
-                        <input type="checkbox" id="quickAlt"><label for="quickAlt">Alt</label>
+                        <legend data-l10n-id="tabs_quick_keys_title"></legend>
+                        <input type="checkbox" id="quickCtrl"><label for="quickCtrl" data-l10n-id="tabs_quick_keys_ctrl"></label>
+                        <input type="checkbox" id="quickShift"><label for="quickShift" data-l10n-id="tabs_quick_keys_shift"></label>
+                        <input type="checkbox" id="quickAlt"><label for="quickAlt" data-l10n-id="tabs_quick_keys_alt"></label>
                     </fieldset>
                     <fieldset>
-                        <legend>Show Results in</legend>
-                        <div><input type="radio" name="quickMethod" id="quickMethod0" value="0"><label for="quickMethod0">Overlay Panel (All Details)</label></div>
-                        <div><input type="radio" name="quickMethod" id="quickMethod1" value="1"><label for="quickMethod1">Overlay Panel (Pocket Version)</label></div>
-                        <div><input type="radio" name="quickMethod" id="quickMethod2" value="2"><label for="quickMethod2">New Tab (Regular Dict.cc)</label></div>
-                        <div><input type="radio" name="quickMethod" id="quickMethod3" value="3"><label for="quickMethod3">Overlay Panel (Micro)</label></div>
+                        <legend data-l10n-id="tabs_results_title">Show Results in</legend>
+                        <div><input type="radio" name="quickMethod" id="quickMethod0" value="0"><label for="quickMethod0" data-l10n-id="tabs_results_syn"></label></div>
+                        <div><input type="radio" name="quickMethod" id="quickMethod1" value="1"><label for="quickMethod1" data-l10n-id="tabs_results_pocket"></label></div>
+                        <div><input type="radio" name="quickMethod" id="quickMethod2" value="2"><label for="quickMethod2" data-l10n-id="tabs_results_tab"></label></div>
+                        <div><input type="radio" name="quickMethod" id="quickMethod3" value="3"><label for="quickMethod3" data-l10n-id="tabs_results_mini"></label></div>
                     </fieldset>
                 </div>
                 <div>
-                    <div><input type="checkbox" id="quickSelected"><label for="quickSelected">Use selected text if available</label></div>
-                    <div><input type="checkbox" id="quickRight"><label for="quickRight">Enable right click for more options</label></div>
-                    <div><input type="checkbox" id="quickFixGestures"><label for="quickFixGestures">Enable fix for mouse gestures</label></div>
-                    <div><input type="checkbox" id="quickMultiwindow"><label for="quickMultiwindow">Create a new tab for every request</label></div>
+                    <div><input type="checkbox" id="quickSelected"><label for="quickSelected" data-l10n-id="tabs_quick_selected"></label></div>
+                    <div><input type="checkbox" id="quickRight"><label for="quickRight" data-l10n-id="tabs_quick_right"></label></div>
+                    <div><input type="checkbox" id="quickFixGestures"><label for="quickFixGestures" data-l10n-id="tabs_quick_fixGestures"></label></div>
+                    <div><input type="checkbox" id="quickMultiwindow"><label for="quickMultiwindow" data-l10n-id="tabs_context_multiWindow"></label></div>
                 </div>
             </div>
             <div>
                 <div>
                     <table id="translationsTableHead">
-                        <tr><th>Label</th><th width="100px">Subdomain</th></tr>
+                        <tr><th data-l10n-id="tabs_language_list_label"></th><th width="100px" data-l10n-id="tabs_language_list_subdomain"></th></tr>
                     </table>
                     <div id="translationsTable">
                         <table>
@@ -85,27 +86,27 @@
                 </div>
                 <div>
                     <fieldset>
-                        <legend>Modify</legend>
-                        <button class="full" id="moveUp">Move entry up</button>
-                        <button class="full" id="moveDown">Move entry down</button>
-                        <button class="full" id="editLabel">Edit label</button>
-                        <button class="half1" id="remove">Remove entry</button>
-                        <button class="half2" id="clear">Clear list</button>
+                        <legend data-l10n-id="tabs_language_modify_title"></legend>
+                        <button class="full" id="moveUp" data-l10n-id="tabs_language_modify_up"></button>
+                        <button class="full" id="moveDown" data-l10n-id="tabs_language_modify_down"></button>
+                        <button class="full" id="editLabel" data-l10n-id="tabs_language_modify_edit"></button>
+                        <button class="half1" id="remove" data-l10n-id="tabs_language_modify_remove"></button>
+                        <button class="half2" id="clear" data-l10n-id="tabs_language_modify_removeAll"></button>
                     </fieldset>
                     <fieldset>
-                        <legend>Add new entry</legend>
+                        <legend data-l10n-id="tabs_language_add_title"></legend>
                         <table>
-                            <tr><td width="10px">First:</td><td><select></select></td><td width="80px"><button id="manual">Manual</button></td></tr>
-                            <tr><td>Second:</td><td><select></select></td><td><button id="refresh">Refresh</button></td></tr>
-                            <tr><td>Direction:</td><td><select></select></td><td><button id="add">Add</button></td></tr>
+                            <tr><td width="10px" data-l10n-id="tabs_language_add_first_before"></td><td><select data-l10n-id="tabs_language_add_first"></select></td><td width="80px"><button id="manual" data-l10n-id="tabs_language_add_manual"></button></td></tr>
+                            <tr><td data-l10n-id="tabs_language_add_second_before"></td><td><select data-l10n-id="tabs_language_add_second"></select></td><td><button id="refresh" data-l10n-id="tabs_language_add_refresh"></button></td></tr>
+                            <tr><td data-l10n-id="tabs_language_add_direction_before"></td><td><select data-l10n-id="tabs_language_add_direction"></select></td><td><button id="add" data-l10n-id="tabs_language_add_do"></button></td></tr>
                         </table>
                     </fieldset>
                 </div>
             </div>
         </div>
         <div id="buttons">
-            <button id="save">Save</button>
-            <button id="cancel">Cancel</button>
+            <button id="save" data-l10n-id="button_save"></button>
+            <button id="cancel" data-l10n-id="button_cancel"></button>
         </div>
     </body>
 </html>

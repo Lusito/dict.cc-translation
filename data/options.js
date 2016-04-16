@@ -44,7 +44,43 @@ for(var i=0; i<tabs.length; i++)
 
 self.port.on('show', function (prefs) {
     preferences = prefs;
-    console.log(prefs['translation.list']);
+    
 });
+
+var tooltip = byId('tooltip');
+function moveTooltip(x, y) {
+    tooltip.style.left = 0;
+    tooltip.style.top = 0;
+    var width = tooltip.clientWidth;
+    var height = tooltip.clientHeight;
+    if(y > document.body.clientHeight/2)
+        tooltip.style.top = (y-height) + 'px';
+    else
+        tooltip.style.top = y + 'px';
+    if(x > document.body.clientWidth/2)
+        tooltip.style.left = (x - width - 8) + 'px';
+    else
+        tooltip.style.left = (x + 15) + 'px';
+}
+function showTooltip(x, y, title) {
+    tooltip.textContent = title;
+    tooltip.className = 'visible';
+    moveTooltip(x, y);
+}
+function hideTooltip() {
+    tooltip.className = '';
+}
+document.body.addEventListener('mousemove', function(e) {
+    moveTooltip(e.clientX, e.clientY);
+});
+function registerTooltip(element) {
+    element.addEventListener('mouseover', function(e) {
+        showTooltip(e.clientX, e.clientY, element.title);
+    });
+    element.addEventListener('mouseout', hideTooltip);
+}
+var titledElements = document.querySelectorAll('[title]');
+for(var i=0; i<titledElements.length; i++)
+    registerTooltip(titledElements[i]);
 
 self.port.emit('init');
