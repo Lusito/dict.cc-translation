@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link href="options.css" type="text/css" rel="stylesheet">
+        <title data-l10n-id="options_dialog_title"></title>
+    </head>
+    <body>
+        <div id="title">Dict.cc Translation Settings</div>
+        <div id="tabs">
+            <div data-l10n-id="options_tab_context" class="active">Context</div>
+            <div data-l10n-id="options_tab_quick">Quick</div>
+            <div data-l10n-id="options_tab_translation">Translation List</div>
+        </div>
+        <div id="pages">
+            <div class="active">
+                <div>
+                    <div><input type="checkbox" id="contextEnable"><label for="contextEnable">Enable context menu</label></div>
+                    <fieldset>
+                        <legend>Show Results in</legend>
+                        <div><input type="radio" name="contextMethod" id="contextMethod0" value="0"><label for="contextMethod0">Overlay Panel (All Details)</label></div>
+                        <div><input type="radio" name="contextMethod" id="contextMethod1" value="1"><label for="contextMethod1">Overlay Panel (Pocket Version)</label></div>
+                        <div><input type="radio" name="contextMethod" id="contextMethod2" value="2"><label for="contextMethod2">New Tab (Regular Dict.cc)</label></div>
+                    </fieldset>
+                </div>
+                <div>
+                    <div><input type="checkbox" id="contextShowFirst"><label for="contextShowFirst">Show first translation at top level</label></div>
+                    <div><input type="checkbox" id="contextMultiwindow"><label for="contextMultiwindow">Create a new tab for every request</label></div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <div><input type="checkbox" id="quickEnable"><label for="quickEnable">Enable quick click</label></div>
+                    <fieldset>
+                        <legend>Keys to press (simultaneously)</legend>
+                        <input type="checkbox" id="quickCtrl"><label for="quickCtrl">Ctrl</label>
+                        <input type="checkbox" id="quickShift"><label for="quickShift">Shift</label>
+                        <input type="checkbox" id="quickAlt"><label for="quickAlt">Alt</label>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Show Results in</legend>
+                        <div><input type="radio" name="quickMethod" id="quickMethod0" value="0"><label for="quickMethod0">Overlay Panel (All Details)</label></div>
+                        <div><input type="radio" name="quickMethod" id="quickMethod1" value="1"><label for="quickMethod1">Overlay Panel (Pocket Version)</label></div>
+                        <div><input type="radio" name="quickMethod" id="quickMethod2" value="2"><label for="quickMethod2">New Tab (Regular Dict.cc)</label></div>
+                        <div><input type="radio" name="quickMethod" id="quickMethod3" value="3"><label for="quickMethod3">Overlay Panel (Micro)</label></div>
+                    </fieldset>
+                </div>
+                <div>
+                    <div><input type="checkbox" id="quickSelected"><label for="quickSelected">Use selected text if available</label></div>
+                    <div><input type="checkbox" id="quickRight"><label for="quickRight">Enable right click for more options</label></div>
+                    <div><input type="checkbox" id="quickFixGestures"><label for="quickFixGestures">Enable fix for mouse gestures</label></div>
+                    <div><input type="checkbox" id="quickMultiwindow"><label for="quickMultiwindow">Create a new tab for every request</label></div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <table id="translationsTableHead">
+                        <tr><th>Label</th><th width="100px">Subdomain</th></tr>
+                    </table>
+                    <div id="translationsTable">
+                        <table>
+                            <tbody id="translationsTableBody">
+                                <tr><td>EN-DE</td><td width="100px">en-de</td></tr>
+                                <tr><td>EN-DE</td><td>en-de</td></tr>
+                                <tr class="active"><td>EN-DE</td><td>en-de</td></tr>
+                                <tr><td>EN-DE</td><td>en-de</td></tr>
+                                <tr><td>EN-DE</td><td>en-de</td></tr>
+                                <tr><td>EN-DE</td><td>en-de</td></tr>
+                                <tr><td>EN-DE</td><td>en-de</td></tr>
+                                <tr><td>EN-DE</td><td>en-de</td></tr>
+                                <tr><td>EN-DE</td><td>en-de</td></tr>
+                                <tr><td>EN-DE</td><td>en-de</td></tr>
+                                <tr><td>EN-DE</td><td>en-de</td></tr>
+                                <tr><td>EN-DE</td><td>en-de</td></tr>
+                                <tr><td>EN-DE</td><td>en-de</td></tr>
+                                <tr><td>EN-DE</td><td>en-de</td></tr>
+                                <tr><td>EN-DE</td><td>en-de</td></tr>
+                                <tr><td>EN-DE</td><td>en-de</td></tr>
+                                <tr><td>EN-DE</td><td>en-de</td></tr>
+                                <tr><td>EN-DE</td><td>en-de</td></tr>
+                                <tr><td>EN-DE</td><td>en-de</td></tr>
+                                <tr><td>EN-DE</td><td>en-de</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <fieldset>
+                        <legend>Modify</legend>
+                        <button class="full" id="moveUp">Move entry up</button>
+                        <button class="full" id="moveDown">Move entry down</button>
+                        <button class="full" id="editLabel">Edit label</button>
+                        <button class="half1" id="remove">Remove entry</button>
+                        <button class="half2" id="clear">Clear list</button>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Add new entry</legend>
+                        <table>
+                            <tr><td width="10px">First:</td><td><select></select></td><td width="80px"><button id="manual">Manual</button></td></tr>
+                            <tr><td>Second:</td><td><select></select></td><td><button id="refresh">Refresh</button></td></tr>
+                            <tr><td>Direction:</td><td><select></select></td><td><button id="add">Add</button></td></tr>
+                        </table>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+        <div id="buttons">
+            <button id="save">Save</button>
+            <button id="cancel">Cancel</button>
+        </div>
+    </body>
+</html>

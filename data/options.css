@@ -1,0 +1,133 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: #F0F0F0;
+    font-family: sans-serif;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+#tabs {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    height: 25px;
+    display: flex;
+    flex-direction: row;
+    z-index: 10;
+    font-size: 15px;
+}
+input:disabled+label {
+    color: gray;
+}
+#title {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    font-weight: bold;
+    font-size: 15px;
+}
+#tabs > div {
+    background: lightgray;
+    border: 1px solid black;
+    padding: 2px 4px;
+    cursor: pointer;
+}
+#tabs > div:not(:first-child) {
+    border-left-width: 0;
+}
+#tabs > div.active {
+    background: white;
+    border-bottom: white;
+}
+#pages {
+    position: absolute;
+    top: 34px;
+    left: 10px;
+    right: 10px;
+    bottom: 45px;
+    border: 1px solid black;
+    padding: 10px;
+    background: white;
+}
+#pages > div {
+    height: 100%;
+    overflow: auto;
+    display: flex;
+    flex-direction: row;
+}
+#pages > div:not(.active) {
+    display: none;
+}
+#pages > div > *:first-child {
+    margin-right: 10px;
+}
+#pages > div > div {
+    flex-grow: 1;
+    box-sizing: border-box;
+    position: relative;
+}
+#pages > div > div > *:not(:last-child) {
+    margin-bottom: 5px;
+}
+#buttons {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    height: 25px;
+    text-align: right;
+}
+fieldset {
+    border-style: solid;
+    box-sizing: border-box;
+}
+th, td {
+    text-align: left;
+}
+button.full {
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+}
+button.half1,
+button.half2 {
+    width: calc(50% - 20px);
+    margin-bottom: 5px;
+}
+button.half2 {
+    float: right;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+table button,
+table select {
+    width: 100%;
+}
+#translationsTable {
+    border: 1px solid black;
+    cursor: default;
+    overflow-y: scroll;
+    position: absolute;
+    top: 20px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+#translationsTableHead th:last-child {
+    text-align: right;
+    padding-right: 20px;
+}
+#translationsTable td:last-child {
+    text-align: center;
+}
+#translationsTableHead {
+    margin: 0 1px;
+}
+#translationsTable tr.active {
+    background: highlight;
+}

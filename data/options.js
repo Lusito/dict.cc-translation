@@ -19,32 +19,32 @@
  
  * ***** END LICENSE BLOCK ***** */
 
-var panel = require("sdk/panel");
-var self = require("sdk/self");
-var translator = require("./translator");
+var preferences = {};
 
-//fixme: reuse panel
-exports.create = function(x, y, onInit) {
-    var p = panel.Panel({
-        position: {
-            left: x,
-            top: y
-        },
-        width: 50,
-        height: 20,
-        contentURL: self.data.url('minilayer.html'),
-        contentScriptWhen: 'ready',
-        contentScriptFile: self.data.url('minilayer.js')
+function byId(id) {
+    return document.getElementById(id);
+}
+function on(node, event, callback) {
+    node.addEventListener(event, callback);
+}
+var tabs = document.querySelectorAll('#tabs > div');
+var pages = document.querySelectorAll('#pages > div');
+
+function linkTab(tab) {
+    on(tab, 'click', function() {
+        for(var i=0; i<tabs.length; i++) {
+            var className = tabs[i] === tab ? 'active' : '';
+            tabs[i].className = className;
+            pages[i].className = className;
+        }
     });
-    p.port.on('init', function (w, h) {
-        p.resize(w, h);
-        onInit(p);
-    });
-    p.port.on('resize', function (w, h) {
-        p.resize(w, h);
-    });
-    p.port.on('requestTranslation', function(text, subdomain) {
-        translator.loadTranslation(p, text, subdomain);
-    });
-    p.show();
-};
+}
+for(var i=0; i<tabs.length; i++)
+    linkTab(tabs[i]);
+
+self.port.on('show', function (prefs) {
+    preferences = prefs;
+    console.log(prefs['translation.list']);
+});
+
+self.port.emit('init');

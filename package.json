@@ -15,20 +15,119 @@
     "permissions": {
         "cross-domain-content": ["http://*.dict.cc/"]
     },
-    "preferences": [{
-            "name": "somePreference",
-            "title": "Some preference title",
-            "description": "Some short description for the preference",
-            "type": "string",
-            "value": "this is the default string value"
+    "preferences": [
+        {
+            "type": "control",
+            "label": "Options",
+            "name": "options",
+            "title": "Open the options dialog"
         },
         {
-            "description": "How many of them we have.",
-            "name": "myInteger",
+            "name": "translation.list",
+            "title": "Use the options dialog please",
+            "type": "string",
+            "value": "www{|}DE<>EN{!}en-de{|}EN->DE{!}de-en{|}DE->EN{!}enpl{|}EN<>PL{!}ennl{|}EN<>NL{!}deit{|}DE<>IT{!}dept{|}DE<>PT",
+            "hidden": true
+        },
+        {
+            "name": "translation.languages",
+            "title": "Use the options dialog please",
+            "type": "string",
+            "value": "SQ{|}Albanian{!}BS{|}Bosnian{!}BG{|}Bulgarian{!}HR{|}Croatian{!}CS{|}Czech{!}DA{|}Danish{!}NL{|}Dutch{!}EO{|}Esperanto{!}FI{|}Finnish{!}FR{|}French{!}EL{|}Greek{!}HU{|}Hungarian{!}IS{|}Icelandic{!}IT{|}Italian{!}NO{|}Norwegian{!}PL{|}Polish{!}PT{|}Portuguese{!}RO{|}Romanian{!}RU{|}Russian{!}SR{|}Serbian{!}SK{|}Slovak{!}ES{|}Spanish{!}SV{|}Swedish{!}TR{|}Turkish{!}LA{|}Latin",
+            "hidden": true
+        },
+        {
+            "name": "context.enabled",
+            "title": "Use the options dialog please",
+            "type": "bool",
+            "value": true,
+            "hidden": true
+        },
+        {
+            "name": "context.showFirst",
+            "title": "Use the options dialog please",
+            "type": "bool",
+            "value": true,
+            "hidden": true
+        },
+        {
+            "name": "context.method",
+            "title": "Use the options dialog please",
             "type": "integer",
-            "value": 8,
-            "title": "How Many?"
-        }],
+            "value": 3,
+            "hidden": true
+        },
+        {
+            "name": "context.multiWindow",
+            "title": "Use the options dialog please",
+            "type": "bool",
+            "value": false,
+            "hidden": true
+        },
+        {
+            "name": "quick.enabled",
+            "title": "Use the options dialog please",
+            "type": "bool",
+            "value": true,
+            "hidden": true
+        },
+        {
+            "name": "quick.right",
+            "title": "Use the options dialog please",
+            "type": "bool",
+            "value": true,
+            "hidden": true
+        },
+        {
+            "name": "quick.ctrl",
+            "title": "Use the options dialog please",
+            "type": "bool",
+            "value": false,
+            "hidden": true
+        },
+        {
+            "name": "quick.shift",
+            "title": "Use the options dialog please",
+            "type": "bool",
+            "value": false,
+            "hidden": true
+        },
+        {
+            "name": "quick.alt",
+            "title": "Use the options dialog please",
+            "type": "bool",
+            "value": true,
+            "hidden": true
+        },
+        {
+            "name": "quick.selected",
+            "title": "Use the options dialog please",
+            "type": "bool",
+            "value": true,
+            "hidden": true
+        },
+        {
+            "name": "quick.method",
+            "title": "Use the options dialog please",
+            "type": "integer",
+            "value": 3,
+            "hidden": true
+        },
+        {
+            "name": "quick.multiWindow",
+            "title": "Use the options dialog please",
+            "type": "bool",
+            "value": false,
+            "hidden": true
+        },
+        {
+            "name": "quick.fixGestures",
+            "title": "Use the options dialog please",
+            "type": "bool",
+            "value": false,
+            "hidden": true
+        }
+    ],
     "keywords": [
         "jetpack"
     ]
