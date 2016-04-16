@@ -1,0 +1,54 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body > div {
+    display: flex;
+    flex-direction: row;
+}
+
+body {
+    padding: 5px;
+    white-space: nowrap;
+    color: #000;
+    font: 13px Arial;
+    background: #F0F0F0;
+}
+
+a:first-child {
+    height: 16px;
+}
+
+a {
+    color: #666;
+    text-decoration: none;
+    cursor: pointer;
+}
+a:hover {
+    color: #666;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#result {
+    line-height: 16px;
+    vertical-align: top;
+    padding: 0 4px;
+}
+
+#extra {
+    display: none;
+    border-top: 1px dotted #C8C8C8;
+    margin: 0;
+}
+
+body.menu #extra {
+    display: block;
+    padding: 2px 0 2px 10px;
+}
+
+body.menu #result {
+    font-weight: bold;
+}
