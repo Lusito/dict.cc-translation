@@ -30,6 +30,8 @@ function setupMiniLayer(text, extraNodes) {
     removeAllChildren(miniResults);
     if (text)
         miniResults.appendChild(document.createTextNode(text));
+    else
+        miniResults.innerHTML = '';
     if (!extraNodes) {
         document.body.className = '';
     } else {
