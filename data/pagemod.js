@@ -119,11 +119,11 @@ window.addEventListener("mousedown", function (e) {
             action = 'menu';
         }
     }
-    //fixme: rocket gestures
+    //fixme: rocker gestures
 
     if (action !== null) {
         if (text)
-            self.port.emit('requestQuickTranslation', e.pageX, e.pageY, text, action === 'menu');
+            self.port.emit('requestQuickTranslation', e.screenX , e.screenY, text, action === 'menu');
 
         e.preventDefault();
         e.stopPropagation();

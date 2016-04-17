@@ -49,11 +49,11 @@ function removeAllChildren(node) {
 
 function createMenuEntry(text, translation) {
     var link = document.createElement("a");
-    var subdomain = translation.subdomain;
+    var subdomain = translation.k;
     link.addEventListener("click", function () {
         self.port.emit("requestTranslation", text, subdomain);
     }, false);
-    link.textContent = translation.label;
+    link.textContent = translation.v;
     return link;
 }
 
@@ -97,4 +97,4 @@ function showMessage(text) {
 self.port.on('showMessage', showMessage);
 self.port.on('showMenu', showMenu);
 self.port.on('showResult', showResult);
-self.port.emit('init', document.body.scrollWidth, document.body.scrollHeight);
+self.port.emit('init');

@@ -58,11 +58,11 @@ var checkedDisableElements = {
     ],
     "quick_method0": [],
     "quick_method1": [],
-    "quick_method2": [ byId("quick_multiWindow") ],
+    "quick_method2": [byId("quick_multiWindow")],
     "quick_method3": [],
     "context_method0": [],
     "context_method1": [],
-    "context_method2": [ byId("context_multiWindow") ]
+    "context_method2": [byId("context_multiWindow")]
 };
 
 function createButton(labelL10nKey, callback) {
@@ -86,7 +86,7 @@ function createDialog(className, titleL10nKey, buttons) {
     dialog.appendChild(contentNode);
     dialog.appendChild(buttonsNode);
     var buttonNodes = {};
-    for(var key in buttons) {
+    for (var key in buttons) {
         var button = createButton(key, buttons[key]);
         buttonNodes[key] = button;
         buttonsNode.appendChild(button);
@@ -97,7 +97,7 @@ function createDialog(className, titleL10nKey, buttons) {
         domNode: dialog,
         contentNode: contentNode,
         buttonNodes: buttonNodes,
-        close: function() {
+        close: function () {
             document.body.removeChild(overlay);
         }
     };
@@ -105,18 +105,18 @@ function createDialog(className, titleL10nKey, buttons) {
 
 function alert(titleL10nKey, contentL10nKey, content, callback) {
     var dialog = createDialog('alert', titleL10nKey, {
-        'alert_ok': function() {
+        'alert_ok': function () {
             dialog.close();
-            if(callback)
+            if (callback)
                 callback();
         }
     });
-    if(contentL10nKey)
+    if (contentL10nKey)
         dialog.contentNode.setAttribute('data-l10n-id', contentL10nKey);
-    if(content)
+    if (content)
         dialog.contentNode.textContent = content;
     var l10n = ['alert_ok', titleL10nKey];
-    if(contentL10nKey)
+    if (contentL10nKey)
         l10n.push(contentL10nKey);
     dialog.buttonNodes.alert_ok.focus();
     self.port.emit('requestTranslation', l10n);
@@ -124,21 +124,21 @@ function alert(titleL10nKey, contentL10nKey, content, callback) {
 
 function confirm(titleL10nKey, contentL10nKey, content, callback) {
     var dialog = createDialog('confirm', titleL10nKey, {
-        'confirm_ok': function() {
+        'confirm_ok': function () {
             dialog.close();
             callback(true);
         },
-        'confirm_cancel': function() {
+        'confirm_cancel': function () {
             dialog.close();
             callback(false);
         }
     });
-    if(contentL10nKey)
+    if (contentL10nKey)
         dialog.contentNode.setAttribute('data-l10n-id', contentL10nKey);
-    if(content)
+    if (content)
         dialog.contentNode.textContent = content;
     var l10n = ['confirm_ok', 'confirm_cancel', titleL10nKey];
-    if(contentL10nKey)
+    if (contentL10nKey)
         l10n.push(contentL10nKey);
     dialog.buttonNodes.confirm_ok.focus();
     self.port.emit('requestTranslation', l10n);
@@ -148,11 +148,11 @@ function prompt(titleL10nKey, value, callback) {
     var input = document.createElement('input');
     input.value = value;
     var dialog = createDialog('prompt', titleL10nKey, {
-        'prompt_ok': function() {
+        'prompt_ok': function () {
             dialog.close();
             callback(input.value);
         },
-        'prompt_cancel': function() {
+        'prompt_cancel': function () {
             dialog.close();
             callback(null);
         }
@@ -274,7 +274,7 @@ function addTranslationRow(label, subdomain) {
     var cell1 = document.createElement('td');
     cell1.textContent = subdomain;
     row.appendChild(cell1);
-    
+
     on(row, 'click', function () {
         var actives = document.querySelectorAll('#translation_list .active');
         for (var i = 0; i < actives.length; i++)
@@ -284,10 +284,6 @@ function addTranslationRow(label, subdomain) {
     });
     on(row, 'dblclick', function () {
         startLabelEdit(row);
-    });
-    
-    on(row, 'keypress', function (e) {
-        //Fixme: remove
     });
 }
 function unserializeTranslations(value) {
@@ -325,7 +321,7 @@ function serializeLanguages() {
     var options = secondLanguage.children;
     for (var i = 0; i < options.length; i++) {
         var option = options[i];
-        if(option.value !== 'DE' && option.value !== 'EN')
+        if (option.value !== 'DE' && option.value !== 'EN')
             list.push({k: option.value, v: option.textContent});
     }
     return JSON.stringify(list);
@@ -371,107 +367,107 @@ function storePreferences() {
 }
 
 function updateDisabledElements() {
-    for(var key in checkedDisableElements) {
+    for (var key in checkedDisableElements) {
         var elements = checkedDisableElements[key];
-        for(var i=0; i<elements.length; i++)
+        for (var i = 0; i < elements.length; i++)
             elements[i].disabled = false;
     }
-    for(var key in checkedDisableElements) {
-        if(!byId(key).checked) {
+    for (var key in checkedDisableElements) {
+        if (!byId(key).checked) {
             var elements = checkedDisableElements[key];
-            for(var i=0; i<elements.length; i++)
+            for (var i = 0; i < elements.length; i++)
                 elements[i].disabled = true;
         }
     }
 }
 function initializeDisabledConnections() {
-    for(var key in checkedDisableElements) {
+    for (var key in checkedDisableElements) {
         on(byId(key), 'click', updateDisabledElements);
     }
 }
 function startLabelEdit(row) {
     var cell = row.children[0];
-    prompt('enterLabel', cell.textContent, function(value) {
-        if(value)
+    prompt('enterLabel', cell.textContent, function (value) {
+        if (value)
             cell.textContent = value;
     });
 }
 function initializeTranslationButtons() {
-    on(byId('moveUp'), 'click', function() {
-        if(selectedTranslationRow) {
+    on(byId('moveUp'), 'click', function () {
+        if (selectedTranslationRow) {
             var prev = selectedTranslationRow.previousElementSibling;
-            if(prev) {
+            if (prev) {
                 var parent = selectedTranslationRow.parentElement;
                 parent.insertBefore(selectedTranslationRow, prev);
             }
         }
     });
-    on(byId('moveDown'), 'click', function() {
-        if(selectedTranslationRow) {
+    on(byId('moveDown'), 'click', function () {
+        if (selectedTranslationRow) {
             var next = selectedTranslationRow.nextElementSibling;
-            if(next) {
+            if (next) {
                 var parent = selectedTranslationRow.parentElement;
                 parent.insertBefore(selectedTranslationRow, next.nextElementSibling);
             }
         }
     });
-    on(byId('editLabel'), 'click', function() {
+    on(byId('editLabel'), 'click', function () {
         var row = selectedTranslationRow;
-        if(row)
+        if (row)
             startLabelEdit(row);
     });
-    on(byId('remove'), 'click', function() {
+    on(byId('remove'), 'click', function () {
         var row = selectedTranslationRow;
-        if(row) {
+        if (row) {
             var label = row.children[0].textContent;
-            confirm('confirm_delete', null, label, function(result) {
-                if(result) {
+            confirm('confirm_delete', null, label, function (result) {
+                if (result) {
                     selectedTranslationRow = row.nextElementSibling || row.previousElementSibling;
-                    if(selectedTranslationRow)
+                    if (selectedTranslationRow)
                         selectedTranslationRow.className = 'active';
                     row.parentElement.removeChild(row);
                 }
             });
         }
     });
-    on(byId('clear'), 'click', function() {
-        confirm('confirm_delete', 'confirm_removeAll', null, function(result) {
-            if(result)
+    on(byId('clear'), 'click', function () {
+        confirm('confirm_delete', 'confirm_removeAll', null, function (result) {
+            if (result)
                 translationList.innerHTML = '';
         });
     });
-    on(byId('manual'), 'click', function() {
-        prompt('enterSubdomain', "www", function(subdomain) {
-            if(subdomain) {
-                prompt('enterLabel', "DE=>EN", function(label) {
-                    if(label)
+    on(byId('manual'), 'click', function () {
+        prompt('enterSubdomain', "www", function (subdomain) {
+            if (subdomain) {
+                prompt('enterLabel', "DE=>EN", function (label) {
+                    if (label)
                         addTranslationRow(label, subdomain);
                 });
             }
         });
     });
-    on(byId('refresh'), 'click', function() {
+    on(byId('refresh'), 'click', function () {
         setLanguageLoading(true);
         self.port.emit('requestLanguageUpdate');
     });
-    on(byId('add'), 'click', function() {
+    on(byId('add'), 'click', function () {
         var first = firstLanguage.value;
         var second = secondLanguage.value;
         var dir = languageDirection.value;
-        
+
         var label, subdomain;
-        if(dir === 'both') {
+        if (dir === 'both') {
             subdomain = first.toLowerCase() + second.toLowerCase();
             label = first.toUpperCase() + '<>' + second.toUpperCase();
-        } else if(dir === 'second') {
+        } else if (dir === 'second') {
             subdomain = first.toLowerCase() + '-' + second.toLowerCase();
             label = first.toUpperCase() + '->' + second.toUpperCase();
         } else {
             subdomain = second.toLowerCase() + '-' + first.toLowerCase();
             label = second.toUpperCase() + '->' + first.toUpperCase();
         }
-        prompt('enterLabel', label, function(value) {
-            if(value)
+        prompt('enterLabel', label, function (value) {
+            if (value)
                 addTranslationRow(value, subdomain);
         });
     });
@@ -482,19 +478,20 @@ function setLanguageLoading(loading) {
     byId('refresh').style.display = loading ? 'none' : '';
     byId('loadingIndicator').style.display = loading ? 'block' : '';
 }
-function onLanguageListUpdate(languages, error) {
+function onLanguageListUpdate(languages) {
     setLanguageLoading(false);
-    if(!error)
+    if (languages && languages.length > 0)
         setLanguageList(languages);
     else
         alert('alert_title_error', 'refreshFailed');
 }
 
-on(byId('cancel'), 'click', function() {
+on(byId('cancel'), 'click', function () {
     self.port.emit('cancel');
 });
-on(byId('save'), 'click', function() {
-    if(!byId('quick_enabled').checked  || byId('quick_ctrl').checked
+
+on(byId('save'), 'click', function () {
+    if (!byId('quick_enabled').checked || byId('quick_ctrl').checked
             || byId('quick_shift').checked || byId('quick_alt').checked) {
         storePreferences();
         self.port.emit('save', preferences);
@@ -520,11 +517,11 @@ self.port.on('show', function (prefs) {
 
 //byId('title').innerHTML = '<div data-l10n-id="prefPane_title">ddd</div>';
 //self.port.emit('requestTranslation', ['prefPane_title']);
-self.port.on('translationResult', function(map) {
-    for(var key in map) {
+self.port.on('translationResult', function (map) {
+    for (var key in map) {
         var value = map[key];
         var elements = document.querySelectorAll('[data-l10n-id=' + key + ']');
-        for(var i=0; i<elements.length; i++)
+        for (var i = 0; i < elements.length; i++)
             elements[i].textContent = value;
     }
 });
