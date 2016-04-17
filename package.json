@@ -54,7 +54,7 @@
             "name": "context.method",
             "title": "Use the options dialog please",
             "type": "integer",
-            "value": 3,
+            "value": 2,
             "hidden": true
         },
         {

@@ -62,10 +62,11 @@ input:disabled+label {
 #pages > div:not(.active) {
     display: none;
 }
-#pages > div > *:first-child {
+#pages > div > div:first-child {
     margin-right: 10px;
 }
 #pages > div > div {
+    width: 50%;
     flex-grow: 1;
     box-sizing: border-box;
     position: relative;
@@ -80,6 +81,12 @@ input:disabled+label {
     bottom: 10px;
     height: 25px;
     text-align: right;
+}
+#manual {
+    color: #990000;
+}
+#refresh {
+    color: #009900;
 }
 fieldset {
     border-style: solid;
@@ -118,19 +125,24 @@ table select {
     bottom: 0;
     left: 0;
     right: 0;
+    -moz-user-select: none;
 }
 #translationsTableHead th:last-child {
     text-align: right;
     padding-right: 20px;
 }
 #translationsTable td:last-child {
-    text-align: center;
+    text-align: left;
 }
 #translationsTableHead {
     margin: 0 1px;
 }
 #translationsTable tr.active {
     background: highlight;
+}
+#translationsTableHead th,
+#translation_list td {
+    padding-left: 5px;
 }
 #tooltip {
     position: absolute;
