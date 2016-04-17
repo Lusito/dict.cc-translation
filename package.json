@@ -26,14 +26,14 @@
             "name": "translation.list",
             "title": "Use the options dialog please",
             "type": "string",
-            "value": "www{|}DE<>EN{!}en-de{|}EN->DE{!}de-en{|}DE->EN{!}enpl{|}EN<>PL{!}ennl{|}EN<>NL{!}deit{|}DE<>IT{!}dept{|}DE<>PT",
+            "value": "[{\"k\":\"www\",\"v\":\"DE<>EN\"},{\"k\":\"en-de\",\"v\":\"EN->DE\"},{\"k\":\"de-en\",\"v\":\"DE->EN\"},{\"k\":\"enpl\",\"v\":\"EN<>PL\"},{\"k\":\"ennl\",\"v\":\"EN<>NL\"},{\"k\":\"deit\",\"v\":\"DE<>IT\"},{\"k\":\"dept\",\"v\":\"DE<>PT\"}]",
             "hidden": true
         },
         {
             "name": "translation.languages",
             "title": "Use the options dialog please",
             "type": "string",
-            "value": "SQ{|}Albanian{!}BS{|}Bosnian{!}BG{|}Bulgarian{!}HR{|}Croatian{!}CS{|}Czech{!}DA{|}Danish{!}NL{|}Dutch{!}EO{|}Esperanto{!}FI{|}Finnish{!}FR{|}French{!}EL{|}Greek{!}HU{|}Hungarian{!}IS{|}Icelandic{!}IT{|}Italian{!}NO{|}Norwegian{!}PL{|}Polish{!}PT{|}Portuguese{!}RO{|}Romanian{!}RU{|}Russian{!}SR{|}Serbian{!}SK{|}Slovak{!}ES{|}Spanish{!}SV{|}Swedish{!}TR{|}Turkish{!}LA{|}Latin",
+            "value": "[{\"k\":\"SQ\",\"v\":\"Albanian\"},{\"k\":\"BS\",\"v\":\"Bosnian\"},{\"k\":\"BG\",\"v\":\"Bulgarian\"},{\"k\":\"HR\",\"v\":\"Croatian\"},{\"k\":\"CS\",\"v\":\"Czech\"},{\"k\":\"DA\",\"v\":\"Danish\"},{\"k\":\"NL\",\"v\":\"Dutch\"},{\"k\":\"EO\",\"v\":\"Esperanto\"},{\"k\":\"FI\",\"v\":\"Finnish\"},{\"k\":\"FR\",\"v\":\"French\"},{\"k\":\"EL\",\"v\":\"Greek\"},{\"k\":\"HU\",\"v\":\"Hungarian\"},{\"k\":\"IS\",\"v\":\"Icelandic\"},{\"k\":\"IT\",\"v\":\"Italian\"},{\"k\":\"NO\",\"v\":\"Norwegian\"},{\"k\":\"PL\",\"v\":\"Polish\"},{\"k\":\"PT\",\"v\":\"Portuguese\"},{\"k\":\"RO\",\"v\":\"Romanian\"},{\"k\":\"RU\",\"v\":\"Russian\"},{\"k\":\"SR\",\"v\":\"Serbian\"},{\"k\":\"SK\",\"v\":\"Slovak\"},{\"k\":\"ES\",\"v\":\"Spanish\"},{\"k\":\"SV\",\"v\":\"Swedish\"},{\"k\":\"TR\",\"v\":\"Turkish\"},{\"k\":\"LA\",\"v\":\"Latin\"}]",
             "hidden": true
         },
         {
@@ -122,6 +122,13 @@
         },
         {
             "name": "quick.fixGestures",
+            "title": "Use the options dialog please",
+            "type": "bool",
+            "value": false,
+            "hidden": true
+        },
+        {
+            "name": "quick.rocker",
             "title": "Use the options dialog please",
             "type": "bool",
             "value": false,

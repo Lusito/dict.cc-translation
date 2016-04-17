@@ -53,6 +53,7 @@ var checkedDisableElements = {
         byId("quick_method3"),
         byId("quick_selected"),
         byId("quick_right"),
+        byId("quick_rocker"),
         byId("quick_fixGestures"),
         byId("quick_multiWindow")
     ],
@@ -159,7 +160,12 @@ function prompt(titleL10nKey, value, callback) {
     });
     dialog.contentNode.appendChild(input);
     input.focus();
-    //fixme: on input enter, submit
+    on(input, 'keydown', function(e) {
+        if(e.keyCode === 13) {
+            dialog.close();
+            callback(input.value);
+        }
+    });
     var l10n = ['prompt_ok', 'prompt_cancel', titleL10nKey];
     self.port.emit('requestTranslation', l10n);
 }
@@ -235,6 +241,7 @@ function initializePreferenceElements() {
         "quick_alt",
         "quick_selected",
         "quick_multiWindow",
+        "quick_rocker",
         "quick_fixGestures"
     ];
     var radioNames = [
