@@ -490,6 +490,19 @@ function onLanguageListUpdate(languages, error) {
         alert('alert_title_error', 'refreshFailed');
 }
 
+on(byId('cancel'), 'click', function() {
+    self.port.emit('cancel');
+});
+on(byId('save'), 'click', function() {
+    if(!byId('quick_enabled').checked  || byId('quick_ctrl').checked
+            || byId('quick_shift').checked || byId('quick_alt').checked) {
+        storePreferences();
+        self.port.emit('save', preferences);
+    } else {
+        alert('alert_title_error', 'noQuickKeys');
+    }
+});
+
 initializeTabs();
 initializeTooltips();
 initializePreferenceElements();
@@ -515,20 +528,3 @@ self.port.on('translationResult', function(map) {
             elements[i].textContent = value;
     }
 });
-
-// todo:
-
-//	onBeforeAccept : function () {
-//		return !quickEnabled.checked  || quickCtrl.checked || quickShift.checked || quickAlt.checked;
-//	},
-//
-//	onAccept : function () {
-//		var result = SearchDictCC_Options.onBeforeAccept();
-//		if(!result) {
-//			alert(strings.GetStringFromName("noQuickKeys"));
-//		} else {
-//			saveTranslations();
-//		}
-//		return result;
-//	},
-//	
