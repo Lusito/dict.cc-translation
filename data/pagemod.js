@@ -85,28 +85,9 @@ function detectWordFromEvent(evt) {
     return pre + post;
 }
 
-window.addEventListener("contextmenu", function (e) {
-    if (config.quickEnabled && (config.ctrl || config.shift || config.alt)
-            && e.ctrlKey === config.ctrl
-            && e.shiftKey === config.shift
-            && e.altKey === config.alt) {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-    }
-    return true;
-});
-
-window.addEventListener("mousedown", function (e) {
-    // get the selection text
-    var text = config.selected ? window.getSelection().toString() : '';
-    // try to get the word from the mouse event
-    if (!text)
-        text = detectWordFromEvent(e);
-    self.port.emit("setWordUnderCursor", text);
-
+function getQuickAction(e) {
     if (!config.quickEnabled)
-        return;
+        return null;
 
     var action = null;
     if ((config.ctrl || config.shift || config.alt)
@@ -119,17 +100,61 @@ window.addEventListener("mousedown", function (e) {
             action = 'menu';
         }
     }
-    //fixme: rocker gestures
+    
+    // support for rocker gestures
+    var currentTime = new Date().getTime();
+    if(config.rocker) {
+        if(!action && (leftDown || rightDown)) {
+            if(e.which === 1 && rightDown !== false && (currentTime-rightDown) < 1000)
+                action = 'instant';
+            else if(e.which === 3 && leftDown !== false && (currentTime-leftDown) < 1000)
+                action = 'menu';
+        }
+    }
+    return action;
+}
 
-    if (action !== null) {
-        if (text)
-            self.port.emit('requestQuickTranslation', e.screenX , e.screenY, text, action === 'menu');
-
+window.addEventListener("contextmenu", function (e) {
+    if (getQuickAction(e) !== null) {
         e.preventDefault();
         e.stopPropagation();
         return false;
     }
     return true;
+});
+
+var leftDown = false;
+var rightDown = false;
+window.addEventListener("mouseup", function (e) {
+    if(e.which === 1)
+        leftDown = false;
+    else if(e.which === 3)
+        rightDown = false;
+});
+window.addEventListener("mousedown", function (e) {
+    // get the selection text
+    var text = config.selected ? window.getSelection().toString() : '';
+    // try to get the word from the mouse event
+    if (!text)
+        text = detectWordFromEvent(e);
+    self.port.emit("setWordUnderCursor", text);
+
+    var action = getQuickAction(e);
+    if (action) {
+        if (text)
+            self.port.emit('requestQuickTranslation', e.screenX , e.screenY, text, action === 'menu');
+
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    var currentTime = new Date().getTime();
+    if(e.which === 1)
+        leftDown = currentTime;
+    if(e.which === 3)
+        rightDown = currentTime;
+
+    return action === null;
 }, false);
 
 self.port.emit('init');
