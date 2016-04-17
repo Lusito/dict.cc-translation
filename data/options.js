@@ -30,7 +30,9 @@ function on(node, event, callback) {
 
 var preferenceElements = {};
 var translationList = byId('translation_list');
-var translationLanguages = byId('translation_languages');
+var firstLanguage = byId('firstLanguage');
+var secondLanguage = byId('secondLanguage');
+var languageDirection = byId('languageDirection');
 var selectedTranslationRow = null;
 
 var checkedDisableElements = {
@@ -62,6 +64,105 @@ var checkedDisableElements = {
     "context_method1": [],
     "context_method2": [ byId("context_multiWindow") ]
 };
+
+function createButton(labelL10nKey, callback) {
+    var button = document.createElement('button');
+    button.setAttribute('data-l10n-id', labelL10nKey);
+    on(button, 'click', callback);
+    return button;
+}
+
+function createDialog(className, titleL10nKey, buttons) {
+    var overlay = document.createElement('div');
+    overlay.className = 'dialogOverlay';
+    var dialog = document.createElement('div');
+    dialog.className = 'dialog ' + className;
+    var titleNode = document.createElement('h2');
+    titleNode.setAttribute('data-l10n-id', titleL10nKey);
+    var contentNode = document.createElement('div');
+    var buttonsNode = document.createElement('div');
+    buttonsNode.className = 'dialogButtons';
+    dialog.appendChild(titleNode);
+    dialog.appendChild(contentNode);
+    dialog.appendChild(buttonsNode);
+    var buttonNodes = {};
+    for(var key in buttons) {
+        var button = createButton(key, buttons[key]);
+        buttonNodes[key] = button;
+        buttonsNode.appendChild(button);
+    }
+    overlay.appendChild(dialog);
+    document.body.appendChild(overlay);
+    return {
+        domNode: dialog,
+        contentNode: contentNode,
+        buttonNodes: buttonNodes,
+        close: function() {
+            document.body.removeChild(overlay);
+        }
+    };
+}
+
+function alert(titleL10nKey, contentL10nKey, content, callback) {
+    var dialog = createDialog('alert', titleL10nKey, {
+        'alert_ok': function() {
+            dialog.close();
+            if(callback)
+                callback();
+        }
+    });
+    if(contentL10nKey)
+        dialog.contentNode.setAttribute('data-l10n-id', contentL10nKey);
+    if(content)
+        dialog.contentNode.textContent = content;
+    var l10n = ['alert_ok', titleL10nKey];
+    if(contentL10nKey)
+        l10n.push(contentL10nKey);
+    dialog.buttonNodes.alert_ok.focus();
+    self.port.emit('requestTranslation', l10n);
+}
+
+function confirm(titleL10nKey, contentL10nKey, content, callback) {
+    var dialog = createDialog('confirm', titleL10nKey, {
+        'confirm_ok': function() {
+            dialog.close();
+            callback(true);
+        },
+        'confirm_cancel': function() {
+            dialog.close();
+            callback(false);
+        }
+    });
+    if(contentL10nKey)
+        dialog.contentNode.setAttribute('data-l10n-id', contentL10nKey);
+    if(content)
+        dialog.contentNode.textContent = content;
+    var l10n = ['confirm_ok', 'confirm_cancel', titleL10nKey];
+    if(contentL10nKey)
+        l10n.push(contentL10nKey);
+    dialog.buttonNodes.confirm_ok.focus();
+    self.port.emit('requestTranslation', l10n);
+}
+
+function prompt(titleL10nKey, value, callback) {
+    var input = document.createElement('input');
+    input.value = value;
+    var dialog = createDialog('prompt', titleL10nKey, {
+        'prompt_ok': function() {
+            dialog.close();
+            callback(input.value);
+        },
+        'prompt_cancel': function() {
+            dialog.close();
+            callback(null);
+        }
+    });
+    dialog.contentNode.appendChild(input);
+    input.focus();
+    //fixme: on input enter, submit
+    var l10n = ['prompt_ok', 'prompt_cancel', titleL10nKey];
+    self.port.emit('requestTranslation', l10n);
+}
 
 function initializeTabs() {
     var tabs = document.querySelectorAll('#tabs > div');
@@ -134,7 +235,7 @@ function initializePreferenceElements() {
         "quick_alt",
         "quick_selected",
         "quick_multiWindow",
-        "quick_fixGestures",
+        "quick_fixGestures"
     ];
     var radioNames = [
         "context_method",
@@ -182,7 +283,7 @@ function addTranslationRow(label, subdomain) {
         row.className = 'active';
     });
     on(row, 'dblclick', function () {
-        //Fixme: edit label
+        startLabelEdit(row);
     });
     
     on(row, 'keypress', function (e) {
@@ -210,18 +311,18 @@ function setLanguageList(list) {
             return 0;
     });
 
-    translationLanguages.innerHTML = '';
+    secondLanguage.innerHTML = '';
     for (var i = 0; i < list.length; i++) {
         var entry = list[i];
         var option = document.createElement('option');
         option.value = entry.k;
         option.textContent = entry.v;
-        translationLanguages.appendChild(option);
+        secondLanguage.appendChild(option);
     }
 }
 function serializeLanguages() {
     var list = [];
-    var options = translationLanguages.children;
+    var options = secondLanguage.children;
     for (var i = 0; i < options.length; i++) {
         var option = options[i];
         if(option.value !== 'DE' && option.value !== 'EN')
@@ -288,7 +389,13 @@ function initializeDisabledConnections() {
         on(byId(key), 'click', updateDisabledElements);
     }
 }
-
+function startLabelEdit(row) {
+    var cell = row.children[0];
+    prompt('enterLabel', cell.textContent, function(value) {
+        if(value)
+            cell.textContent = value;
+    });
+}
 function initializeTranslationButtons() {
     on(byId('moveUp'), 'click', function() {
         if(selectedTranslationRow) {
@@ -309,37 +416,78 @@ function initializeTranslationButtons() {
         }
     });
     on(byId('editLabel'), 'click', function() {
+        var row = selectedTranslationRow;
+        if(row)
+            startLabelEdit(row);
     });
     on(byId('remove'), 'click', function() {
         var row = selectedTranslationRow;
-        selectedTranslationRow = row.nextElementSibling || row.previousElementSibling;
-        if(selectedTranslationRow)
-            selectedTranslationRow.className = 'active';
-        row.parentElement.removeChild(row);
+        if(row) {
+            var label = row.children[0].textContent;
+            confirm('confirm_delete', null, label, function(result) {
+                if(result) {
+                    selectedTranslationRow = row.nextElementSibling || row.previousElementSibling;
+                    if(selectedTranslationRow)
+                        selectedTranslationRow.className = 'active';
+                    row.parentElement.removeChild(row);
+                }
+            });
+        }
     });
     on(byId('clear'), 'click', function() {
-        translationList.innerHTML = '';
+        confirm('confirm_delete', 'confirm_removeAll', null, function(result) {
+            if(result)
+                translationList.innerHTML = '';
+        });
     });
     on(byId('manual'), 'click', function() {
+        prompt('enterSubdomain', "www", function(subdomain) {
+            if(subdomain) {
+                prompt('enterLabel', "DE=>EN", function(label) {
+                    if(label)
+                        addTranslationRow(label, subdomain);
+                });
+            }
+        });
     });
     on(byId('refresh'), 'click', function() {
+        setLanguageLoading(true);
         self.port.emit('requestLanguageUpdate');
     });
     on(byId('add'), 'click', function() {
+        var first = firstLanguage.value;
+        var second = secondLanguage.value;
+        var dir = languageDirection.value;
+        
+        var label, subdomain;
+        if(dir === 'both') {
+            subdomain = first.toLowerCase() + second.toLowerCase();
+            label = first.toUpperCase() + '<>' + second.toUpperCase();
+        } else if(dir === 'second') {
+            subdomain = first.toLowerCase() + '-' + second.toLowerCase();
+            label = first.toUpperCase() + '->' + second.toUpperCase();
+        } else {
+            subdomain = second.toLowerCase() + '-' + first.toLowerCase();
+            label = second.toUpperCase() + '->' + first.toUpperCase();
+        }
+        prompt('enterLabel', label, function(value) {
+            if(value)
+                addTranslationRow(value, subdomain);
+        });
     });
 }
 
 function setLanguageLoading(loading) {
-//		document.getElementById("secondLanguage").disabled = !loading;
-//		document.getElementById("updateProgress").hidden = loading;
-//		document.getElementById("update").hidden = loading;
+    secondLanguage.disabled = loading;
+    byId('refresh').style.display = loading ? 'none' : '';
+    byId('loadingIndicator').style.display = loading ? 'block' : '';
 }
 function onLanguageListUpdate(languages, error) {
     setLanguageLoading(false);
     if(!error)
         setLanguageList(languages);
-//    else
-//		alert(strings.GetStringFromName("refreshFailed"));
+    else
+        alert('alert_title_error', 'refreshFailed');
 }
 
 initializeTabs();
@@ -357,6 +505,17 @@ self.port.on('show', function (prefs) {
     updateDisabledElements();
 });
 
+//byId('title').innerHTML = '<div data-l10n-id="prefPane_title">ddd</div>';
+//self.port.emit('requestTranslation', ['prefPane_title']);
+self.port.on('translationResult', function(map) {
+    for(var key in map) {
+        var value = map[key];
+        var elements = document.querySelectorAll('[data-l10n-id=' + key + ']');
+        for(var i=0; i<elements.length; i++)
+            elements[i].textContent = value;
+    }
+});
+
 // todo:
 
 //	onBeforeAccept : function () {
@@ -372,104 +531,4 @@ self.port.on('show', function (prefs) {
 //		}
 //		return result;
 //	},
-
-//	onAdd : function () {
-//		var firstLanguage = document.getElementById("firstLanguage").selectedIndex;
-//		var secondLanguage = document.getElementById("secondLanguage").selectedIndex;
-//		var direction = document.getElementById("languageDirection").selectedIndex;
-//
-//		var subdomain = '';
-//		var label = '';
-//		if(secondLanguage == 0) {
-//			if(direction == 0) {
-//				subdomain = 'www';
-//				label = 'DE<>EN';
-//			} else if((firstLanguage == 0 && direction == 1) || (firstLanguage == 1 && direction == 2)) {
-//				subdomain = 'en-de';
-//				label = 'EN->DE';
-//			} else {
-//				subdomain = 'de-en';
-//				label = 'DE->EN';
-//			}
-//		} else {
-//			var languages = Prefs.getLanguages();
-//			var first;
-//			if(firstLanguage == 0)
-//				first = { target: 'EN', label: strings.GetStringFromName("language_en")};
-//			else if(firstLanguage == 1)
-//				first = { target: 'DE', label: strings.GetStringFromName("language_de")};
-//			else
-//				first = languages[firstLanguage-1];
-//			var second = languages[secondLanguage-1];
-//
-//			if(direction == 0) {
-//				subdomain = first.target.toLowerCase() + second.target.toLowerCase();
-//				label = first.target.toUpperCase() + '<>' + second.target.toUpperCase();
-//			} else if(direction == 1) {
-//				subdomain = first.target.toLowerCase() + '-' + second.target.toLowerCase();
-//				label = first.target.toUpperCase() + '->' + second.target.toUpperCase();
-//			} else {
-//				subdomain = second.target.toLowerCase() + '-' + first.target.toLowerCase();
-//				label = second.target.toUpperCase() + '->' + first.target.toUpperCase();
-//			}
-//		}
-//		label = prompt(strings.GetStringFromName("enterLabel"), label);
-//		if(label)
-//			addEntry(label, subdomain);
-//	},
 //	
-//	onManualAdd : function () {
-//		var subdomain = prompt(strings.GetStringFromName("enterSubdomain"), "www");
-//		if(!subdomain) {
-//			return;
-//		}
-//		var label = prompt(strings.GetStringFromName("enterLabel"), "DE=>EN");
-//		if(!label) {
-//			return;
-//		}
-//		addEntry(label, subdomain);
-//	},
-//
-//	onRemove : function () {
-//		var entry = translationsList.selectedItem;
-//		if(entry) {
-//			var columns = entry.getElementsByTagName('listcell');
-//			if(confirm("Do you really want to delete the entry '" + columns[0].getAttribute('label') + "'")) {
-//				entry.parentNode.removeChild(entry);
-//				if(instantApply)
-//					saveTranslations();
-//			}
-//		}
-//	},
-//
-//	onRemoveAll : function () {
-//		if(confirm("Do you really want to remove all entries?")) {
-//			while(translationsList.childNodes.length > 1) {
-//				translationsList.removeChild(translationsList.childNodes[translationsList.childNodes.length-1]);
-//			}
-//			if(instantApply)
-//				saveTranslations();
-//		}
-//	},
-//
-//	onEdit : function () {
-//		var entry = translationsList.selectedItem;
-//		if(entry) {
-//			var columns = entry.getElementsByTagName('listcell');
-//			var label = prompt(strings.GetStringFromName("enterLabel"), columns[0].getAttribute('label'));
-//			if(!label) {
-//				return;
-//			}
-//			columns[0].setAttribute('label', label);
-//
-//			if(instantApply)
-//				saveTranslations();
-//		}
-//	},
-
-//	onRefresh : function () {
-//		document.getElementById("secondLanguage").disabled = true;
-//		document.getElementById("updateProgress").hidden = false;
-//		document.getElementById("update").hidden = true;
-//		Helpers.getUrlContent('http://contribute.dict.cc/?action=buildup', callbackLanguages);
-//	},

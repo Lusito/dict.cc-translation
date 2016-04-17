@@ -75,11 +75,11 @@
                     </fieldset>
                     <fieldset>
                         <legend data-l10n-id="tabs_language_add_title"></legend>
-                        <table>
+                        <table id="language_config_table">
                             <tr>
                                 <td width="10px" data-l10n-id="tabs_language_add_first_before"></td>
                                 <td>
-                                    <select data-l10n-id="tabs_language_add_first">
+                                    <select id="firstLanguage" data-l10n-id="tabs_language_add_first">
                                         <option value="EN">English</option>
                                         <option value="DE">German</option>
                                     </select>
@@ -88,12 +88,12 @@
                             </tr>
                             <tr>
                                 <td data-l10n-id="tabs_language_add_second_before"></td>
-                                <td><select id="translation_languages" data-l10n-id="tabs_language_add_second"></select></td>
-                                <td><button id="refresh" data-l10n-id="tabs_language_add_refresh"></button></td></tr>
+                                <td><select id="secondLanguage" data-l10n-id="tabs_language_add_second"></select></td>
+                                <td><button id="refresh" data-l10n-id="tabs_language_add_refresh"></button><progress id="loadingIndicator"></progress></td></tr>
                             <tr>
                                 <td data-l10n-id="tabs_language_add_direction_before"></td>
                                 <td>
-                                    <select data-l10n-id="tabs_language_add_direction">
+                                    <select id="languageDirection" data-l10n-id="tabs_language_add_direction">
                                         <option data-l10n-id="tabs_language_add_direction_toBoth" value="both"></option>
                                         <option data-l10n-id="tabs_language_add_direction_toSecond" value="second"></option>
                                         <option data-l10n-id="tabs_language_add_direction_toFirst" value="first"></option>
