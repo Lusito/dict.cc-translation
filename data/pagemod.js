@@ -37,13 +37,9 @@ function isWordChar(str, i) {
 }
 
 function detectWordFromEvent(evt) {
-    var rangeParent = evt.rangeParent;
-    var rangeOffset = evt.rangeOffset;
-
-
     var rangeParent;
     var rangeOffset;
-    if (typeof evt.rangeParent !== "undefined") {
+    if (evt.rangeParent) {
         rangeParent = evt.rangeParent;
         rangeOffset = evt.rangeOffset;
     } else if (document.caretPositionFromPoint) {
@@ -52,16 +48,22 @@ function detectWordFromEvent(evt) {
         rangeOffset = pos.offset;
     }
 
-    // create a range object
-    var rangePre = document.createRange();
-    rangePre.setStart(rangeParent, 0);
-    rangePre.setEnd(rangeParent, rangeOffset);
-    // create a range object
-    var rangePost = document.createRange();
-    rangePost.setStart(rangeParent, rangeOffset);
-    rangePost.setEnd(rangeParent, rangeParent.length);
-    var pre = rangePre.toString();
-    var post = rangePost.toString();
+    var pre = "", post = "";
+    if(rangeParent.length) {
+        // create a range object
+        var rangePre = document.createRange();
+        rangePre.setStart(rangeParent, 0);
+        rangePre.setEnd(rangeParent, rangeOffset);
+        // create a range object
+        var rangePost = document.createRange();
+        rangePost.setStart(rangeParent, rangeOffset);
+        rangePost.setEnd(rangeParent, rangeParent.length);
+        pre = rangePre.toString();
+        post = rangePost.toString();
+    } else if(rangeParent.value) {
+        var pre = rangeParent.value.substr(0, rangeOffset);
+        var post = rangeParent.value.substr(rangeOffset);
+    }
 
     // Strip to a word
     if (pre !== '') {
