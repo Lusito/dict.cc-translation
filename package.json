@@ -3,7 +3,7 @@
     "title": "Dict.cc Translation",
     "id": "searchdictcc@roughael",
     "description": "Uses Dict.cc to translate text selection via context menu or via alt+click on a word(without the need for selection)",
-    "version": "4.0.0b",
+    "version": "4.0.0b2",
     "main": "lib/main.js",
     "author": "Santo Pfingsten",
     "homepage": "https://addons.mozilla.org/en-US/firefox/addon/dictcc-translation/",
@@ -13,7 +13,8 @@
         "firefox": ">=38.0a1"
     },
     "permissions": {
-        "cross-domain-content": ["http://*.dict.cc/"]
+        "cross-domain-content": ["http://*.dict.cc/"],
+        "multiprocess": true
     },
     "preferences": [
         {
