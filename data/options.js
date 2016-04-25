@@ -160,8 +160,8 @@ function prompt(titleL10nKey, value, callback) {
     });
     dialog.contentNode.appendChild(input);
     input.focus();
-    on(input, 'keydown', function(e) {
-        if(e.keyCode === 13) {
+    on(input, 'keydown', function (e) {
+        if (e.keyCode === 13) {
             dialog.close();
             callback(input.value);
         }
@@ -195,7 +195,7 @@ function initializeTooltips() {
     var lastMouseX, lastMouseY;
     function showTooltip() {
         tooltipShowTimeoutHandle = null;
-        if(hasTooltip) {
+        if (hasTooltip) {
             tooltip.style.left = 0;
             tooltip.style.top = 0;
             tooltip.className = 'visible';
@@ -212,11 +212,11 @@ function initializeTooltips() {
         }
     }
     function moveTooltip(x, y) {
-        if(tooltipShowTimeoutHandle) {
+        if (tooltipShowTimeoutHandle) {
             clearTimeout(tooltipShowTimeoutHandle);
             tooltipShowTimeoutHandle = null;
         }
-        if(hasTooltip) {
+        if (hasTooltip) {
             tooltipShowTimeoutHandle = setTimeout(showTooltip, showTooltipDelay);
             lastMouseX = x;
             lastMouseY = y;

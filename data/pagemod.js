@@ -49,7 +49,7 @@ function detectWordFromEvent(evt) {
     }
 
     var pre = "", post = "";
-    if(rangeParent.length) {
+    if (rangeParent.length) {
         // create a range object
         var rangePre = document.createRange();
         rangePre.setStart(rangeParent, 0);
@@ -60,7 +60,7 @@ function detectWordFromEvent(evt) {
         rangePost.setEnd(rangeParent, rangeParent.length);
         pre = rangePre.toString();
         post = rangePost.toString();
-    } else if(rangeParent.value) {
+    } else if (rangeParent.value) {
         var pre = rangeParent.value.substr(0, rangeOffset);
         var post = rangeParent.value.substr(rangeOffset);
     }
@@ -102,14 +102,14 @@ function getQuickAction(e) {
             action = 'menu';
         }
     }
-    
+
     // support for rocker gestures
     var currentTime = new Date().getTime();
-    if(config.rocker) {
-        if(!action && (leftDown || rightDown)) {
-            if(e.which === 1 && rightDown !== false && (currentTime-rightDown) < 1000)
+    if (config.rocker) {
+        if (!action && (leftDown || rightDown)) {
+            if (e.which === 1 && rightDown !== false && (currentTime - rightDown) < 1000)
                 action = 'instant';
-            else if(e.which === 3 && leftDown !== false && (currentTime-leftDown) < 1000)
+            else if (e.which === 3 && leftDown !== false && (currentTime - leftDown) < 1000)
                 action = 'menu';
         }
     }
@@ -128,9 +128,9 @@ window.addEventListener("contextmenu", function (e) {
 var leftDown = false;
 var rightDown = false;
 window.addEventListener("mouseup", function (e) {
-    if(e.which === 1)
+    if (e.which === 1)
         leftDown = false;
-    else if(e.which === 3)
+    else if (e.which === 3)
         rightDown = false;
 });
 window.addEventListener("mousedown", function (e) {
@@ -144,16 +144,16 @@ window.addEventListener("mousedown", function (e) {
     var action = getQuickAction(e);
     if (action) {
         if (text)
-            self.port.emit('requestQuickTranslation', e.screenX , e.screenY, text, action === 'menu');
+            self.port.emit('requestQuickTranslation', e.screenX, e.screenY, text, action === 'menu');
 
         e.preventDefault();
         e.stopPropagation();
     }
 
     var currentTime = new Date().getTime();
-    if(e.which === 1)
+    if (e.which === 1)
         leftDown = currentTime;
-    if(e.which === 3)
+    if (e.which === 3)
         rightDown = currentTime;
 
     return action === null;
