@@ -13,7 +13,7 @@
         "firefox": ">=38.0a1"
     },
     "permissions": {
-        "cross-domain-content": ["http://*.dict.cc/"],
+        "cross-domain-content": ["http://*.dict.cc/", "https://*.dict.cc/"],
         "multiprocess": true
     },
     "preferences": [
@@ -27,7 +27,7 @@
             "name": "translation.list",
             "title": "Use the options dialog please",
             "type": "string",
-            "value": "[{\"k\":\"www\",\"v\":\"DE<>EN\"},{\"k\":\"en-de\",\"v\":\"EN->DE\"},{\"k\":\"de-en\",\"v\":\"DE->EN\"},{\"k\":\"enpl\",\"v\":\"EN<>PL\"},{\"k\":\"ennl\",\"v\":\"EN<>NL\"},{\"k\":\"deit\",\"v\":\"DE<>IT\"},{\"k\":\"dept\",\"v\":\"DE<>PT\"}]",
+            "value": "[{\"k\":\"ende\",\"v\":\"DE<>EN\"},{\"k\":\"en-de\",\"v\":\"EN->DE\"},{\"k\":\"de-en\",\"v\":\"DE->EN\"},{\"k\":\"enpl\",\"v\":\"EN<>PL\"},{\"k\":\"ennl\",\"v\":\"EN<>NL\"},{\"k\":\"deit\",\"v\":\"DE<>IT\"},{\"k\":\"dept\",\"v\":\"DE<>PT\"}]",
             "hidden": true
         },
         {
@@ -35,6 +35,13 @@
             "title": "Use the options dialog please",
             "type": "string",
             "value": "[{\"k\":\"SQ\",\"v\":\"Albanian\"},{\"k\":\"BS\",\"v\":\"Bosnian\"},{\"k\":\"BG\",\"v\":\"Bulgarian\"},{\"k\":\"HR\",\"v\":\"Croatian\"},{\"k\":\"CS\",\"v\":\"Czech\"},{\"k\":\"DA\",\"v\":\"Danish\"},{\"k\":\"NL\",\"v\":\"Dutch\"},{\"k\":\"EO\",\"v\":\"Esperanto\"},{\"k\":\"FI\",\"v\":\"Finnish\"},{\"k\":\"FR\",\"v\":\"French\"},{\"k\":\"EL\",\"v\":\"Greek\"},{\"k\":\"HU\",\"v\":\"Hungarian\"},{\"k\":\"IS\",\"v\":\"Icelandic\"},{\"k\":\"IT\",\"v\":\"Italian\"},{\"k\":\"NO\",\"v\":\"Norwegian\"},{\"k\":\"PL\",\"v\":\"Polish\"},{\"k\":\"PT\",\"v\":\"Portuguese\"},{\"k\":\"RO\",\"v\":\"Romanian\"},{\"k\":\"RU\",\"v\":\"Russian\"},{\"k\":\"SR\",\"v\":\"Serbian\"},{\"k\":\"SK\",\"v\":\"Slovak\"},{\"k\":\"ES\",\"v\":\"Spanish\"},{\"k\":\"SV\",\"v\":\"Swedish\"},{\"k\":\"TR\",\"v\":\"Turkish\"},{\"k\":\"LA\",\"v\":\"Latin\"}]",
+            "hidden": true
+        },
+        {
+            "name": "translation.useHttps",
+            "title": "Use the options dialog please",
+            "type": "bool",
+            "value": true,
             "hidden": true
         },
         {
@@ -83,7 +90,7 @@
             "name": "quick.ctrl",
             "title": "Use the options dialog please",
             "type": "bool",
-            "value": false,
+            "value": true,
             "hidden": true
         },
         {

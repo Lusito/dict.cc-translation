@@ -51,9 +51,9 @@ function removeAllChildren(node) {
 
 function createMenuEntry(text, translation) {
     var link = document.createElement("a");
-    var subdomain = translation.k;
+    var languagePair = translation.k;
     link.addEventListener("click", function () {
-        self.port.emit("requestTranslation", text, subdomain);
+        self.port.emit("requestTranslation", text, languagePair);
     }, false);
     link.textContent = translation.v;
     return link;

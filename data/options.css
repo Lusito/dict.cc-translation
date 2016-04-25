@@ -121,7 +121,7 @@ table select {
     cursor: default;
     overflow-y: scroll;
     position: absolute;
-    top: 20px;
+    top: 40px;
     bottom: 0;
     left: 0;
     right: 0;
@@ -135,7 +135,7 @@ table select {
     text-align: left;
 }
 #translationsTableHead {
-    margin: 0 1px;
+    margin: 5px 1px 0 1px;
 }
 #translationsTable tr.active {
     background: highlight;

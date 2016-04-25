@@ -242,7 +242,8 @@ function initializePreferenceElements() {
         "quick_selected",
         "quick_multiWindow",
         "quick_rocker",
-        "quick_fixGestures"
+        "quick_fixGestures",
+        "translation_useHttps"
     ];
     var radioNames = [
         "context_method",
@@ -270,7 +271,7 @@ function serializeTranslations() {
     }
     return JSON.stringify(list);
 }
-function addTranslationRow(label, subdomain) {
+function addTranslationRow(label, languagePair) {
     var row = document.createElement('tr');
     translationList.appendChild(row);
 
@@ -279,7 +280,7 @@ function addTranslationRow(label, subdomain) {
     row.appendChild(cell0);
 
     var cell1 = document.createElement('td');
-    cell1.textContent = subdomain;
+    cell1.textContent = languagePair;
     row.appendChild(cell1);
 
     on(row, 'click', function () {
@@ -444,11 +445,11 @@ function initializeTranslationButtons() {
         });
     });
     on(byId('manual'), 'click', function () {
-        prompt('enterSubdomain', "www", function (subdomain) {
-            if (subdomain) {
+        prompt('enterLanguagePair', "de-en", function (languagePair) {
+            if (languagePair) {
                 prompt('enterLabel', "DE=>EN", function (label) {
                     if (label)
-                        addTranslationRow(label, subdomain);
+                        addTranslationRow(label, languagePair);
                 });
             }
         });
@@ -462,20 +463,20 @@ function initializeTranslationButtons() {
         var second = secondLanguage.value;
         var dir = languageDirection.value;
 
-        var label, subdomain;
+        var label, languagePair;
         if (dir === 'both') {
-            subdomain = first.toLowerCase() + second.toLowerCase();
+            languagePair = first.toLowerCase() + second.toLowerCase();
             label = first.toUpperCase() + '<>' + second.toUpperCase();
         } else if (dir === 'second') {
-            subdomain = first.toLowerCase() + '-' + second.toLowerCase();
+            languagePair = first.toLowerCase() + '-' + second.toLowerCase();
             label = first.toUpperCase() + '->' + second.toUpperCase();
         } else {
-            subdomain = second.toLowerCase() + '-' + first.toLowerCase();
+            languagePair = second.toLowerCase() + '-' + first.toLowerCase();
             label = second.toUpperCase() + '->' + first.toUpperCase();
         }
         prompt('enterLabel', label, function (value) {
             if (value)
-                addTranslationRow(value, subdomain);
+                addTranslationRow(value, languagePair);
         });
     });
 }
