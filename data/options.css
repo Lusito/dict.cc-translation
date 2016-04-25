@@ -1,0 +1,205 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: #F0F0F0;
+    font-family: sans-serif;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
+}
+#tabs {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    height: 25px;
+    display: flex;
+    flex-direction: row;
+    z-index: 10;
+    font-size: 15px;
+}
+input:disabled+label {
+    color: gray;
+}
+#title {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    font-weight: bold;
+    font-size: 15px;
+}
+#tabs > div {
+    background: lightgray;
+    border: 1px solid black;
+    padding: 2px 4px;
+    cursor: pointer;
+}
+#tabs > div:not(:first-child) {
+    border-left-width: 0;
+}
+#tabs > div.active {
+    background: white;
+    border-bottom: white;
+}
+#pages {
+    position: absolute;
+    top: 34px;
+    left: 10px;
+    right: 10px;
+    bottom: 45px;
+    border: 1px solid black;
+    padding: 10px;
+    background: white;
+}
+#pages > div {
+    height: 100%;
+    overflow: auto;
+    display: flex;
+    flex-direction: row;
+}
+#pages > div:not(.active) {
+    display: none;
+}
+#pages > div > div:first-child {
+    margin-right: 10px;
+}
+#pages > div > div {
+    width: 50%;
+    flex-grow: 1;
+    box-sizing: border-box;
+    position: relative;
+}
+#pages > div > div > *:not(:last-child) {
+    margin-bottom: 5px;
+}
+#buttons {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    height: 25px;
+    text-align: right;
+}
+#manual {
+    color: #990000;
+}
+#refresh {
+    color: #009900;
+}
+fieldset {
+    border-style: solid;
+    box-sizing: border-box;
+}
+th, td {
+    text-align: left;
+}
+button.full {
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+}
+button.half1,
+button.half2 {
+    width: calc(50% - 20px);
+    margin-bottom: 5px;
+}
+button.half2 {
+    float: right;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+table button,
+table select {
+    width: 100%;
+}
+#translationsTable {
+    border: 1px solid black;
+    cursor: default;
+    overflow-y: scroll;
+    position: absolute;
+    top: 42px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    -moz-user-select: none;
+}
+#translationsTableHead th:last-child {
+    text-align: right;
+    padding-right: 20px;
+}
+#translationsTable td:last-child {
+    text-align: left;
+}
+#translationsTableHead {
+    margin: 5px 1px 0 1px;
+    user-select: none;
+}
+#translationsTable tr.active {
+    background: highlight;
+}
+#translationsTableHead th,
+#translation_list td {
+    padding-left: 5px;
+}
+#tooltip {
+    position: absolute;
+    border: 1px solid black;
+    background: #FFFFE1;
+    border-radius: 3px;
+    padding: 2px 5px;
+    font-size: 12px;
+    max-width: 200px;
+    display: block;
+    z-index: 10000;
+    box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.59);
+    pointer-events: none;
+}
+#tooltip:not(.visible) {
+    display: none;
+}
+.dialogOverlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 10000;
+    background: rgba(0,0,0,0.25);
+}
+.dialog {
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    top: 20px;
+    border: 1px solid black;
+    background: #FFFFE1;
+    box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.59);
+    padding: 10px;
+}
+.dialog.prompt > div > input {
+    width: 100%;
+}
+.dialog > h2,
+.dialogButtons {
+    text-align: center;
+}
+.dialog > h2 {
+    margin: 0 0 10px 0;
+}
+.dialogButtons {
+    margin-top: 10px;
+}
+#loadingIndicator {
+    display: none;
+}
+#loadingIndicator,
+#language_config_table button {
+    width: 78px;
+    height: 24px;
+    line-height: 10px;
+    box-sizing: border-box;
+}
