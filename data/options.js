@@ -190,24 +190,40 @@ function initializeTabs() {
 function initializeTooltips() {
     var tooltip = byId('tooltip');
     var hasTooltip = false;
-    //Fixme: show tooltip 1s after move has stopped
-    function moveTooltip(x, y) {
-        tooltip.style.left = 0;
-        tooltip.style.top = 0;
-        var width = tooltip.clientWidth;
-        var height = tooltip.clientHeight;
-        if (y > document.body.clientHeight / 2)
-            tooltip.style.top = (y - height) + 'px';
-        else
-            tooltip.style.top = y + 'px';
-        if (x > document.body.clientWidth / 2)
-            tooltip.style.left = (x - width - 8) + 'px';
-        else
-            tooltip.style.left = (x + 15) + 'px';
+    var tooltipShowTimeoutHandle;
+    var showTooltipDelay = 500;
+    var lastMouseX, lastMouseY;
+    function showTooltip() {
+        tooltipShowTimeoutHandle = null;
+        if(hasTooltip) {
+            tooltip.style.left = 0;
+            tooltip.style.top = 0;
+            tooltip.className = 'visible';
+            var width = tooltip.clientWidth;
+            var height = tooltip.clientHeight;
+            if (lastMouseY > document.body.clientHeight / 2)
+                tooltip.style.top = (lastMouseY - height) + 'px';
+            else
+                tooltip.style.top = lastMouseY + 'px';
+            if (lastMouseX > document.body.clientWidth / 2)
+                tooltip.style.left = (lastMouseX - width - 8) + 'px';
+            else
+                tooltip.style.left = (lastMouseX + 15) + 'px';
+        }
     }
-    function showTooltip(x, y, title) {
+    function moveTooltip(x, y) {
+        if(tooltipShowTimeoutHandle) {
+            clearTimeout(tooltipShowTimeoutHandle);
+            tooltipShowTimeoutHandle = null;
+        }
+        if(hasTooltip) {
+            tooltipShowTimeoutHandle = setTimeout(showTooltip, showTooltipDelay);
+            lastMouseX = x;
+            lastMouseY = y;
+        }
+    }
+    function prepareTooltip(x, y, title) {
         tooltip.textContent = title;
-        tooltip.className = 'visible';
         hasTooltip = true;
         moveTooltip(x, y);
     }
@@ -220,7 +236,7 @@ function initializeTooltips() {
     });
     function registerTooltip(element) {
         element.addEventListener('mouseover', function (e) {
-            showTooltip(e.clientX, e.clientY, element.title);
+            prepareTooltip(e.clientX, e.clientY, element.title);
         });
         element.addEventListener('mouseout', hideTooltip);
     }
