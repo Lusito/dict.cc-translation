@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link href="options.css" type="text/css" rel="stylesheet">
+        <title data-l10n-id="prefPane_title"></title>
+    </head>
+    <body>
+        <div id="tooltip"></div>
+        <div id="title" data-l10n-id="prefPane_title"></div>
+        <div id="tabs">
+            <div data-l10n-id="tabs_context_title" class="active"></div>
+            <div data-l10n-id="tabs_quick_title"></div>
+            <div data-l10n-id="tabs_language_title"></div>
+        </div>
+        <div id="pages">
+            <div class="active">
+                <div>
+                    <div><input type="checkbox" id="context_enabled"><label for="context_enabled" data-l10n-id="tabs_context_enable"></label></div>
+                    <fieldset>
+                        <legend data-l10n-id="tabs_results_title"></legend>
+                        <div><input type="radio" name="context_method" id="context_method0" value="0"><label for="context_method0" data-l10n-id="tabs_results_syn"></label></div>
+                        <div><input type="radio" name="context_method" id="context_method1" value="1"><label for="context_method1" data-l10n-id="tabs_results_pocket"></label></div>
+                        <div><input type="radio" name="context_method" id="context_method2" value="2"><label for="context_method2" data-l10n-id="tabs_results_tab"></label></div>
+                    </fieldset>
+                </div>
+                <div>
+                    <div><input type="checkbox" id="context_showFirst"><label for="context_showFirst" data-l10n-id="tabs_context_showFirst"></label></div>
+                    <div><input type="checkbox" id="context_multiWindow"><label for="context_multiWindow" data-l10n-id="tabs_context_multiWindow"></label></div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <div><input type="checkbox" id="quick_enabled"><label for="quick_enabled" data-l10n-id="tabs_quick_enable"></label></div>
+                    <fieldset>
+                        <legend data-l10n-id="tabs_quick_keys_title"></legend>
+                        <input type="checkbox" id="quick_ctrl"><label for="quick_ctrl" data-l10n-id="tabs_quick_keys_ctrl"></label>
+                        <input type="checkbox" id="quick_shift"><label for="quick_shift" data-l10n-id="tabs_quick_keys_shift"></label>
+                        <input type="checkbox" id="quick_alt"><label for="quick_alt" data-l10n-id="tabs_quick_keys_alt"></label>
+                    </fieldset>
+                    <fieldset>
+                        <legend data-l10n-id="tabs_results_title">Show Results in</legend>
+                        <div><input type="radio" name="quick_method" id="quick_method0" value="0"><label for="quick_method0" data-l10n-id="tabs_results_syn"></label></div>
+                        <div><input type="radio" name="quick_method" id="quick_method1" value="1"><label for="quick_method1" data-l10n-id="tabs_results_pocket"></label></div>
+                        <div><input type="radio" name="quick_method" id="quick_method2" value="2"><label for="quick_method2" data-l10n-id="tabs_results_tab"></label></div>
+                        <div><input type="radio" name="quick_method" id="quick_method3" value="3"><label for="quick_method3" data-l10n-id="tabs_results_mini"></label></div>
+                    </fieldset>
+                </div>
+                <div>
+                    <div><input type="checkbox" id="quick_selected"><label for="quick_selected" data-l10n-id="tabs_quick_selected"></label></div>
+                    <div><input type="checkbox" id="quick_right"><label for="quick_right" data-l10n-id="tabs_quick_right"></label></div>
+                    <div><input type="checkbox" id="quick_rocker"><label for="quick_rocker" data-l10n-id="tabs_quick_rocker"></label></div>
+                    <div><input type="checkbox" id="quick_fixGestures"><label for="quick_fixGestures" data-l10n-id="tabs_quick_fixGestures"></label></div>
+                    <div><input type="checkbox" id="quick_multiWindow"><label for="quick_multiWindow" data-l10n-id="tabs_context_multiWindow"></label></div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <input id="translation_useHttps" type="checkbox"><label for="translation_useHttps" data-l10n-id="tabs_language_use_https"></label>
+                    <table id="translationsTableHead">
+                        <tr><th data-l10n-id="tabs_language_list_label"></th><th width="100px" data-l10n-id="tabs_language_list_languagepair"></th></tr>
+                    </table>
+                    <div id="translationsTable">
+                        <table>
+                            <thead style="height: 0;overflow: hidden;"><td></td><td width="65px"></td></thead>
+                            <tbody id="translation_list"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <fieldset>
+                        <legend data-l10n-id="tabs_language_modify_title"></legend>
+                        <button class="full" id="moveUp" data-l10n-id="tabs_language_modify_up"></button>
+                        <button class="full" id="moveDown" data-l10n-id="tabs_language_modify_down"></button>
+                        <button class="full" id="editLabel" data-l10n-id="tabs_language_modify_edit"></button>
+                        <button class="half1" id="remove" data-l10n-id="tabs_language_modify_remove"></button>
+                        <button class="half2" id="clear" data-l10n-id="tabs_language_modify_removeAll"></button>
+                    </fieldset>
+                    <fieldset>
+                        <legend data-l10n-id="tabs_language_add_title"></legend>
+                        <table id="language_config_table">
+                            <tr>
+                                <td width="10px" data-l10n-id="tabs_language_add_first_before"></td>
+                                <td>
+                                    <select id="firstLanguage" data-l10n-id="tabs_language_add_first">
+                                        <option value="EN">English</option>
+                                        <option value="DE">German</option>
+                                    </select>
+                                </td>
+                                <td width="80px"><button id="manual" data-l10n-id="tabs_language_add_manual"></button></td>
+                            </tr>
+                            <tr>
+                                <td data-l10n-id="tabs_language_add_second_before"></td>
+                                <td><select id="secondLanguage" data-l10n-id="tabs_language_add_second"></select></td>
+                                <td><button id="refresh" data-l10n-id="tabs_language_add_refresh"></button><progress id="loadingIndicator"></progress></td></tr>
+                            <tr>
+                                <td data-l10n-id="tabs_language_add_direction_before"></td>
+                                <td>
+                                    <select id="languageDirection" data-l10n-id="tabs_language_add_direction">
+                                        <option data-l10n-id="tabs_language_add_direction_toBoth" value="both"></option>
+                                        <option data-l10n-id="tabs_language_add_direction_toSecond" value="second"></option>
+                                        <option data-l10n-id="tabs_language_add_direction_toFirst" value="first"></option>
+                                    </select>
+                                </td>
+                                <td><button id="add" data-l10n-id="tabs_language_add_do"></button></td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+        <div id="buttons">
+            <button id="save" data-l10n-id="button_save"></button>
+            <button id="cancel" data-l10n-id="button_cancel"></button>
+        </div>
+    </body>
+</html>
