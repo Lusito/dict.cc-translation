@@ -22,14 +22,18 @@ a:first-child {
 }
 
 a {
-    color: #666;
     text-decoration: none;
     cursor: pointer;
 }
 a:hover {
-    color: #666;
     text-decoration: underline;
     cursor: pointer;
+}
+a, a:hover {
+    color: black;
+}
+a:last-child, a:last-child:hover {
+    color: #666;
 }
 
 #result {

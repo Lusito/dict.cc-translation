@@ -86,10 +86,8 @@ function showResult(text, links) {
         for (var i = 0; i < links.length; i++) {
             var link = createResultEntry(links[i].label, links[i].href);
             miniResults.appendChild(link);
-            if (i < (links.length - 1)) {
+            if (i < (links.length - 1))
                 miniResults.appendChild(document.createTextNode(", "));
-                link.style.color = 'black';
-            }
         }
     }
     updateSize();
