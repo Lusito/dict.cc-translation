@@ -96,7 +96,7 @@ function updateWordUnderCursor(e) {
     // try to get the word from the mouse event
     if (!text)
         text = detectWordFromEvent(e);
-    self.port.emit("setWordUnderCursor", text);
+    self.port.emit("setWordUnderCursor", text, e.screenX, e.screenY);
     return text;
 }
 
@@ -146,11 +146,11 @@ function updateRocker(which, value) {
         leftDown = value;
     else if (which === 3)
         rightDown = value;
-    return preventMouseEventAfterAction(e);
 }
 
 function onMouseUp(e) {
     updateRocker(e.which, false);
+    return preventMouseEventAfterAction(e);
 }
 
 function onMouseDown(e) {

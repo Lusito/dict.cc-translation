@@ -385,6 +385,7 @@ function updateDisabledElements() {
         byId("context_method0"),
         byId("context_method1"),
         byId("context_method2"),
+        byId("context_method3"),
         byId("context_showFirst"),
         byId("context_multiWindow")
     ];
@@ -393,20 +394,20 @@ function updateDisabledElements() {
         byId("micro_method1"),
         byId("micro_method2")
     ];
-    
+
     var quickEnabled = byId("quick_enabled").checked;
     setElementsDisabled(quickElements, !quickEnabled);
-    if(quickEnabled) {
-        if(!byId('quick_method3').checked)
+    if (quickEnabled) {
+        if (!byId('quick_method3').checked)
             setElementsDisabled(microMethodElements, true);
         var microMethod2 = byId('micro_method2');
-        if(!byId('quick_method2').checked && (microMethod2.disabled || !microMethod2.checked))
+        if (!byId('quick_method2').checked && (microMethod2.disabled || !microMethod2.checked))
             byId("quick_multiWindow").disabled = true;
     }
     var contextEnabled = byId("context_enabled").checked;
     setElementsDisabled(contextElements, !contextEnabled);
-    if(contextEnabled) {
-        if(!byId('context_method2').checked)
+    if (contextEnabled) {
+        if (!byId('context_method2').checked)
             byId("context_multiWindow").disabled = true;
     }
 }
@@ -423,9 +424,10 @@ function initializeDisabledConnections() {
         byId("micro_method2"),
         byId("context_method0"),
         byId("context_method1"),
-        byId("context_method2")
+        byId("context_method2"),
+        byId("context_method3")
     ];
-    for (var i=0; i<elementsDisabling.length; i++) {
+    for (var i = 0; i < elementsDisabling.length; i++) {
         on(elementsDisabling[i], 'click', updateDisabledElements);
     }
 }
