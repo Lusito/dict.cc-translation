@@ -30,9 +30,6 @@ a:hover {
     cursor: pointer;
 }
 a, a:hover {
-    color: black;
-}
-a:last-child, a:last-child:hover {
     color: #666;
 }
 
