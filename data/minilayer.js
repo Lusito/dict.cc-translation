@@ -71,16 +71,20 @@ function showMenu(label, text, translations) {
     setupMiniLayer(label, extraNodes);
     updateSize();
 }
-
+function createResultEntry(label, href) {
+    var link = document.createElement("a");
+    link.addEventListener("click", function () {
+        self.port.emit("requestFullTranslation", href);
+    }, false);
+    link.textContent = label;
+    return link;
+}
 function showResult(text, links) {
     var hasResults = links && links.length > 0;
     setupMiniLayer(text, null);
     if (hasResults) {
         for (var i = 0; i < links.length; i++) {
-            var link = document.createElement("a");
-            link.href = links[i].href;
-            link.target = "_blank";
-            link.textContent = links[i].label;
+            var link = createResultEntry(links[i].label, links[i].href);
             miniResults.appendChild(link);
             if (i < (links.length - 1)) {
                 miniResults.appendChild(document.createTextNode(", "));

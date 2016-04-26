@@ -122,6 +122,13 @@
             "hidden": true
         },
         {
+            "name": "micro.method",
+            "title": "Use the options dialog please",
+            "type": "integer",
+            "value": 1,
+            "hidden": true
+        },
+        {
             "name": "quick.multiWindow",
             "title": "Use the options dialog please",
             "type": "bool",
