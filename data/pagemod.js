@@ -111,7 +111,7 @@ function getQuickAction(e) {
             && e.altKey === config.alt) {
         if (e.which === 1) {
             action = 'instant';
-        } else if (e.which === 3 && config.menu) {
+        } else if (config.menu && e.which === 3) {
             action = 'menu';
         }
     }
@@ -122,7 +122,7 @@ function getQuickAction(e) {
         if (!action && (leftDown || rightDown)) {
             if (e.which === 1 && rightDown !== false && (currentTime - rightDown) < 1000)
                 action = 'instant';
-            else if (e.which === 3 && leftDown !== false && (currentTime - leftDown) < 1000)
+            else if (config.menu && e.which === 3 && leftDown !== false && (currentTime - leftDown) < 1000)
                 action = 'menu';
         }
     }
