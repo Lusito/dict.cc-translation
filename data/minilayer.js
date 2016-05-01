@@ -53,7 +53,7 @@ function createMenuEntry(text, translation) {
     var link = document.createElement("a");
     var languagePair = translation.k;
     link.addEventListener("click", function () {
-        self.port.emit("requestTranslation", text, languagePair);
+        self.port.emit("menuEntryClick", text, languagePair);
     }, false);
     link.textContent = translation.v;
     return link;
@@ -71,21 +71,25 @@ function showMenu(label, text, translations) {
     setupMiniLayer(label, extraNodes);
     updateSize();
 }
-
+function createResultEntry(def) {
+    var link = document.createElement("a");
+    link.addEventListener("click", function () {
+        self.port.emit("resultClick", def.href);
+    }, false);
+    link.textContent = def.label;
+    if(def.style)
+        link.style = def.style;
+    return link;
+}
 function showResult(text, links) {
     var hasResults = links && links.length > 0;
     setupMiniLayer(text, null);
     if (hasResults) {
         for (var i = 0; i < links.length; i++) {
-            var link = document.createElement("a");
-            link.href = links[i].href;
-            link.target = "_blank";
-            link.textContent = links[i].label;
+            var link = createResultEntry(links[i]);
             miniResults.appendChild(link);
-            if (i < (links.length - 1)) {
+            if (i < (links.length - 1))
                 miniResults.appendChild(document.createTextNode(", "));
-                link.style.color = 'black';
-            }
         }
     }
     updateSize();

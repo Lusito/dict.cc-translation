@@ -35,37 +35,6 @@ var secondLanguage = byId('secondLanguage');
 var languageDirection = byId('languageDirection');
 var selectedTranslationRow = null;
 
-var checkedDisableElements = {
-    "context_enabled": [
-        byId("context_method0"),
-        byId("context_method1"),
-        byId("context_method2"),
-        byId("context_showFirst"),
-        byId("context_multiWindow")
-    ],
-    "quick_enabled": [
-        byId("quick_ctrl"),
-        byId("quick_shift"),
-        byId("quick_alt"),
-        byId("quick_method0"),
-        byId("quick_method1"),
-        byId("quick_method2"),
-        byId("quick_method3"),
-        byId("quick_selected"),
-        byId("quick_right"),
-        byId("quick_rocker"),
-        byId("quick_fixGestures"),
-        byId("quick_multiWindow")
-    ],
-    "quick_method0": [],
-    "quick_method1": [],
-    "quick_method2": [byId("quick_multiWindow")],
-    "quick_method3": [],
-    "context_method0": [],
-    "context_method1": [],
-    "context_method2": [byId("context_multiWindow")]
-};
-
 function createButton(labelL10nKey, callback) {
     var button = document.createElement('button');
     button.setAttribute('data-l10n-id', labelL10nKey);
@@ -250,6 +219,7 @@ function initializePreferenceElements() {
         "context_enabled",
         "context_showFirst",
         "context_multiWindow",
+        "context_asPanel",
         "quick_enabled",
         "quick_right",
         "quick_ctrl",
@@ -257,13 +227,15 @@ function initializePreferenceElements() {
         "quick_alt",
         "quick_selected",
         "quick_multiWindow",
+        "quick_asPanel",
         "quick_rocker",
         "quick_fixGestures",
         "translation_useHttps"
     ];
     var radioNames = [
         "context_method",
-        "quick_method"
+        "quick_method",
+        "micro_method"
     ];
     for (var i = 0; i < checkboxIds.length; i++) {
         var id = checkboxIds[i];
@@ -389,24 +361,85 @@ function storePreferences() {
     preferences["translation.list"] = serializeTranslations();
     preferences["translation.languages"] = serializeLanguages();
 }
-
+function setElementsDisabled(elements, disabled) {
+    for (var i = 0; i < elements.length; i++)
+        elements[i].disabled = disabled;
+}
 function updateDisabledElements() {
-    for (var key in checkedDisableElements) {
-        var elements = checkedDisableElements[key];
-        for (var i = 0; i < elements.length; i++)
-            elements[i].disabled = false;
+    var quickElements = [
+        byId("quick_ctrl"),
+        byId("quick_shift"),
+        byId("quick_alt"),
+        byId("quick_method0"),
+        byId("quick_method1"),
+        byId("quick_method2"),
+        byId("quick_method3"),
+        byId("micro_method0"),
+        byId("micro_method1"),
+        byId("micro_method2"),
+        byId("quick_selected"),
+        byId("quick_right"),
+        byId("quick_rocker"),
+        byId("quick_fixGestures"),
+        byId("quick_multiWindow"),
+        byId("quick_asPanel")
+    ];
+    var contextElements = [
+        byId("context_method0"),
+        byId("context_method1"),
+        byId("context_method2"),
+        byId("context_method3"),
+        byId("context_showFirst"),
+        byId("context_multiWindow"),
+        byId("context_asPanel")
+    ];
+    var microMethodElements = [
+        byId("micro_method0"),
+        byId("micro_method1"),
+        byId("micro_method2")
+    ];
+
+    var quickEnabled = byId("quick_enabled").checked;
+    setElementsDisabled(quickElements, !quickEnabled);
+    if (quickEnabled) {
+        if (!byId('quick_method3').checked)
+            setElementsDisabled(microMethodElements, true);
+        var microMethod2 = byId('micro_method2');
+        if (!byId('quick_method2').checked && (microMethod2.disabled || !microMethod2.checked))
+            byId("quick_multiWindow").disabled = true;
+        var isPopup = byId('quick_method0').checked || byId('quick_method1').checked;
+        if(!isPopup)
+            isPopup = byId('quick_method3').checked && (byId('micro_method0').checked || byId('micro_method1').checked);
+        if (!isPopup)
+            byId("quick_asPanel").disabled = true;
     }
-    for (var key in checkedDisableElements) {
-        if (!byId(key).checked) {
-            var elements = checkedDisableElements[key];
-            for (var i = 0; i < elements.length; i++)
-                elements[i].disabled = true;
-        }
+    var contextEnabled = byId("context_enabled").checked;
+    setElementsDisabled(contextElements, !contextEnabled);
+    if (contextEnabled) {
+        if (!byId('context_method2').checked)
+            byId("context_multiWindow").disabled = true;
+        if (!byId('context_method0').checked && !byId('context_method1').checked)
+            byId("context_asPanel").disabled = true;
     }
 }
 function initializeDisabledConnections() {
-    for (var key in checkedDisableElements) {
-        on(byId(key), 'click', updateDisabledElements);
+    var elementsDisabling = [
+        byId("context_enabled"),
+        byId("quick_enabled"),
+        byId("quick_method0"),
+        byId("quick_method1"),
+        byId("quick_method2"),
+        byId("quick_method3"),
+        byId("micro_method0"),
+        byId("micro_method1"),
+        byId("micro_method2"),
+        byId("context_method0"),
+        byId("context_method1"),
+        byId("context_method2"),
+        byId("context_method3")
+    ];
+    for (var i = 0; i < elementsDisabling.length; i++) {
+        on(elementsDisabling[i], 'click', updateDisabledElements);
     }
 }
 function startLabelEdit(row) {

@@ -21,6 +21,9 @@
 
 var allowedAscii = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 var config = {};
+var lastActionTime = 0;
+var leftDown = false;
+var rightDown = false;
 
 self.port.on('configure', function (cfg) {
     config = cfg;
@@ -87,6 +90,16 @@ function detectWordFromEvent(evt) {
     return pre + post;
 }
 
+function updateWordUnderCursor(e) {
+    // get the selection text
+    var text = config.selected ? window.getSelection().toString() : '';
+    // try to get the word from the mouse event
+    if (!text)
+        text = detectWordFromEvent(e);
+    self.port.emit("setWordUnderCursor", text, e.screenX, e.screenY);
+    return text;
+}
+
 function getQuickAction(e) {
     if (!config.quickEnabled)
         return null;
@@ -98,7 +111,7 @@ function getQuickAction(e) {
             && e.altKey === config.alt) {
         if (e.which === 1) {
             action = 'instant';
-        } else if (e.which === 3 && config.menu) {
+        } else if (config.menu && e.which === 3) {
             action = 'menu';
         }
     }
@@ -109,40 +122,44 @@ function getQuickAction(e) {
         if (!action && (leftDown || rightDown)) {
             if (e.which === 1 && rightDown !== false && (currentTime - rightDown) < 1000)
                 action = 'instant';
-            else if (e.which === 3 && leftDown !== false && (currentTime - leftDown) < 1000)
+            else if (config.menu && e.which === 3 && leftDown !== false && (currentTime - leftDown) < 1000)
                 action = 'menu';
         }
     }
     return action;
 }
 
-window.addEventListener("contextmenu", function (e) {
-    if (getQuickAction(e) !== null) {
+
+function preventMouseEventAfterAction(e) {
+    var currentTime = new Date().getTime();
+    var deltaTime = currentTime - lastActionTime;
+    if (deltaTime < 500) {
         e.preventDefault();
         e.stopPropagation();
         return false;
     }
     return true;
-});
+}
 
-var leftDown = false;
-var rightDown = false;
-window.addEventListener("mouseup", function (e) {
-    if (e.which === 1)
-        leftDown = false;
-    else if (e.which === 3)
-        rightDown = false;
-});
-window.addEventListener("mousedown", function (e) {
-    // get the selection text
-    var text = config.selected ? window.getSelection().toString() : '';
-    // try to get the word from the mouse event
-    if (!text)
-        text = detectWordFromEvent(e);
-    self.port.emit("setWordUnderCursor", text);
+function updateRocker(which, value) {
+    if (which === 1)
+        leftDown = value;
+    else if (which === 3)
+        rightDown = value;
+}
 
+function onMouseUp(e) {
+    updateRocker(e.which, false);
+    return preventMouseEventAfterAction(e);
+}
+
+function onMouseDown(e) {
+    var text = updateWordUnderCursor(e);
+
+    var currentTime = new Date().getTime();
     var action = getQuickAction(e);
     if (action) {
+        lastActionTime = currentTime;
         if (text)
             self.port.emit('requestQuickTranslation', e.screenX, e.screenY, text, action === 'menu');
 
@@ -150,13 +167,14 @@ window.addEventListener("mousedown", function (e) {
         e.stopPropagation();
     }
 
-    var currentTime = new Date().getTime();
-    if (e.which === 1)
-        leftDown = currentTime;
-    if (e.which === 3)
-        rightDown = currentTime;
+    updateRocker(e.which, currentTime);
 
     return action === null;
-}, false);
+}
+
+window.addEventListener("click", preventMouseEventAfterAction, true);
+window.addEventListener("contextmenu", preventMouseEventAfterAction, true);
+window.addEventListener("mousedown", onMouseDown, true);
+window.addEventListener("mouseup", onMouseUp, true);
 
 self.port.emit('init');
