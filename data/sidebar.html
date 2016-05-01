@@ -18,12 +18,13 @@
     <body>
         <iframe id="iframe"></iframe>
         <script>
-            var result = {};
+            var url;
             location.search.substr(1).split("&").forEach(function (item) {
                 var tmp = item.split("=");
-                result[tmp[0]] = decodeURIComponent(tmp[1]);
+                if(tmp[0] === 'url')
+                    url = atob(decodeURIComponent(tmp[1]));
             });
-            document.getElementById('iframe').src = result.url;
+            document.getElementById('iframe').src = url;
         </script>
     </body>
 </html>
