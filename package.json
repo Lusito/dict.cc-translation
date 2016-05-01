@@ -74,6 +74,13 @@
             "hidden": true
         },
         {
+            "name": "context.asPanel",
+            "title": "Use the options dialog please",
+            "type": "bool",
+            "value": true,
+            "hidden": true
+        },
+        {
             "name": "quick.enabled",
             "title": "Use the options dialog please",
             "type": "bool",
@@ -134,6 +141,13 @@
             "title": "Use the options dialog please",
             "type": "bool",
             "value": false,
+            "hidden": true
+        },
+        {
+            "name": "quick.asPanel",
+            "title": "Use the options dialog please",
+            "type": "bool",
+            "value": true,
             "hidden": true
         },
         {
