@@ -151,13 +151,6 @@
             "hidden": true
         },
         {
-            "name": "quick.fixGestures",
-            "title": "Use the options dialog please",
-            "type": "bool",
-            "value": false,
-            "hidden": true
-        },
-        {
             "name": "quick.rocker",
             "title": "Use the options dialog please",
             "type": "bool",

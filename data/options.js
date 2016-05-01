@@ -229,7 +229,6 @@ function initializePreferenceElements() {
         "quick_multiWindow",
         "quick_asPanel",
         "quick_rocker",
-        "quick_fixGestures",
         "translation_useHttps"
     ];
     var radioNames = [
@@ -380,7 +379,6 @@ function updateDisabledElements() {
         byId("quick_selected"),
         byId("quick_right"),
         byId("quick_rocker"),
-        byId("quick_fixGestures"),
         byId("quick_multiWindow"),
         byId("quick_asPanel")
     ];
