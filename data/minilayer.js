@@ -53,7 +53,7 @@ function createMenuEntry(text, translation) {
     var link = document.createElement("a");
     var languagePair = translation.k;
     link.addEventListener("click", function () {
-        self.port.emit("requestTranslation", text, languagePair);
+        self.port.emit("menuEntryClick", text, languagePair);
     }, false);
     link.textContent = translation.v;
     return link;
@@ -74,7 +74,7 @@ function showMenu(label, text, translations) {
 function createResultEntry(def) {
     var link = document.createElement("a");
     link.addEventListener("click", function () {
-        self.port.emit("requestFullTranslation", def.href);
+        self.port.emit("resultClick", def.href);
     }, false);
     link.textContent = def.label;
     if(def.style)
