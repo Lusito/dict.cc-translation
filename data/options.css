@@ -82,6 +82,9 @@ input:disabled+label {
     height: 25px;
     text-align: right;
 }
+#buttons > #restore_defaults {
+    float: left;
+}
 #manual {
     color: #990000;
 }

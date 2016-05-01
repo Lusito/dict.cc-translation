@@ -552,6 +552,14 @@ on(byId('cancel'), 'click', function () {
     self.port.emit('cancel');
 });
 
+on(byId('restore_defaults'), 'click', function () {
+    confirm('confirm_restore_defaults', "confirm_restore_defaults_content", null, function (result) {
+        if (result) {
+            self.port.emit('restore_defaults');
+        }
+    });
+});
+
 on(byId('save'), 'click', function () {
     if (!byId('quick_enabled').checked || byId('quick_ctrl').checked
             || byId('quick_shift').checked || byId('quick_alt').checked) {
@@ -575,6 +583,7 @@ self.port.on('show', function (prefs) {
     preferences = prefs;
     loadPreferences();
     updateDisabledElements();
+    byId('save').focus();
 });
 
 //byId('title').innerHTML = '<div data-l10n-id="prefPane_title">ddd</div>';
