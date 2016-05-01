@@ -373,9 +373,11 @@ function updateDisabledElements() {
         byId("quick_method1"),
         byId("quick_method2"),
         byId("quick_method3"),
+        byId("quick_method4"),
         byId("micro_method0"),
         byId("micro_method1"),
         byId("micro_method2"),
+        byId("micro_method4"),
         byId("quick_selected"),
         byId("quick_right"),
         byId("quick_rocker"),
@@ -387,6 +389,7 @@ function updateDisabledElements() {
         byId("context_method1"),
         byId("context_method2"),
         byId("context_method3"),
+        byId("context_method4"),
         byId("context_showFirst"),
         byId("context_multiWindow"),
         byId("context_asPanel")
@@ -394,7 +397,8 @@ function updateDisabledElements() {
     var microMethodElements = [
         byId("micro_method0"),
         byId("micro_method1"),
-        byId("micro_method2")
+        byId("micro_method2"),
+        byId("micro_method4")
     ];
 
     var quickEnabled = byId("quick_enabled").checked;
@@ -428,13 +432,16 @@ function initializeDisabledConnections() {
         byId("quick_method1"),
         byId("quick_method2"),
         byId("quick_method3"),
+        byId("quick_method4"),
         byId("micro_method0"),
         byId("micro_method1"),
         byId("micro_method2"),
+        byId("micro_method4"),
         byId("context_method0"),
         byId("context_method1"),
         byId("context_method2"),
-        byId("context_method3")
+        byId("context_method3"),
+        byId("context_method4")
     ];
     for (var i = 0; i < elementsDisabling.length; i++) {
         on(elementsDisabling[i], 'click', updateDisabledElements);

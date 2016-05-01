@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title data-l10n-id="sidebar_title"></title>
+        <style>
+            html, body, iframe {
+                margin: 0;
+                padding: 0;
+                border: 0;
+                width: 100%;
+                height: 100%;
+            }
+            body {
+                overflow-y: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <iframe id="iframe"></iframe>
+        <script>
+            var result = {};
+            location.search.substr(1).split("&").forEach(function (item) {
+                var tmp = item.split("=");
+                result[tmp[0]] = decodeURIComponent(tmp[1]);
+            });
+            document.getElementById('iframe').src = result.url;
+        </script>
+    </body>
+</html>
