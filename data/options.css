@@ -207,3 +207,13 @@ table select {
     line-height: 10px;
     box-sizing: border-box;
 }
+.warning {
+    border: 2px solid #E88E00;
+    border-radius: 4px;
+    margin-top: 2px;
+    padding: 3px;
+}
+.warning > span:first-child {
+    color: #E88E00;
+    font-weight: bold;
+}

@@ -424,6 +424,7 @@ function updateDisabledElements() {
             byId("context_asPanel").disabled = true;
     }
 }
+
 function initializeDisabledConnections() {
     var elementsDisabling = [
         byId("context_enabled"),
@@ -447,6 +448,28 @@ function initializeDisabledConnections() {
         on(elementsDisabling[i], 'click', updateDisabledElements);
     }
 }
+
+function initializeWarningConnections() {
+    var quick_ctrl = byId("quick_ctrl");
+    var quick_shift = byId("quick_shift");
+    var quick_alt = byId("quick_alt");
+    var quick_right = byId("quick_right");
+    
+    var quick_warning_shift = byId("quick_warning_shift");
+    var quick_warning_alt = byId("quick_warning_alt");
+    function updateWarnings() {
+        var warnShift = quick_shift.checked && quick_right.checked &&  !quick_ctrl.checked && !quick_alt.checked;
+        var warnAlt = quick_alt.checked && !quick_ctrl.checked && !quick_shift.checked;
+        quick_warning_shift.style.display = warnShift ? 'block' : 'none';
+        quick_warning_alt.style.display = warnAlt ? 'block' : 'none';
+    }
+    updateWarnings();
+    on(quick_ctrl, 'click', updateWarnings);
+    on(quick_shift, 'click', updateWarnings);
+    on(quick_alt, 'click', updateWarnings);
+    on(quick_right, 'click', updateWarnings);
+}
+
 function startLabelEdit(row) {
     var cell = row.children[0];
     prompt('enterLabel', cell.textContent, function (value) {
@@ -575,6 +598,7 @@ initializeTooltips();
 initializePreferenceElements();
 initializeDisabledConnections();
 initializeTranslationButtons();
+initializeWarningConnections();
 
 self.port.emit('init');
 self.port.on('languageListUpdate', onLanguageListUpdate);
