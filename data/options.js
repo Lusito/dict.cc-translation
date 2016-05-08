@@ -229,7 +229,6 @@ function initializePreferenceElements() {
         "quick_multiWindow",
         "quick_asPanel",
         "quick_rocker",
-        "quick_fixGestures",
         "translation_useHttps"
     ];
     var radioNames = [
@@ -374,13 +373,14 @@ function updateDisabledElements() {
         byId("quick_method1"),
         byId("quick_method2"),
         byId("quick_method3"),
+        byId("quick_method4"),
         byId("micro_method0"),
         byId("micro_method1"),
         byId("micro_method2"),
+        byId("micro_method4"),
         byId("quick_selected"),
         byId("quick_right"),
         byId("quick_rocker"),
-        byId("quick_fixGestures"),
         byId("quick_multiWindow"),
         byId("quick_asPanel")
     ];
@@ -389,6 +389,7 @@ function updateDisabledElements() {
         byId("context_method1"),
         byId("context_method2"),
         byId("context_method3"),
+        byId("context_method4"),
         byId("context_showFirst"),
         byId("context_multiWindow"),
         byId("context_asPanel")
@@ -396,7 +397,8 @@ function updateDisabledElements() {
     var microMethodElements = [
         byId("micro_method0"),
         byId("micro_method1"),
-        byId("micro_method2")
+        byId("micro_method2"),
+        byId("micro_method4")
     ];
 
     var quickEnabled = byId("quick_enabled").checked;
@@ -422,6 +424,7 @@ function updateDisabledElements() {
             byId("context_asPanel").disabled = true;
     }
 }
+
 function initializeDisabledConnections() {
     var elementsDisabling = [
         byId("context_enabled"),
@@ -430,18 +433,43 @@ function initializeDisabledConnections() {
         byId("quick_method1"),
         byId("quick_method2"),
         byId("quick_method3"),
+        byId("quick_method4"),
         byId("micro_method0"),
         byId("micro_method1"),
         byId("micro_method2"),
+        byId("micro_method4"),
         byId("context_method0"),
         byId("context_method1"),
         byId("context_method2"),
-        byId("context_method3")
+        byId("context_method3"),
+        byId("context_method4")
     ];
     for (var i = 0; i < elementsDisabling.length; i++) {
         on(elementsDisabling[i], 'click', updateDisabledElements);
     }
 }
+
+function initializeWarningConnections() {
+    var quick_ctrl = byId("quick_ctrl");
+    var quick_shift = byId("quick_shift");
+    var quick_alt = byId("quick_alt");
+    var quick_right = byId("quick_right");
+    
+    var quick_warning_shift = byId("quick_warning_shift");
+    var quick_warning_alt = byId("quick_warning_alt");
+    function updateWarnings() {
+        var warnShift = quick_shift.checked && quick_right.checked &&  !quick_ctrl.checked && !quick_alt.checked;
+        var warnAlt = quick_alt.checked && !quick_ctrl.checked && !quick_shift.checked;
+        quick_warning_shift.style.display = warnShift ? 'block' : 'none';
+        quick_warning_alt.style.display = warnAlt ? 'block' : 'none';
+    }
+    updateWarnings();
+    on(quick_ctrl, 'click', updateWarnings);
+    on(quick_shift, 'click', updateWarnings);
+    on(quick_alt, 'click', updateWarnings);
+    on(quick_right, 'click', updateWarnings);
+}
+
 function startLabelEdit(row) {
     var cell = row.children[0];
     prompt('enterLabel', cell.textContent, function (value) {
@@ -547,6 +575,14 @@ on(byId('cancel'), 'click', function () {
     self.port.emit('cancel');
 });
 
+on(byId('restore_defaults'), 'click', function () {
+    confirm('confirm_restore_defaults', "confirm_restore_defaults_content", null, function (result) {
+        if (result) {
+            self.port.emit('restore_defaults');
+        }
+    });
+});
+
 on(byId('save'), 'click', function () {
     if (!byId('quick_enabled').checked || byId('quick_ctrl').checked
             || byId('quick_shift').checked || byId('quick_alt').checked) {
@@ -562,6 +598,7 @@ initializeTooltips();
 initializePreferenceElements();
 initializeDisabledConnections();
 initializeTranslationButtons();
+initializeWarningConnections();
 
 self.port.emit('init');
 self.port.on('languageListUpdate', onLanguageListUpdate);
@@ -570,6 +607,7 @@ self.port.on('show', function (prefs) {
     preferences = prefs;
     loadPreferences();
     updateDisabledElements();
+    byId('save').focus();
 });
 
 //byId('title').innerHTML = '<div data-l10n-id="prefPane_title">ddd</div>';

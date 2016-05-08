@@ -20,7 +20,10 @@
  * ***** END LICENSE BLOCK ***** */
 
 function updateSize() {
+    var last = document.body.className;
+    document.body.className += ' measuring';
     self.port.emit('resize', document.body.scrollWidth, document.body.scrollHeight);
+    document.body.className = last;
 }
 
 var miniResults = document.getElementById('result');

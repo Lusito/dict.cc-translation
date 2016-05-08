@@ -3,7 +3,7 @@
     "title": "Dict.cc Translation",
     "id": "searchdictcc@roughael",
     "description": "Uses Dict.cc to translate text selection via context menu or via alt+click on a word(without the need for selection)",
-    "version": "4.1.0",
+    "version": "4.2.0",
     "main": "lib/main.js",
     "author": "Santo Pfingsten",
     "homepage": "https://addons.mozilla.org/en-US/firefox/addon/dictcc-translation/",
@@ -148,13 +148,6 @@
             "title": "Use the options dialog please",
             "type": "bool",
             "value": true,
-            "hidden": true
-        },
-        {
-            "name": "quick.fixGestures",
-            "title": "Use the options dialog please",
-            "type": "bool",
-            "value": false,
             "hidden": true
         },
         {
