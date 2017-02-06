@@ -533,9 +533,8 @@ on(byId('save'), 'click', function () {
 on(byId('cancel'), 'click', function () {
     // close on chrome
     window.close();
-    // on firefox, restore settings to last known, since you can't close the settings window
-    loadPreferences();
-    updateDisabledElements();
+    // on firefox, there is no popup window to close, so go back in history
+    window.history.back();
 });
 
 translateChildren(document);
