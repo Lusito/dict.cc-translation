@@ -267,6 +267,7 @@ function loadPreferences() {
 
     translationsFromJSON(settings.get("translation.list"));
     languagesFromJSON(settings.get("translation.languages"));
+    updateWarnings();
 }
 
 function storePreferences() {
@@ -367,7 +368,7 @@ function initializeDisabledConnections() {
         on(elementsDisabling[i], 'click', updateDisabledElements);
     }
 }
-
+var updateWarnings = function() {};
 function initializeWarningConnections() {
     var quick_ctrl = byId("quick_ctrl");
     var quick_shift = byId("quick_shift");
@@ -376,12 +377,12 @@ function initializeWarningConnections() {
 
     var quick_warning_shift = byId("quick_warning_shift");
     var quick_warning_alt = byId("quick_warning_alt");
-    function updateWarnings() {
+    updateWarnings = function() {
         var warnShift = quick_shift.checked && quick_right.checked && !quick_ctrl.checked && !quick_alt.checked;
         var warnAlt = quick_alt.checked && !quick_ctrl.checked && !quick_shift.checked;
         quick_warning_shift.style.display = warnShift ? 'block' : 'none';
         quick_warning_alt.style.display = warnAlt ? 'block' : 'none';
-    }
+    };
     updateWarnings();
     on(quick_ctrl, 'click', updateWarnings);
     on(quick_shift, 'click', updateWarnings);
@@ -542,7 +543,8 @@ initializeTabs();
 initializePreferenceElements();
 initializeDisabledConnections();
 initializeTranslationButtons();
-initializeWarningConnections();
+if(navigator.userAgent.toLowerCase().indexOf("firefox") >= 0)
+    initializeWarningConnections();
 byId('save').focus();
 
 settings.onReady(function () {
