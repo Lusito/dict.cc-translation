@@ -246,23 +246,65 @@ function getTopLeftFromIframe() {
 
    return [left,top];
 }
-//Fixme: all should be !important
-var DEFAULT_OVERLAY_STYLES = "position: fixed;border: none;box-shadow: none;z-index: 1000000000;margin: 0; padding: 0; top: 0; left: 0; right: 0; bottom: 0; background: rgba(128, 128, 128, 0.22);";
+var COMMON_STYLES = {
+    display: "block",
+    float: "none",
+    margin: 0,
+    padding: 0,
+    border: "none",
+    "border-radius": 0,
+    width: "auto",
+    height: "auto",
+    outline: "none",
+    "box-shadow": "none",
+    background: "none"
+};
+var OVERLAY_STYLES = {
+    position: "fixed",
+    "z-index": 1000000000,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: "rgba(128, 128, 128, 0.22)"
+};
+var DEFAULT_PANEL_STYLES = {
+    position: "fixed",
+    "box-shadow": "0 0 4px 1px #adadad"
+};
+
+var MICRO_PANEL_STYLES = {
+    left: "-1000px",
+    top: 0,
+    right: "auto",
+    bottom: "auto",
+    width: "50px",
+    height: "20px",
+    "border-radius": "3px"
+};
+
+function applyForcedStyles(elem) {
+    for(var i=1; i<arguments.length; i++) {
+        var styles = arguments[i];
+        for(var key in styles) {
+            elem.style.setProperty(key, styles[key], "important");
+        }
+    }
+}
+
 function createPanelOverlay() {
     var tdoc = window.top.document;
     var overlay = tdoc.createElement('div');
-    overlay.style=DEFAULT_OVERLAY_STYLES + "pointer-events:none;";
+    applyForcedStyles(overlay, COMMON_STYLES, OVERLAY_STYLES, {"pointer-events":"none"});
     on(overlay, 'mousedown', destroyPanels);
     tdoc.body.appendChild(overlay);
     // enable pointer-events later, since otherwise context-menu will be opened on the new panel
     setTimeout(function() {
-        overlay.style=DEFAULT_OVERLAY_STYLES;
+        applyForcedStyles(overlay, {'pointer-events': 'auto'});
     }, 500);
     return overlay;
 }
 
-//Fixme: all should be !important
-var DEFAULT_PANEL_STYLES = "position: fixed;border: none;box-shadow: 0 0 4px 1px #adadad;z-index: 1000000000;";
 function MiniLayer(x, y, onload) {
     // If in a frame, add frame position
     if(window.top !== window.self) {
@@ -274,8 +316,7 @@ function MiniLayer(x, y, onload) {
     var tdoc = window.top.document;
     var iframe = tdoc.createElement('iframe');
     var idoc,ibody,resultNode,extraNode;
-    //Fixme: all should be !important
-    iframe.style=DEFAULT_PANEL_STYLES + "left: -1000px;top: 0px;height: 20px;width: 50px;border-radius: 3px;";
+    applyForcedStyles(iframe, COMMON_STYLES, DEFAULT_PANEL_STYLES, MICRO_PANEL_STYLES);
     iframe.onload = function() {
         idoc = iframe.contentDocument || iframe.contentWindow.document;
         ibody = idoc.body;
@@ -294,14 +335,18 @@ function MiniLayer(x, y, onload) {
     function updateSize() {
         var last = ibody.className;
         ibody.className += ' measuring';
-        iframe.style.width = '50px';
-        iframe.style.height = '20px';
+        applyForcedStyles(iframe, {
+            width: '50px',
+            height: '20px'
+        });
         var calculatedWidth = ibody.scrollWidth;
         var calculatedHeight = ibody.scrollHeight;
         ibody.className = last;
 
-        iframe.style.width = calculatedWidth + 'px';
-        iframe.style.height = calculatedHeight + 'px';
+        applyForcedStyles(iframe, {
+            width: calculatedWidth + 'px',
+            height: calculatedHeight + 'px'
+        });
         var vw = Math.max(tdoc.documentElement.clientWidth, window.innerWidth || 0);
         var vh = Math.max(tdoc.documentElement.clientHeight, window.innerHeight || 0);
         var left = (x + 5);
@@ -310,8 +355,10 @@ function MiniLayer(x, y, onload) {
         var top = (y + 5);
         if((top + calculatedHeight) >= vh)
             top = (y - calculatedHeight - 5);
-        iframe.style.left = left + 'px';
-        iframe.style.top = top + 'px';
+        applyForcedStyles(iframe, {
+            left: left + 'px',
+            top: top + 'px'
+        });
     }
     function setup(text, extraNodes) {
         removeAllChildren(resultNode);
@@ -411,10 +458,13 @@ function Panel(url, width, height) {
     var tdoc = window.top.document;
     var iframe = tdoc.createElement('iframe');
     iframe.src = url;
-    var hh = Math.round(height/2);
-    var hw = Math.round(width/2);
-    //Fixme: all should be !important
-    iframe.style=DEFAULT_PANEL_STYLES + "left: calc(50% - " + hw + "px);top: calc(50% - " + hh + "px);height: " + height + "px;width: " + width + "px;";
+    var calculatedStyles = {
+        left: "calc(50% - " + Math.round(width/2) + "px)",
+        top: "calc(50% - " + Math.round(height/2) + "px)",
+        height: height + "px",
+        width: width + "px"
+    };
+    applyForcedStyles(iframe, COMMON_STYLES, DEFAULT_PANEL_STYLES, calculatedStyles);
     iframe.onload = function() { setTimeout(onload, 0); };
     overlay.appendChild(iframe);
     
