@@ -83,6 +83,7 @@
                 translator.run({
                     text: wordUnderCursor,
                     languagePair: translation.k,
+                    asPanel: settings.get('context.asPanel'),
                     x: lastCursorX,
                     y: lastCursorY
                 }, false, tab);
