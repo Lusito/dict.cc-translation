@@ -228,11 +228,51 @@ function onMouseDown(e) {
 
     return action === null;
 }
+function getTopLeftFromIframe() {
+   var left = 0, top = 0;
+   var win = window;
+   var element = window.frameElement;
+
+   do {
+      left += element.offsetLeft;
+      top += element.offsetTop;
+      element = element.offsetParent;
+
+      if (!element) {
+         element = win.frameElement;
+         win = win.parent;
+      }
+   } while (element)
+
+   return [left,top];
+}
+//Fixme: all should be !important
+var DEFAULT_OVERLAY_STYLES = "position: fixed;border: none;box-shadow: none;z-index: 1000000000;margin: 0; padding: 0; top: 0; left: 0; right: 0; bottom: 0; background: rgba(128, 128, 128, 0.22);";
+function createPanelOverlay() {
+    var tdoc = window.top.document;
+    var overlay = tdoc.createElement('div');
+    overlay.style=DEFAULT_OVERLAY_STYLES + "pointer-events:none;";
+    on(overlay, 'mousedown', destroyPanels);
+    tdoc.body.appendChild(overlay);
+    // enable pointer-events later, since otherwise context-menu will be opened on the new panel
+    setTimeout(function() {
+        overlay.style=DEFAULT_OVERLAY_STYLES;
+    }, 500);
+    return overlay;
+}
 
 //Fixme: all should be !important
 var DEFAULT_PANEL_STYLES = "position: fixed;border: none;box-shadow: 0 0 4px 1px #adadad;z-index: 1000000000;";
 function MiniLayer(x, y, onload) {
-    var iframe = document.createElement('iframe');
+    // If in a frame, add frame position
+    if(window.top !== window.self) {
+        var tl = getTopLeftFromIframe();
+        x += tl[0];
+        y += tl[1];
+    }
+    var overlay = createPanelOverlay();
+    var tdoc = window.top.document;
+    var iframe = tdoc.createElement('iframe');
     var idoc,ibody,resultNode,extraNode;
     //Fixme: all should be !important
     iframe.style=DEFAULT_PANEL_STYLES + "left: -1000px;top: 0px;height: 20px;width: 50px;border-radius: 3px;";
@@ -248,7 +288,7 @@ function MiniLayer(x, y, onload) {
         extraNode = createElement(idoc, ibody, 'span', {id: "extra"});
         setTimeout(onload, 0);
     };
-    document.body.appendChild(iframe);
+    overlay.appendChild(iframe);
     
 
     function updateSize() {
@@ -262,8 +302,8 @@ function MiniLayer(x, y, onload) {
 
         iframe.style.width = calculatedWidth + 'px';
         iframe.style.height = calculatedHeight + 'px';
-        var vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-        var vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        var vw = Math.max(tdoc.documentElement.clientWidth, window.innerWidth || 0);
+        var vh = Math.max(tdoc.documentElement.clientHeight, window.innerHeight || 0);
         var left = (x + 5);
         if((left + calculatedWidth) >= vw)
             left = (x - calculatedWidth - 5);
@@ -349,7 +389,7 @@ function MiniLayer(x, y, onload) {
         });
     };
     this.destroy = function() {
-        document.body.removeChild(iframe);
+        tdoc.body.removeChild(overlay);
     };
 }
 var miniLayer = null;
@@ -367,17 +407,19 @@ function destroyPanels() {
 }
 
 function Panel(url, width, height) {
-    var iframe = document.createElement('iframe');
+    var overlay = createPanelOverlay();
+    var tdoc = window.top.document;
+    var iframe = tdoc.createElement('iframe');
     iframe.src = url;
     var hh = Math.round(height/2);
     var hw = Math.round(width/2);
     //Fixme: all should be !important
     iframe.style=DEFAULT_PANEL_STYLES + "left: calc(50% - " + hw + "px);top: calc(50% - " + hh + "px);height: " + height + "px;width: " + width + "px;";
     iframe.onload = function() { setTimeout(onload, 0); };
-    document.body.appendChild(iframe);
+    overlay.appendChild(iframe);
     
     this.destroy = function() {
-        document.body.removeChild(iframe);
+        tdoc.body.removeChild(overlay);
     };
 }
 function showPanel(cfg) {
