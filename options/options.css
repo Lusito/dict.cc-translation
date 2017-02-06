@@ -4,25 +4,18 @@ body {
     padding: 0;
     background: white;
     font-family: "Open Sans", sans-serif;
-    width: 650px;
+    width: 700px;
     font-size: 13px;
     display: flex;
     flex-direction: column;
 }
 body {
-    max-width: 650px;
+    max-width: 700px;
     background: #F0F0F0;
     padding: 10px;
     box-sizing: border-box;
 }
-#tabs {
-    height: 28px;
-    display: flex;
-    flex-direction: row;
-    z-index: 10;
-    font-size: 15px;
-    flex-shrink: 0;
-}
+
 input:disabled+label {
     color: gray;
 }
@@ -30,12 +23,14 @@ input[type=checkbox],
 input[type=radio] {
     margin-right: 3px;
 }
-input[type=checkbox] + label,
-input[type=radio] + label {
-    position: relative;
-    top: 1px;
+label > input[type=checkbox],
+label > input[type=radio] {
+  vertical-align: middle;
 }
-
+label > input[type=checkbox] + span,
+label > input[type=radio] + span {
+  vertical-align: middle;
+}
 #title {
     position: absolute;
     top: 12px;
@@ -43,27 +38,11 @@ input[type=radio] + label {
     font-weight: bold;
     font-size: 15px;
 }
-#tabs > div {
-    background: lightgray;
-    border: 1px solid #A7A7A7;
-    padding: 2px 4px;
-    cursor: pointer;
-    user-select: none;
-    -moz-user-select: none;
-}
-#tabs > div:not(:first-child) {
-    border-left-width: 0;
-}
-#tabs > div.active {
-    background: white;
-    border-bottom-color: white;
-}
-
 #pages {
     flex-grow: 1;
     border: 1px solid #A7A7A7;
     padding: 10px;
-    margin: -1px 0 10px 0;
+    margin: 0 0 10px 0;
     min-height: 276px;
     background: white;
 }
@@ -198,7 +177,6 @@ table select {
 }
 #loadingIndicator,
 #language_config_table button {
-    width: 78px;
     height: 24px;
     line-height: 10px;
     box-sizing: border-box;
@@ -212,4 +190,58 @@ table select {
 .warning > span:first-child {
     color: #E88E00;
     font-weight: bold;
+}
+
+#tabs {
+    height: 28px;
+    padding: 0 0 0 0;
+    overflow: visible;
+}
+
+#tabs>div {
+    position: relative;
+    width: 160px;
+    height: 28px;
+    overflow: hidden;
+    float: left;
+    margin: 0 -22px 0 0;
+    cursor: pointer;
+    user-select: none;
+    -moz-user-select: none;
+}
+
+.tab-box {
+    height: 33px;
+    background: lightgray;
+    border-radius: 4px;
+    border: 1px solid #A7A7A7;
+    outline: 1px solid transparent;
+    margin: 0 10px 0;
+    -webkit-transform: perspective(100px) rotateX(20deg);
+    -moz-transform: perspective(100px) rotateX(20deg);
+    transform: perspective(100px) rotateX(20deg);
+}
+
+.tab-label {
+    position: absolute;
+    top: 7px;
+    left: 23px;
+}
+
+#tabs>div:nth-child(1) {
+    z-index: 3;
+}
+#tabs>div:nth-child(2) {
+    z-index: 2;
+}
+#tabs>div:nth-child(3) {
+    z-index: 1;
+}
+#tabs>div.active {
+    z-index: 40;
+    padding-bottom: 1px;
+}
+
+#tabs>div.active .tab-box {
+    background: white;
 }

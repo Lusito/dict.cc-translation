@@ -36,7 +36,7 @@
 
 	"prefPane_title": { "message": "Dict.cc Add-on Einstellungen", "description": "" },
 	"tabs_context_title": { "message": "Kontextmenü", "description": "" },
-	"tabs_quick_title": { "message": "Schnellübersetzung", "description": "" },
+	"tabs_quick_title": { "message": "Quick Click", "description": "" },
 	"tabs_language_title": { "message": "Übersetzungsliste", "description": "" },
 
 	"tabs_context_enable": { "message": "Kontextmenü aktivieren", "description": "" },
