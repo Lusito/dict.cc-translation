@@ -1,0 +1,69 @@
+{
+    "manifest_version": 2,
+
+    "name": "__MSG_extensionName__",
+    "description": "__MSG_extensionDescription__",
+	"author": "Santo Pfingsten",
+    "default_locale": "en",
+    "version": "5.0",
+    "icons": {
+        "16": "icon16.png",
+        "32": "icon32.png",
+        "48": "icon48.png",
+        "64": "icon64.png",
+        "96": "icon96.png",
+        "128": "icon128.png"
+    },
+    "incognito" : "split",
+    "browser_action": {
+        "default_icon": "icon64.png",
+        "default_popup": "popup/popup.html",
+        "default_title": "__MSG_actionTitle__"
+    },
+    "background": {
+        "scripts": [
+            "lib/browser.js",
+            "lib/constants.js",
+            "lib/messageUtil.js",
+            "lib/settings.js",
+            "lib/popup.js",
+            "lib/request.js",
+            "visualizers/inpageVisualizer.js",
+            "visualizers/pocketPopupVisualizer.js",
+            "visualizers/synPopupVisualizer.js",
+            "visualizers/tabVisualizer.js",
+            "lib/translator.js",
+            "scripts/contextmenu.js"
+        ]
+    },
+    "content_scripts": [
+        {
+            "all_frames": true,
+            "js": [
+                "lib/browser.js",
+                "lib/constants.js",
+                "lib/htmlUtils.js",
+                "lib/messageUtil.js",
+                "lib/settings.js",
+                "scripts/content.js"
+            ],
+            "matches": ["*://*/*"]
+        }
+    ],
+    "options_ui": {
+        "page": "options/options.html",
+        "chrome_style": true
+    },
+    "permissions": [
+        "https://*.dict.cc/",
+        "http://*.dict.cc/",
+        "contextMenus",
+        "storage",
+        "tabs"
+    ],
+    "web_accessible_resources": [
+        "minilayer/minilayer.html",
+        "minilayer/minilayer.css",
+        "icon16.png"
+    ]
+}

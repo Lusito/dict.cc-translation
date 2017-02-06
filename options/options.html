@@ -3,11 +3,9 @@
     <head>
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
         <link href="options.css" type="text/css" rel="stylesheet">
-        <title data-l10n-id="prefPane_title"></title>
     </head>
     <body>
         <div id="tooltip"></div>
-        <div id="title" data-l10n-id="prefPane_title"></div>
         <div id="tabs">
             <div data-l10n-id="tabs_context_title" class="active"></div>
             <div data-l10n-id="tabs_quick_title"></div>
@@ -17,7 +15,6 @@
             <div class="active">
                 <div>
                     <div><input type="checkbox" id="context_enabled"><label for="context_enabled" data-l10n-id="tabs_context_enable"></label></div>
-                    <div><input type="checkbox" id="context_showFirst"><label for="context_showFirst" data-l10n-id="tabs_context_showFirst"></label></div>
                     <div><input type="checkbox" id="context_multiWindow"><label for="context_multiWindow" data-l10n-id="tabs_result_multiWindow"></label></div>
                     <div><input type="checkbox" id="context_asPanel"><label for="context_asPanel" data-l10n-id="tabs_result_asPanel"></label></div>
                 </div>
@@ -28,7 +25,6 @@
                         <div><input type="radio" name="context_method" id="context_method1" value="1"><label for="context_method1" data-l10n-id="tabs_results_pocket"></label></div>
                         <div><input type="radio" name="context_method" id="context_method2" value="2"><label for="context_method2" data-l10n-id="tabs_results_tab"></label></div>
                         <div><input type="radio" name="context_method" id="context_method3" value="3"><label for="context_method3" data-l10n-id="tabs_results_mini"></label></div>
-                        <div><input type="radio" name="context_method" id="context_method4" value="4"><label for="context_method4" data-l10n-id="tabs_results_sidebar"></label></div>
                     </fieldset>
                 </div>
             </div>
@@ -62,14 +58,12 @@
                         <div><input type="radio" name="quick_method" id="quick_method1" value="1"><label for="quick_method1" data-l10n-id="tabs_results_pocket"></label></div>
                         <div><input type="radio" name="quick_method" id="quick_method2" value="2"><label for="quick_method2" data-l10n-id="tabs_results_tab"></label></div>
                         <div><input type="radio" name="quick_method" id="quick_method3" value="3"><label for="quick_method3" data-l10n-id="tabs_results_mini"></label></div>
-                        <div><input type="radio" name="quick_method" id="quick_method4" value="4"><label for="quick_method4" data-l10n-id="tabs_results_sidebar"></label></div>
                     </fieldset>
                     <fieldset>
                         <legend data-l10n-id="tabs_results_micropanel_title"></legend>
                         <div><input type="radio" name="micro_method" id="micro_method0" value="0"><label for="micro_method0" data-l10n-id="tabs_results_syn"></label></div>
                         <div><input type="radio" name="micro_method" id="micro_method1" value="1"><label for="micro_method1" data-l10n-id="tabs_results_pocket"></label></div>
                         <div><input type="radio" name="micro_method" id="micro_method2" value="2"><label for="micro_method2" data-l10n-id="tabs_results_tab"></label></div>
-                        <div><input type="radio" name="micro_method" id="micro_method4" value="4"><label for="micro_method4" data-l10n-id="tabs_results_sidebar"></label></div>
                     </fieldset>
                 </div>
             </div>
@@ -133,5 +127,12 @@
             <button id="save" data-l10n-id="button_save"></button>
             <button id="cancel" data-l10n-id="button_cancel"></button>
         </div>
+        <script src="../lib/browser.js"></script>
+        <script src="../lib/constants.js"></script>
+        <script src="../lib/request.js"></script>
+        <script src="../lib/settings.js"></script>
+        <script src="../lib/messageUtil.js"></script>
+        <script src="../lib/htmlUtils.js"></script>
+        <script src="options.js"></script>
     </body>
 </html>

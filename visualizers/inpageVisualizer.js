@@ -19,20 +19,13 @@
  
  * ***** END LICENSE BLOCK ***** */
 
-var XMLHttpRequest = require("sdk/net/xhr").XMLHttpRequest;
-var browserWindows = require("sdk/windows").browserWindows;
-var privateBrowsing = require("sdk/private-browsing");
-
-exports.requestHTML = function (url, onSuccess, onError) {
-    var cfg = {};
-    if(privateBrowsing.isPrivate(browserWindows.activeWindow))
-        cfg.mozAnon = true;
-    var xhr = new XMLHttpRequest(cfg);
-    xhr.onload = function () {
-        onSuccess(this.responseXML);
-    };
-    xhr.onerror = onError;
-    xhr.open("GET", url);
-    xhr.responseType = "document";
-    xhr.send();
+var inpageVisualizer = {
+    show: function (config) {
+        messageUtil.sendToTab(config.tab, 'showMiniLayer', {
+            x: config.x,
+            y: config.y,
+            text: config.text,
+            languagePair: config.languagePair
+        });
+    }
 };

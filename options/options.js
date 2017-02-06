@@ -19,14 +19,7 @@
  
  * ***** END LICENSE BLOCK ***** */
 
-var preferences = {};
-
-function byId(id) {
-    return document.getElementById(id);
-}
-function on(node, event, callback) {
-    node.addEventListener(event, callback);
-}
+/* global byId, settings, request, messageUtil */
 
 var preferenceElements = {};
 var translationList = byId('translation_list');
@@ -85,11 +78,8 @@ function alert(titleL10nKey, contentL10nKey, content, callback) {
         dialog.contentNode.setAttribute('data-l10n-id', contentL10nKey);
     if (content)
         dialog.contentNode.textContent = content;
-    var l10n = ['alert_ok', titleL10nKey];
-    if (contentL10nKey)
-        l10n.push(contentL10nKey);
     dialog.buttonNodes.alert_ok.focus();
-    self.port.emit('requestTranslation', l10n);
+    translateChildren(dialog.domNode);
 }
 
 function confirm(titleL10nKey, contentL10nKey, content, callback) {
@@ -107,11 +97,8 @@ function confirm(titleL10nKey, contentL10nKey, content, callback) {
         dialog.contentNode.setAttribute('data-l10n-id', contentL10nKey);
     if (content)
         dialog.contentNode.textContent = content;
-    var l10n = ['confirm_ok', 'confirm_cancel', titleL10nKey];
-    if (contentL10nKey)
-        l10n.push(contentL10nKey);
     dialog.buttonNodes.confirm_ok.focus();
-    self.port.emit('requestTranslation', l10n);
+    translateChildren(dialog.domNode);
 }
 
 function prompt(titleL10nKey, value, callback) {
@@ -135,8 +122,7 @@ function prompt(titleL10nKey, value, callback) {
             callback(input.value);
         }
     });
-    var l10n = ['prompt_ok', 'prompt_cancel', titleL10nKey];
-    self.port.emit('requestTranslation', l10n);
+    translateChildren(dialog.domNode);
 }
 
 function initializeTabs() {
@@ -156,68 +142,9 @@ function initializeTabs() {
         linkTab(tabs[i]);
 }
 
-function initializeTooltips() {
-    var tooltip = byId('tooltip');
-    var hasTooltip = false;
-    var tooltipShowTimeoutHandle;
-    var showTooltipDelay = 500;
-    var lastMouseX, lastMouseY;
-    function showTooltip() {
-        tooltipShowTimeoutHandle = null;
-        if (hasTooltip) {
-            tooltip.style.left = 0;
-            tooltip.style.top = 0;
-            tooltip.className = 'visible';
-            var width = tooltip.clientWidth;
-            var height = tooltip.clientHeight;
-            if (lastMouseY > document.body.clientHeight / 2)
-                tooltip.style.top = (lastMouseY - height) + 'px';
-            else
-                tooltip.style.top = lastMouseY + 'px';
-            if (lastMouseX > document.body.clientWidth / 2)
-                tooltip.style.left = (lastMouseX - width - 8) + 'px';
-            else
-                tooltip.style.left = (lastMouseX + 15) + 'px';
-        }
-    }
-    function moveTooltip(x, y) {
-        if (tooltipShowTimeoutHandle) {
-            clearTimeout(tooltipShowTimeoutHandle);
-            tooltipShowTimeoutHandle = null;
-        }
-        if (hasTooltip) {
-            tooltipShowTimeoutHandle = setTimeout(showTooltip, showTooltipDelay);
-            lastMouseX = x;
-            lastMouseY = y;
-        }
-    }
-    function prepareTooltip(x, y, title) {
-        tooltip.textContent = title;
-        hasTooltip = true;
-        moveTooltip(x, y);
-    }
-    function hideTooltip() {
-        tooltip.className = '';
-        hasTooltip = false;
-    }
-    document.body.addEventListener('mousemove', function (e) {
-        moveTooltip(e.clientX, e.clientY);
-    });
-    function registerTooltip(element) {
-        element.addEventListener('mouseover', function (e) {
-            prepareTooltip(e.clientX, e.clientY, element.title);
-        });
-        element.addEventListener('mouseout', hideTooltip);
-    }
-    var titledElements = document.querySelectorAll('[title]');
-    for (var i = 0; i < titledElements.length; i++)
-        registerTooltip(titledElements[i]);
-}
-
 function initializePreferenceElements() {
     var checkboxIds = [
         "context_enabled",
-        "context_showFirst",
         "context_multiWindow",
         "context_asPanel",
         "quick_enabled",
@@ -249,14 +176,14 @@ function initializePreferenceElements() {
     }
 }
 
-function serializeTranslations() {
+function translationsToJSON() {
     var list = [];
     var rows = translationList.children;
     for (var i = 0; i < rows.length; i++) {
         var cells = rows[i].children;
         list.push({k: cells[1].textContent, v: cells[0].textContent});
     }
-    return JSON.stringify(list);
+    return list;
 }
 function addTranslationRow(label, languagePair) {
     var row = document.createElement('tr');
@@ -281,9 +208,8 @@ function addTranslationRow(label, languagePair) {
         startLabelEdit(row);
     });
 }
-function unserializeTranslations(value) {
+function translationsFromJSON(list) {
     selectedTranslationRow = null;
-    var list = JSON.parse(value);
     translationList.innerHTML = '';
     for (var i = 0; i < list.length; i++) {
         var entry = list[i];
@@ -311,7 +237,7 @@ function setLanguageList(list) {
         secondLanguage.appendChild(option);
     }
 }
-function serializeLanguages() {
+function languagesToJSON() {
     var list = [];
     var options = secondLanguage.children;
     for (var i = 0; i < options.length; i++) {
@@ -319,15 +245,15 @@ function serializeLanguages() {
         if (option.value !== 'DE' && option.value !== 'EN')
             list.push({k: option.value, v: option.textContent});
     }
-    return JSON.stringify(list);
+    return list;
 }
-function unserializeLanguages(value) {
-    setLanguageList(JSON.parse(value));
+function languagesFromJSON(value) {
+    setLanguageList(value);
 }
 
 function loadPreferences() {
     for (var key in preferenceElements) {
-        var value = preferences[key];
+        var value = settings.get(key);
         var el = preferenceElements[key];
         if (el.parentElement)
             el.checked = value;
@@ -339,26 +265,27 @@ function loadPreferences() {
         }
     }
 
-    unserializeTranslations(preferences["translation.list"]);
-    unserializeLanguages(preferences["translation.languages"]);
+    translationsFromJSON(settings.get("translation.list"));
+    languagesFromJSON(settings.get("translation.languages"));
 }
 
 function storePreferences() {
     for (var key in preferenceElements) {
         var el = preferenceElements[key];
         if (el.parentElement)
-            preferences[key] = el.checked;
+            settings.set(key, el.checked);
         else {
             for (var i = 0; i < el.length; i++) {
                 var radio = el[i];
                 if (radio.checked)
-                    preferences[key] = parseInt(radio.value);
+                    settings.set(key, parseInt(radio.value));
             }
         }
     }
 
-    preferences["translation.list"] = serializeTranslations();
-    preferences["translation.languages"] = serializeLanguages();
+    settings.set("translation.list", translationsToJSON());
+    settings.set("translation.languages", languagesToJSON());
+    settings.save();
 }
 function setElementsDisabled(elements, disabled) {
     for (var i = 0; i < elements.length; i++)
@@ -373,11 +300,9 @@ function updateDisabledElements() {
         byId("quick_method1"),
         byId("quick_method2"),
         byId("quick_method3"),
-        byId("quick_method4"),
         byId("micro_method0"),
         byId("micro_method1"),
         byId("micro_method2"),
-        byId("micro_method4"),
         byId("quick_selected"),
         byId("quick_right"),
         byId("quick_rocker"),
@@ -389,16 +314,13 @@ function updateDisabledElements() {
         byId("context_method1"),
         byId("context_method2"),
         byId("context_method3"),
-        byId("context_method4"),
-        byId("context_showFirst"),
         byId("context_multiWindow"),
         byId("context_asPanel")
     ];
     var microMethodElements = [
         byId("micro_method0"),
         byId("micro_method1"),
-        byId("micro_method2"),
-        byId("micro_method4")
+        byId("micro_method2")
     ];
 
     var quickEnabled = byId("quick_enabled").checked;
@@ -410,7 +332,7 @@ function updateDisabledElements() {
         if (!byId('quick_method2').checked && (microMethod2.disabled || !microMethod2.checked))
             byId("quick_multiWindow").disabled = true;
         var isPopup = byId('quick_method0').checked || byId('quick_method1').checked;
-        if(!isPopup)
+        if (!isPopup)
             isPopup = byId('quick_method3').checked && (byId('micro_method0').checked || byId('micro_method1').checked);
         if (!isPopup)
             byId("quick_asPanel").disabled = true;
@@ -433,16 +355,13 @@ function initializeDisabledConnections() {
         byId("quick_method1"),
         byId("quick_method2"),
         byId("quick_method3"),
-        byId("quick_method4"),
         byId("micro_method0"),
         byId("micro_method1"),
         byId("micro_method2"),
-        byId("micro_method4"),
         byId("context_method0"),
         byId("context_method1"),
         byId("context_method2"),
         byId("context_method3"),
-        byId("context_method4")
     ];
     for (var i = 0; i < elementsDisabling.length; i++) {
         on(elementsDisabling[i], 'click', updateDisabledElements);
@@ -454,11 +373,11 @@ function initializeWarningConnections() {
     var quick_shift = byId("quick_shift");
     var quick_alt = byId("quick_alt");
     var quick_right = byId("quick_right");
-    
+
     var quick_warning_shift = byId("quick_warning_shift");
     var quick_warning_alt = byId("quick_warning_alt");
     function updateWarnings() {
-        var warnShift = quick_shift.checked && quick_right.checked &&  !quick_ctrl.checked && !quick_alt.checked;
+        var warnShift = quick_shift.checked && quick_right.checked && !quick_ctrl.checked && !quick_alt.checked;
         var warnAlt = quick_alt.checked && !quick_ctrl.checked && !quick_shift.checked;
         quick_warning_shift.style.display = warnShift ? 'block' : 'none';
         quick_warning_alt.style.display = warnAlt ? 'block' : 'none';
@@ -533,7 +452,7 @@ function initializeTranslationButtons() {
     });
     on(byId('refresh'), 'click', function () {
         setLanguageLoading(true);
-        self.port.emit('requestLanguageUpdate');
+        requestLanguageUpdate();
     });
     on(byId('add'), 'click', function () {
         var first = firstLanguage.value;
@@ -571,14 +490,31 @@ function onLanguageListUpdate(languages) {
         alert('alert_title_error', 'refreshFailed');
 }
 
-on(byId('cancel'), 'click', function () {
-    self.port.emit('cancel');
-});
+function requestLanguageUpdate() {
+    var url = 'http://contribute.dict.cc/?action=buildup';
+    var hrefPrefix = 'http://contribute.dict.cc/?action=buildup&targetlang=';
+    request.getHTML(url, function (doc) {
+
+        var elements = doc.getElementsByTagName("a");
+        var list = new Array();
+        for (var i = 0; i < elements.length; i++) {
+            if (elements[i].href.indexOf(hrefPrefix) === 0) {
+                var lang = elements[i].href.substring(hrefPrefix.length);
+                var name = elements[i].textContent;
+                list.push({k: lang, v: name});
+            }
+        }
+        onLanguageListUpdate(list);
+    }, function () {
+        onLanguageListUpdate(null);
+    });
+}
 
 on(byId('restore_defaults'), 'click', function () {
     confirm('confirm_restore_defaults', "confirm_restore_defaults_content", null, function (result) {
         if (result) {
-            self.port.emit('restore_defaults');
+            settings.restoreDefaults();
+            byId('save').focus();
         }
     });
 });
@@ -587,36 +523,33 @@ on(byId('save'), 'click', function () {
     if (!byId('quick_enabled').checked || byId('quick_ctrl').checked
             || byId('quick_shift').checked || byId('quick_alt').checked) {
         storePreferences();
-        self.port.emit('save', preferences);
+        window.close();
     } else {
         alert('alert_title_error', 'noQuickKeys');
     }
 });
 
+on(byId('cancel'), 'click', function () {
+    // close on chrome
+    window.close();
+    // on firefox, restore settings to last known, since you can't close the settings window
+    loadPreferences();
+    updateDisabledElements();
+});
+
+translateChildren(document);
 initializeTabs();
-initializeTooltips();
 initializePreferenceElements();
 initializeDisabledConnections();
 initializeTranslationButtons();
 initializeWarningConnections();
+byId('save').focus();
 
-self.port.emit('init');
-self.port.on('languageListUpdate', onLanguageListUpdate);
-
-self.port.on('show', function (prefs) {
-    preferences = prefs;
+settings.onReady(function () {
     loadPreferences();
     updateDisabledElements();
-    byId('save').focus();
-});
-
-//byId('title').innerHTML = '<div data-l10n-id="prefPane_title">ddd</div>';
-//self.port.emit('requestTranslation', ['prefPane_title']);
-self.port.on('translationResult', function (map) {
-    for (var key in map) {
-        var value = map[key];
-        var elements = document.querySelectorAll('[data-l10n-id=' + key + ']');
-        for (var i = 0; i < elements.length; i++)
-            elements[i].textContent = value;
-    }
+    messageUtil.receive('settingsChanged', function () {
+        loadPreferences();
+        updateDisabledElements();
+    });
 });
