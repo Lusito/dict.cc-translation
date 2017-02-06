@@ -479,6 +479,7 @@ function initializeTranslationButtons() {
 
 function setLanguageLoading(loading) {
     secondLanguage.disabled = loading;
+    byId('loadingIndicator').style.width = byId('refresh').clientWidth + 'px';
     byId('refresh').style.display = loading ? 'none' : '';
     byId('loadingIndicator').style.display = loading ? 'block' : '';
 }
