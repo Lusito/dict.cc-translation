@@ -43,7 +43,7 @@ label > input[type=radio] + span {
     border: 1px solid #A7A7A7;
     padding: 10px;
     margin: 0 0 10px 0;
-    min-height: 276px;
+    min-height: 280px;
     background: white;
 }
 #pages > div {
@@ -174,11 +174,10 @@ table select {
 }
 #loadingIndicator {
     display: none;
+    height: 22px;
 }
 #loadingIndicator,
 #language_config_table button {
-    height: 24px;
-    line-height: 10px;
     box-sizing: border-box;
 }
 .warning {

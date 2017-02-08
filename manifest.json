@@ -51,8 +51,7 @@
         }
     ],
     "options_ui": {
-        "page": "options/options.html",
-        "chrome_style": true
+        "page": "options/options.html"
     },
     "permissions": [
         "https://*.dict.cc/",
