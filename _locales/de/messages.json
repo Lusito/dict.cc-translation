@@ -1,6 +1,6 @@
 {
-    "extensionName": { "message": "dict.cc translation", "description": "Name of the extension." },
-    "extensionDescription": { "message": "The add-on uses dict.cc to translate words and phrases in any website, epub or pdf. In-page translation. No need to select the word, just click on it!", "description": "Description of the extension." },
+    "extensionName": { "message": "Dict.cc Übersetzung", "description": "Name of the extension." },
+    "extensionDescription": { "message": "Das Add-on nutzt dict.cc um Wörter und Phrasen in jeder Website, epub oder pdf zu übersetzen. Vor-Ort Übersetzung. Text-Selektion nicht notwendig, ein Klick reicht aus!", "description": "Description of the extension." },
     "actionTitle" : { "message": "Schnellübersetzung", "description": "Action button title" },
 
 	"noQuickKeys": { "message": "Es muss mindestens eine Taste für Quick-Click angegeben werden.", "description": "" },

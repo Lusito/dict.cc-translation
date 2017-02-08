@@ -1,5 +1,5 @@
 {
-    "extensionName": { "message": "dict.cc translation", "description": "Name of the extension." },
+    "extensionName": { "message": "Dict.cc Translation", "description": "Name of the extension." },
     "extensionDescription": { "message": "The add-on uses dict.cc to translate words and phrases in any website, epub or pdf. In-page translation. No need to select the word, just click on it!", "description": "Description of the extension." },
     "actionTitle" : { "message": "Quick translation", "description": "Action button title" },
 
