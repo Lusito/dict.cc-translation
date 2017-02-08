@@ -2,6 +2,11 @@
 
 settings.onReady(function () {
     var lp = byId('lp');
+    var search = byId('search');
+    var go = byId('go');
+    search.placeholder = browser.i18n.getMessage("popup_placeholder");
+    go.textContent = browser.i18n.getMessage("popup_button");
+    var result = null;
     var translations = settings.get('translation.list');
     for (var i = 0; i < translations.length; i++) {
         var translation = translations[i];
@@ -20,8 +25,6 @@ settings.onReady(function () {
             params += '&s=' + encodeURIComponent(text);
         return params;
     }
-    var search = byId('search');
-    var result = null;
     function runSearch() {
         var word = search.value.trim();
         if(word !== '') {
@@ -64,6 +67,5 @@ settings.onReady(function () {
             runSearch();
         }
     });
-    var go = byId('go');
     on(go, 'click', runSearch);
 });

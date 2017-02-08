@@ -2,66 +2,11 @@
 <html>
     <head>
         <link href="../style.css" rel="stylesheet" type="text/css"/>
-        <style>
-            html, body {
-                padding: 0;
-                margin: 0;
-            }
-            body {
-                padding: 5px;
-                min-width: 400px;
-                font-family: arial,helvetica,sans-serif;
-                font-size: 11pt;
-            }
-            #form {
-                display: flex;
-                flex-direction: row;
-            }
-            #form > input {
-                flex-grow: 1;
-            }
-            #form > * {
-                margin-right: 5px;
-            }
-            #form > *:last-child {
-                margin-right: 0;
-            }
-            dl {
-                max-height: 400px;
-                max-width: 400px;
-                overflow: auto;
-                margin: 5px 0 0 0;
-                padding: 5px;
-                border: 1px solid #bfbfbf;
-                border-radius: 2px;
-            }
-            a {
-                text-decoration: none;
-                color: black;
-            }
-            dt {
-                font-weight: bold;
-                font-size: 10pt;
-                margin-top: 13px;
-            }
-            dd {
-                margin-left:20px;
-                line-height:18px
-            }
-            var {
-                color:#36c;
-                font-style:normal;
-            }
-            kbd {
-                color: #039;
-                font-family: serif,arial,helvetica,sans-serif;
-                font-size: 10pt;
-            }
-        </style>
+        <link href="popup.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <div id="form">
-            <input id="search" autofocus placeholder="Search..">
+            <input id="search" autofocus>
             <select id="lp"></select>
             <button id="go">Go</button>
         </div>

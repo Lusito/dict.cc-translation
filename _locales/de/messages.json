@@ -33,6 +33,9 @@
 
 	"prompt_ok": { "message": "OK", "description": "" },
 	"prompt_cancel": { "message": "Abbrechen", "description": "" },
+    
+	"popup_button": { "message": "Los!", "description": "" },
+	"popup_placeholder": { "message": "Übersetzen..", "description": "" },
 
 	"prefPane_title": { "message": "Dict.cc Add-on Einstellungen", "description": "" },
 	"tabs_context_title": { "message": "Kontextmenü", "description": "" },
