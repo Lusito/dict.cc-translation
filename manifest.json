@@ -33,6 +33,7 @@
             "visualizers/synPopupVisualizer.js",
             "visualizers/tabVisualizer.js",
             "lib/translator.js",
+            "scripts/background.js",
             "scripts/contextmenu.js"
         ]
     },

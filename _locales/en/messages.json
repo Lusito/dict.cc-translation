@@ -51,8 +51,6 @@
 	"tabs_results_tab": { "message": "New tab (regular Dict.cc)", "description": "" },
 	"tabs_results_mini": { "message": "Micro panel", "description": "" },
 	"tabs_results_micropanel_title": { "message": "Click on a micro panel result shows as", "description": "" },
-	"tabs_result_asPanel": { "message": "Use an overlay panel instead of a popup", "description": "" },
-	"tabs_result_asPanel__title": { "message": "An overlay panel is like a window but without the border and titlebar. Once you click somewhere outside of it, it disappears.", "description": "" },
 	"tabs_result_multiWindow": { "message": "Create a new window/tab for every request", "description": "" },
 	"tabs_result_multiWindow__title": { "message": "Uncheck this if you want to reuse the last tab for the results.", "description": "" },
 

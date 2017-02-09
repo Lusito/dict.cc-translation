@@ -146,7 +146,6 @@ function initializePreferenceElements() {
     var checkboxIds = [
         "context_enabled",
         "context_multiWindow",
-        "context_asPanel",
         "quick_enabled",
         "quick_right",
         "quick_ctrl",
@@ -154,7 +153,6 @@ function initializePreferenceElements() {
         "quick_alt",
         "quick_selected",
         "quick_multiWindow",
-        "quick_asPanel",
         "quick_rocker",
         "translation_useHttps"
     ];
@@ -293,10 +291,12 @@ function setElementsDisabled(elements, disabled) {
         elements[i].disabled = disabled;
 }
 function updateDisabledElements() {
-    var quickElements = [
+    var modifierElements = [
         byId("quick_ctrl"),
         byId("quick_shift"),
-        byId("quick_alt"),
+        byId("quick_alt")
+    ];
+    var quickElements = [
         byId("quick_method0"),
         byId("quick_method1"),
         byId("quick_method2"),
@@ -306,17 +306,14 @@ function updateDisabledElements() {
         byId("micro_method2"),
         byId("quick_selected"),
         byId("quick_right"),
-        byId("quick_rocker"),
-        byId("quick_multiWindow"),
-        byId("quick_asPanel")
+        byId("quick_multiWindow")
     ];
     var contextElements = [
         byId("context_method0"),
         byId("context_method1"),
         byId("context_method2"),
         byId("context_method3"),
-        byId("context_multiWindow"),
-        byId("context_asPanel")
+        byId("context_multiWindow")
     ];
     var microMethodElements = [
         byId("micro_method0"),
@@ -325,26 +322,21 @@ function updateDisabledElements() {
     ];
 
     var quickEnabled = byId("quick_enabled").checked;
-    setElementsDisabled(quickElements, !quickEnabled);
-    if (quickEnabled) {
+    setElementsDisabled(modifierElements, !quickEnabled);
+    var quickRocker = byId("quick_rocker").checked;
+    setElementsDisabled(quickElements, !quickEnabled && !quickRocker);
+    if (quickEnabled || quickRocker) {
         if (!byId('quick_method3').checked)
             setElementsDisabled(microMethodElements, true);
         var microMethod2 = byId('micro_method2');
         if (!byId('quick_method2').checked && (microMethod2.disabled || !microMethod2.checked))
             byId("quick_multiWindow").disabled = true;
-        var isPopup = byId('quick_method0').checked || byId('quick_method1').checked;
-        if (!isPopup)
-            isPopup = byId('quick_method3').checked && (byId('micro_method0').checked || byId('micro_method1').checked);
-        if (!isPopup)
-            byId("quick_asPanel").disabled = true;
     }
     var contextEnabled = byId("context_enabled").checked;
     setElementsDisabled(contextElements, !contextEnabled);
     if (contextEnabled) {
         if (!byId('context_method2').checked)
             byId("context_multiWindow").disabled = true;
-        if (!byId('context_method0').checked && !byId('context_method1').checked)
-            byId("context_asPanel").disabled = true;
     }
 }
 
@@ -352,6 +344,7 @@ function initializeDisabledConnections() {
     var elementsDisabling = [
         byId("context_enabled"),
         byId("quick_enabled"),
+        byId("quick_rocker"),
         byId("quick_method0"),
         byId("quick_method1"),
         byId("quick_method2"),

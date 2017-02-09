@@ -24,12 +24,6 @@
 var synPopupVisualizer = {
     show: function (config) {
         var url = config.protocol + 'syn.dict.cc/' + config.params;
-        if(config.asPanel) {
-            messageUtil.sendToTab(config.tab, 'showPanel', {
-                url: url, width: 770, height: 600
-            });
-        } else {
-            popup.open(url, config.incognito, 770, 600);
-        }
+        popup.open(url, config.incognito, 770, 600);
     }
 };

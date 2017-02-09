@@ -148,25 +148,25 @@ function updateWordUnderCursor(e) {
 }
 
 function getQuickAction(e) {
-    if (!config.quickEnabled)
-        return null;
-
     var action = null;
-    if ((config.ctrl || config.shift || config.alt)
-            && e.ctrlKey === config.ctrl
-            && e.shiftKey === config.shift
-            && e.altKey === config.alt) {
-        if (e.which === 1) {
-            action = 'instant';
-        } else if (config.menu && e.which === 3) {
-            action = 'menu';
+    // Using modifiers
+    if (config.quickEnabled) {
+        if ((config.ctrl || config.shift || config.alt)
+                && e.ctrlKey === config.ctrl
+                && e.shiftKey === config.shift
+                && e.altKey === config.alt) {
+            if (e.which === 1) {
+                action = 'instant';
+            } else if (config.menu && e.which === 3) {
+                action = 'menu';
+            }
         }
     }
 
-    // support for rocker gestures
-    var currentTime = new Date().getTime();
+    // Support for rocker gestures
     if (config.rocker) {
         if (!action && (leftDown || rightDown)) {
+            var currentTime = new Date().getTime();
             if (e.which === 1 && rightDown !== false && (currentTime - rightDown) < 1000)
                 action = 'instant';
             else if (config.menu && e.which === 3 && leftDown !== false && (currentTime - leftDown) < 1000)
@@ -208,14 +208,20 @@ function onMouseDown(e) {
         var text = updateWordUnderCursor(e);
         lastActionTime = currentTime;
         if (text) {
-            miniLayer = new MiniLayer(e.clientX, e.clientY, function() {
-                if(!miniLayer)
-                    return;
-                if(action === 'menu')
-                    miniLayer.showMenu(browser.i18n.getMessage("translateTo"), text);
-                else
-                    miniLayer.translateQuick(text);
-            });
+            if(config.method === METHOD_INPAGE || action === 'menu') {
+                miniLayer = new MiniLayer(e.clientX, e.clientY, function() {
+                    if(!miniLayer)
+                        return;
+                    if(action === 'menu')
+                        miniLayer.showMenu(browser.i18n.getMessage("translateTo"), text);
+                    else
+                        miniLayer.translateQuick(text);
+                });
+            } else {
+                messageUtil.send('requestQuickTranslation', {
+                    text: text
+                });
+            }
         }
 
         e.preventDefault();
@@ -432,7 +438,8 @@ function MiniLayer(x, y, onload) {
         miniLayer.showLoading();
         messageUtil.send('requestQuickTranslation', {
             text: text,
-            languagePair: languagePair
+            languagePair: languagePair,
+            dcc: true
         });
     };
     this.destroy = function() {
@@ -440,42 +447,14 @@ function MiniLayer(x, y, onload) {
     };
 }
 var miniLayer = null;
-var panel = null;
 
 function destroyPanels() {
     if(miniLayer) {
         miniLayer.destroy();
         miniLayer = null;
     }
-    if(panel) {
-        panel.destroy();
-        panel = null;
-    }
 }
 
-function Panel(url, width, height) {
-    var overlay = createPanelOverlay();
-    var tdoc = window.top.document;
-    var iframe = tdoc.createElement('iframe');
-    iframe.src = url;
-    var calculatedStyles = {
-        left: "calc(50% - " + Math.round(width/2) + "px)",
-        top: "calc(50% - " + Math.round(height/2) + "px)",
-        height: height + "px",
-        width: width + "px"
-    };
-    applyForcedStyles(iframe, COMMON_STYLES, DEFAULT_PANEL_STYLES, calculatedStyles);
-    iframe.onload = function() { setTimeout(onload, 0); };
-    overlay.appendChild(iframe);
-    
-    this.destroy = function() {
-        tdoc.body.removeChild(overlay);
-    };
-}
-function showPanel(cfg) {
-    destroyPanels();
-    panel = new Panel(cfg.url, cfg.width, cfg.height);
-}
 function showMiniLayer(cfg) {
     destroyPanels();
     miniLayer = new MiniLayer(cfg.x, cfg.y, function() {
@@ -499,6 +478,7 @@ settings.onReady(function () {
 
     function updateConfig() {
         config = {
+            method: settings.get('quick.method'),
             translations: settings.get('translation.list'),
             contextEnabled: settings.get('context.enabled'),
             selected: settings.get('quick.selected'),
@@ -511,7 +491,6 @@ settings.onReady(function () {
         };
     }
     messageUtil.receive('settingsChanged', updateConfig);
-    messageUtil.receive('showPanel', showPanel);
     messageUtil.receive('showMiniLayer', showMiniLayer);
     messageUtil.receive('showMiniLayerResult', showMiniLayerResult);
     updateConfig();

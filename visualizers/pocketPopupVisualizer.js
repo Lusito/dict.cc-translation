@@ -24,12 +24,6 @@
 var pocketPopupVisualizer = {
     show: function (config) {
         var url = config.protocol + 'pocket.dict.cc/' + config.params;
-        if(config.asPanel) {
-            messageUtil.sendToTab(config.tab, 'showPanel', {
-                url: url, width: 350, height: 500
-            });
-        } else {
-            popup.open(url, config.incognito, 350, 500);
-        }
+        popup.open(url, config.incognito, 350, 500);
     }
 };

@@ -16,7 +16,7 @@ body {
     box-sizing: border-box;
 }
 
-input:disabled+label {
+label >input:disabled+span {
     color: gray;
 }
 input[type=checkbox],
