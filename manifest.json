@@ -16,7 +16,14 @@
     },
     "incognito" : "split",
     "browser_action": {
-        "default_icon": "icon64.png",
+        "default_icon": {
+            "16": "icon16.png",
+            "32": "icon32.png",
+            "48": "icon48.png",
+            "64": "icon64.png",
+            "96": "icon96.png",
+            "128": "icon128.png"
+        },
         "default_popup": "popup/popup.html",
         "default_title": "__MSG_actionTitle__"
     },
