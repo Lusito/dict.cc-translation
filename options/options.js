@@ -361,7 +361,7 @@ function initializeDisabledConnections() {
         on(elementsDisabling[i], 'click', updateDisabledElements);
     }
 }
-var updateWarnings = function() {};
+var updateWarnings = function () {};
 function initializeWarningConnections() {
     var quick_ctrl = byId("quick_ctrl");
     var quick_shift = byId("quick_shift");
@@ -370,7 +370,7 @@ function initializeWarningConnections() {
 
     var quick_warning_shift = byId("quick_warning_shift");
     var quick_warning_alt = byId("quick_warning_alt");
-    updateWarnings = function() {
+    updateWarnings = function () {
         var warnShift = quick_shift.checked && quick_right.checked && !quick_ctrl.checked && !quick_alt.checked;
         var warnAlt = quick_alt.checked && !quick_ctrl.checked && !quick_shift.checked;
         quick_warning_shift.style.display = warnShift ? 'block' : 'none';
@@ -536,7 +536,7 @@ initializeTabs();
 initializePreferenceElements();
 initializeDisabledConnections();
 initializeTranslationButtons();
-if(navigator.userAgent.toLowerCase().indexOf("firefox") >= 0)
+if (navigator.userAgent.toLowerCase().indexOf("firefox") >= 0)
     initializeWarningConnections();
 byId('save').focus();
 

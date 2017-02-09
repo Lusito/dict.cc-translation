@@ -19,6 +19,8 @@
  
  * ***** END LICENSE BLOCK ***** */
 
+/* global messageUtil */
+
 var inpageVisualizer = {
     show: function (config) {
         messageUtil.sendToTab(config.tab, 'showMiniLayer', {

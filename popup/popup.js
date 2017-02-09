@@ -15,7 +15,7 @@ settings.onReady(function () {
             value: translation.k
         });
     }
-    
+
     function getProtocol() {
         return settings.get('translation.useHttps') ? 'https://' : 'http://';
     }
@@ -27,30 +27,30 @@ settings.onReady(function () {
     }
     function runSearch() {
         var word = search.value.trim();
-        if(word !== '') {
+        if (word !== '') {
             var languagePair = lp.value;
             var url = getProtocol() + 'pocket.dict.cc/' + createParams(word, languagePair);
-            
-            
-            if(result === null)
-                result = createElement(document, document.body, 'dl', { id: 'result' });
+
+
+            if (result === null)
+                result = createElement(document, document.body, 'dl', {id: 'result'});
 
             result.textContent = browser.i18n.getMessage("loading");
             request.getHTML(url, function (doc) {
                 var dl = doc.querySelector("dl");
-                if(!dl) {
+                if (!dl) {
                     //fixme: error
                 } else {
                     var scripts = dl.querySelectorAll('script');
-                    for(var i=0; i<scripts.length; i++) {
+                    for (var i = 0; i < scripts.length; i++) {
                         var s = scripts[i];
                         s.parentElement.removeChild(s);
                     }
                     var links = dl.querySelectorAll('a');
-                    for(var i=0; i<links.length; i++) {
+                    for (var i = 0; i < links.length; i++) {
                         var a = links[i];
                         var href = a.getAttribute('href');
-                        if(href.indexOf('/?') === 0) {
+                        if (href.indexOf('/?') === 0) {
                             a.href = getProtocol() + 'www.dict.cc' + href + '&lp=' + languagePair;
                         }
                         a.target = '_blank';
@@ -62,8 +62,8 @@ settings.onReady(function () {
             });
         }
     }
-    on(search, 'keydown', function(e) {
-        if(e.keyCode === 13) {
+    on(search, 'keydown', function (e) {
+        if (e.keyCode === 13) {
             runSearch();
         }
     });

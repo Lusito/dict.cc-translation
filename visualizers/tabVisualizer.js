@@ -25,7 +25,7 @@ var tabVisualizer = {
     lastTab: null,
     show: function (config) {
         var tabConfig = {};
-        if(config.url)
+        if (config.url)
             tabConfig.url = config.url;
         else
             tabConfig.url = config.protocol + 'www.dict.cc/' + config.params;

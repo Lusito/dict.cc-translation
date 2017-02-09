@@ -1,8 +1,8 @@
 /* global messageUtil, translator, settings, popup, tabVisualizer */
 
 messageUtil.receive('requestQuickTranslation', function (data, sender) {
-    if(data.dcc) {
-        translator.runDCC(data.text, data.languagePair, function(response) {
+    if (data.dcc) {
+        translator.runDCC(data.text, data.languagePair, function (response) {
             messageUtil.sendToTab(sender.tab, 'showMiniLayerResult', response);
         });
         return true;

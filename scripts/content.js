@@ -208,11 +208,11 @@ function onMouseDown(e) {
         var text = updateWordUnderCursor(e);
         lastActionTime = currentTime;
         if (text) {
-            if(config.method === METHOD_INPAGE || action === 'menu') {
-                miniLayer = new MiniLayer(e.clientX, e.clientY, function() {
-                    if(!miniLayer)
+            if (config.method === METHOD_INPAGE || action === 'menu') {
+                miniLayer = new MiniLayer(e.clientX, e.clientY, function () {
+                    if (!miniLayer)
                         return;
-                    if(action === 'menu')
+                    if (action === 'menu')
                         miniLayer.showMenu(browser.i18n.getMessage("translateTo"), text);
                     else
                         miniLayer.translateQuick(text);
@@ -235,22 +235,22 @@ function onMouseDown(e) {
     return action === null;
 }
 function getTopLeftFromIframe() {
-   var left = 0, top = 0;
-   var win = window;
-   var element = window.frameElement;
+    var left = 0, top = 0;
+    var win = window;
+    var element = window.frameElement;
 
-   do {
-      left += element.offsetLeft;
-      top += element.offsetTop;
-      element = element.offsetParent;
+    do {
+        left += element.offsetLeft;
+        top += element.offsetTop;
+        element = element.offsetParent;
 
-      if (!element) {
-         element = win.frameElement;
-         win = win.parent;
-      }
-   } while (element)
+        if (!element) {
+            element = win.frameElement;
+            win = win.parent;
+        }
+    } while (element)
 
-   return [left,top];
+    return [left, top];
 }
 var COMMON_STYLES = {
     display: "block",
@@ -290,9 +290,9 @@ var MICRO_PANEL_STYLES = {
 };
 
 function applyForcedStyles(elem) {
-    for(var i=1; i<arguments.length; i++) {
+    for (var i = 1; i < arguments.length; i++) {
         var styles = arguments[i];
-        for(var key in styles) {
+        for (var key in styles) {
             elem.style.setProperty(key, styles[key], "important");
         }
     }
@@ -301,11 +301,11 @@ function applyForcedStyles(elem) {
 function createPanelOverlay() {
     var tdoc = window.top.document;
     var overlay = tdoc.createElement('div');
-    applyForcedStyles(overlay, COMMON_STYLES, OVERLAY_STYLES, {"pointer-events":"none"});
+    applyForcedStyles(overlay, COMMON_STYLES, OVERLAY_STYLES, {"pointer-events": "none"});
     on(overlay, 'mousedown', destroyPanels);
     tdoc.body.appendChild(overlay);
     // enable pointer-events later, since otherwise context-menu will be opened on the new panel
-    setTimeout(function() {
+    setTimeout(function () {
         applyForcedStyles(overlay, {'pointer-events': 'auto'});
     }, 500);
     return overlay;
@@ -313,7 +313,7 @@ function createPanelOverlay() {
 
 function MiniLayer(x, y, onload) {
     // If in a frame, add frame position
-    if(window.top !== window.self) {
+    if (window.top !== window.self) {
         var tl = getTopLeftFromIframe();
         x += tl[0];
         y += tl[1];
@@ -321,22 +321,22 @@ function MiniLayer(x, y, onload) {
     var overlay = createPanelOverlay();
     var tdoc = window.top.document;
     var iframe = tdoc.createElement('iframe');
-    var idoc,ibody,resultNode,extraNode;
+    var idoc, ibody, resultNode, extraNode;
     applyForcedStyles(iframe, COMMON_STYLES, DEFAULT_PANEL_STYLES, MICRO_PANEL_STYLES);
-    iframe.onload = function() {
+    iframe.onload = function () {
         idoc = iframe.contentDocument || iframe.contentWindow.document;
         ibody = idoc.body;
         addLink(idoc, "minilayer/minilayer.css");
 
         var div = createElement(idoc, ibody, 'div');
-        var a = createElement(idoc, div, 'a', {target: "_blank", href:"http://www.dict.cc/"});
-        createElement(idoc, a, 'img', {src: browser.runtime.getURL("icon16.png"), alt:"dict.cc"});
+        var a = createElement(idoc, div, 'a', {target: "_blank", href: "http://www.dict.cc/"});
+        createElement(idoc, a, 'img', {src: browser.runtime.getURL("icon16.png"), alt: "dict.cc"});
         resultNode = createElement(idoc, div, 'span', {id: "result"});
         extraNode = createElement(idoc, ibody, 'span', {id: "extra"});
         setTimeout(onload, 0);
     };
     overlay.appendChild(iframe);
-    
+
 
     function updateSize() {
         var last = ibody.className;
@@ -356,10 +356,10 @@ function MiniLayer(x, y, onload) {
         var vw = Math.max(tdoc.documentElement.clientWidth, window.innerWidth || 0);
         var vh = Math.max(tdoc.documentElement.clientHeight, window.innerHeight || 0);
         var left = (x + 5);
-        if((left + calculatedWidth) >= vw)
+        if ((left + calculatedWidth) >= vw)
             left = (x - calculatedWidth - 5);
         var top = (y + 5);
-        if((top + calculatedHeight) >= vh)
+        if ((top + calculatedHeight) >= vh)
             top = (y - calculatedHeight - 5);
         applyForcedStyles(iframe, {
             left: left + 'px',
@@ -369,7 +369,7 @@ function MiniLayer(x, y, onload) {
     function setup(text, extraNodes) {
         removeAllChildren(resultNode);
         if (text)
-           resultNode.appendChild(idoc.createTextNode(text));
+            resultNode.appendChild(idoc.createTextNode(text));
         else
             resultNode.innerHTML = '';
         if (!extraNodes) {
@@ -403,7 +403,7 @@ function MiniLayer(x, y, onload) {
         });
         return link;
     }
-    this.showMenu = function(label, text) {
+    this.showMenu = function (label, text) {
         var translations = config.translations;
         var extraNodes = new Array();
         for (var i = 0; i < translations.length; i++) {
@@ -434,7 +434,7 @@ function MiniLayer(x, y, onload) {
     this.showLoading = function () {
         this.showMessage(browser.i18n.getMessage("loading"), null);
     };
-    this.translateQuick = function(text, languagePair) {
+    this.translateQuick = function (text, languagePair) {
         miniLayer.showLoading();
         messageUtil.send('requestQuickTranslation', {
             text: text,
@@ -442,14 +442,14 @@ function MiniLayer(x, y, onload) {
             dcc: true
         });
     };
-    this.destroy = function() {
+    this.destroy = function () {
         tdoc.body.removeChild(overlay);
     };
 }
 var miniLayer = null;
 
 function destroyPanels() {
-    if(miniLayer) {
+    if (miniLayer) {
         miniLayer.destroy();
         miniLayer = null;
     }
@@ -457,14 +457,14 @@ function destroyPanels() {
 
 function showMiniLayer(cfg) {
     destroyPanels();
-    miniLayer = new MiniLayer(cfg.x, cfg.y, function() {
-        if(miniLayer)
+    miniLayer = new MiniLayer(cfg.x, cfg.y, function () {
+        if (miniLayer)
             miniLayer.translateQuick(cfg.text, cfg.languagePair);
     });
 }
 function showMiniLayerResult(response) {
-    if(miniLayer) {
-        if(response.error)
+    if (miniLayer) {
+        if (response.error)
             miniLayer.showMessage(response.error);
         else
             miniLayer.showResult(response.links);

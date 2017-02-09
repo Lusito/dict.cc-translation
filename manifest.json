@@ -3,7 +3,7 @@
 
     "name": "__MSG_extensionName__",
     "description": "__MSG_extensionDescription__",
-	"author": "Santo Pfingsten",
+    "author": "Santo Pfingsten",
     "default_locale": "en",
     "version": "5.0",
     "icons": {
@@ -14,7 +14,7 @@
         "96": "icon96.png",
         "128": "icon128.png"
     },
-    "incognito" : "split",
+    "incognito": "split",
     "browser_action": {
         "default_icon": {
             "16": "icon16.png",
