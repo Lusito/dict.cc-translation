@@ -41,6 +41,7 @@
 	"tabs_context_title": { "message": "Context Menu", "description": "" },
 	"tabs_quick_title": { "message": "Quick Click", "description": "" },
 	"tabs_language_title": { "message": "Translation List", "description": "" },
+	"tabs_help": { "message": "Help", "description": "" },
 
 	"tabs_context_enable": { "message": "Enable Context Menu", "description": "" },
 	"tabs_context_enable__title": { "message": "Add translation options to the context menu.", "description": "" },
@@ -70,6 +71,7 @@
 	"tabs_quick_keys_warning": { "message": "Warning:", "description": "" },
 	"tabs_quick_keys_warning_shift": { "message": "In newer Firefox versions, using shift as only modifier causes problems with the quick context menu.", "description": "" },
 	"tabs_quick_keys_warning_alt": { "message": "In multi-process Firefox, using alt as only modifier causes problems.", "description": "" },
+	"tabs_quick_keys_warning_chrome": { "message": "Quick Click does not work for PDF files in Chrome. You'll need to select the text and use the context-menu.", "description": "" },
 	"tabs_quick_rocker": { "message": "Enable rocker gestures", "description": "" },
 	"tabs_quick_rocker__title": { "message": "Holding right mouse, then pressing left mouse for quick translation and vice versa for a context menu.", "description": "" },
 
@@ -108,6 +110,9 @@
 	"tabs_language_add_direction_toFirst": { "message": "From second to first language", "description": "" },
 	"tabs_language_add_do": { "message": "Add", "description": "" },
 	"tabs_language_add_do__title": { "message": "Add a new entry using the selected values.", "description": "" },
+
+    "tabs_help_dict_text" : { "message": "I am not the author of dict.cc. I just wrote the add-on. Send questions about dict.cc to:", "description": "" },
+    "tabs_help_issues_text": { "message": "Problems, questions and other feedback on the add-on can be reported on GitHub:", "description": "" },
 
 	"button_restore_defaults": { "message": "Reset to defaults", "description": "" },
 	"button_save": { "message": "Save", "description": "" },

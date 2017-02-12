@@ -49,9 +49,11 @@ label > input[type=radio] + span {
 #pages > div {
     height: 100%;
     overflow: auto;
+}
+
+#pages > div:not(:last-child) {
     display: flex;
     flex-direction: row;
-
 }
 #pages > div:not(.active) {
     display: none;

@@ -41,6 +41,7 @@
 	"tabs_context_title": { "message": "Kontextmenü", "description": "" },
 	"tabs_quick_title": { "message": "Quick Click", "description": "" },
 	"tabs_language_title": { "message": "Übersetzungsliste", "description": "" },
+	"tabs_help": { "message": "Hilfe", "description": "" },
 
 	"tabs_context_enable": { "message": "Kontextmenü aktivieren", "description": "" },
 	"tabs_context_enable__title": { "message": "Übersetzungseinträge zum Kontextmenü hinzufügen.", "description": "" },
@@ -70,6 +71,7 @@
 	"tabs_quick_keys_warning": { "message": "Warnung:", "description": "" },
 	"tabs_quick_keys_warning_shift": { "message": "Nur die Shift-Taste zu nutzen verursacht in neueren Firefox Versionen Probleme mit dem Quick Kontextmenü.", "description": "" },
 	"tabs_quick_keys_warning_alt": { "message": "Nur die Alt-Taste zu nutzen verursacht im Multi-Prozess Firefox Probleme.", "description": "" },
+	"tabs_quick_keys_warning_chrome": { "message": "In Chrome funktioniert Quick Click nicht mit PDF Dateien. Statt dessen muss Text selektiert und dann das Kontext-Menü genutzt werden.", "description": "" },
 	"tabs_quick_rocker": { "message": "Wippgesten aktivieren", "description": "" },
 	"tabs_quick_rocker__title": { "message": "Rechte Maustaste gedrückt halten, dann die Linke drücken für Schnellübersetzung und umgekehrt für ein Kontextmenü.", "description": "" },
 
@@ -108,6 +110,9 @@
 	"tabs_language_add_direction_toFirst": { "message": "Von der zweiten zur ersten Sprache", "description": "" },
 	"tabs_language_add_do": { "message": "Hinzufügen", "description": "" },
 	"tabs_language_add_do__title": { "message": "Einen neuen Eintrag mit den ausgewählten Werten hinzufügen.", "description": "" },
+    
+    "tabs_help_dict_text" : { "message": "Ich bin nicht der Autor von dict.cc. Lediglich das Add-On ist von mir. Fragen bezüglich dict.cc bitte an:", "description": "" },
+    "tabs_help_issues_text": { "message": "Probleme, Fragen oder anderes Feedback bezüglich des Add-Ons können auf GitHub gemeldet werden:", "description": "" },
 
 	"button_restore_defaults": { "message": "Defaults wiederherstellen", "description": "" },
 	"button_save": { "message": "Speichern", "description": "" },

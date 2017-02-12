@@ -27,24 +27,24 @@
     var wordUnderCursor = null;
     var lastCursorX = 0;
     var lastCursorY = 0;
-    var menuContexts = ["editable", "frame", "page", "selection"];
+    var menuContexts = ["editable", "frame", "page", "link", "selection"];
 
     messageUtil.receive('setWordUnderCursor', function (data) {
-        wordUnderCursor = data.text;
+        wordUnderCursor = data.text.trim();
         lastCursorX = data.x;
         lastCursorY = data.y;
-        var title = wordUnderCursor;
-        // Update labels
-        if (title.length > 15)
-            title = title.substring(0, 15) + ellipsis;
-
-        if (title !== "") {
-            title = browser.i18n.getMessage("menuSelection", title);
-        } else {
-            title = browser.i18n.getMessage("menuNone");
-        }
-
-        browser.contextMenus.update("translationLabel", {title: title});
+//        var title = wordUnderCursor;
+//        // Update labels
+//        if (title.length > 15)
+//            title = title.substring(0, 15) + ellipsis;
+//
+//        if (title !== "") {
+//            title = browser.i18n.getMessage("menuSelection", title);
+//        } else {
+//            title = browser.i18n.getMessage("menuNone");
+//        }
+//
+//        browser.contextMenus.update("translationLabel", {title: title});
     });
 
     messageUtil.receive('settingsChanged', recreate);
@@ -81,7 +81,7 @@
             contexts: menuContexts,
             onclick: function (info, tab) {
                 translator.run({
-                    text: wordUnderCursor,
+                    text: info.selectionText || wordUnderCursor,
                     languagePair: translation.k,
                     x: lastCursorX,
                     y: lastCursorY
@@ -95,7 +95,7 @@
         if (!settings.get('context.enabled'))
             return;
 
-        createLabel(browser.i18n.getMessage("menuNone"), "translationLabel");
+        createLabel(browser.i18n.getMessage("translateTo"), "translationLabel");
         createSeparator();
 
         var translations = settings.get('translation.list');
