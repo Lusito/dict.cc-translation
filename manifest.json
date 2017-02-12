@@ -6,6 +6,12 @@
     "author": "Santo Pfingsten",
     "default_locale": "en",
     "version": "5.0",
+    "applications": {
+        "gecko": {
+            "id": "searchdictcc@roughael",
+            "strict_min_version": "50.0"
+        }
+    },
     "icons": {
         "16": "icon16.png",
         "32": "icon32.png",
@@ -14,7 +20,6 @@
         "96": "icon96.png",
         "128": "icon128.png"
     },
-    "incognito": "split",
     "browser_action": {
         "default_icon": {
             "16": "icon16.png",
