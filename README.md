@@ -1,4 +1,4 @@
-#Dict.cc Translation FireFox Add-On
+#Dict.cc Translation Web-Extension
 
 ## About the add-on
 The add-on uses [Dict.cc](https://www.dict.cc/) to translate words and phrases in any website, epub or pdf.
@@ -8,11 +8,13 @@ No add-on is faster, easier or more precise!
 - Use rocker gestures or modifiers (for example ctrl+alt) and mouseclick to quickly translate the word under your cursor.
 - Use the context menu to get more options.
 - This is a word and phrase translation, it does not translate whole sentences.
-- I'm not the author or owner of Dict.cc, I just wrote this Firefox add-on.
+- I'm not the author or owner of Dict.cc, I just wrote this web-extension.
 
 All languages from dict.cc are supported, and if new ones arrive, you can just update the list of languages from within the add-on.
 And now it's also possible to do a quick search using a combination of [ctrl,shift,alt] + click on a word.
 Results can be shown as a pop-up or in a new tab or as an in-page translation layer.
+
+Version 5 has been rewritten (and crippled along the way) to work as web-extension, since Firefox discontinues all other add-ons.
 
 Version 4 has been heavily rewritten to work with the new SDK and support multi-process Firefox.
 
