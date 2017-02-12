@@ -538,6 +538,8 @@ initializeDisabledConnections();
 initializeTranslationButtons();
 if (navigator.userAgent.toLowerCase().indexOf("firefox") >= 0)
     initializeWarningConnections();
+else
+    byId('quick_warning_chrome').style.display = '';
 byId('save').focus();
 
 settings.onReady(function () {
