@@ -86,3 +86,35 @@ select:focus {
     border-color: rgb(77, 144, 254);
     outline: none;
 }
+
+button,
+input[type='button'],
+input[type='submit'] {
+    position: relative;
+}
+button:after,
+input[type='button']:after,
+input[type='submit']:after {
+    display: block;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(45deg, #1e5799 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(1,1);
+    opacity: 0;
+    transition: transform .25s, opacity 1s;
+    pointer-events: none;
+}
+
+button:active:after,
+input[type='button']:active:after,
+input[type='submit']:active:after {
+    transition: 0s;
+    transform: scale(0,0);
+    opacity: .3;
+}
