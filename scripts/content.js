@@ -327,9 +327,13 @@ function MiniLayer(x, y, onload) {
         idoc = iframe.contentDocument || iframe.contentWindow.document;
         ibody = idoc.body;
         addLink(idoc, "minilayer/minilayer.css");
+        
+        var ihead = idoc.querySelector('head');
+        var meta = createElement(idoc, ihead, 'meta');
+        meta.setAttribute('charset', "utf-8");
 
         var div = createElement(idoc, ibody, 'div');
-        var a = createElement(idoc, div, 'a', {target: "_blank", href: "http://www.dict.cc/"});
+        var a = createElement(idoc, div, 'a', {target: "_blank", href: "http://www.dict.cc/", id: "logo"});
         createElement(idoc, a, 'img', {src: browser.runtime.getURL("icon16.png"), alt: "dict.cc"});
         resultNode = createElement(idoc, div, 'span', {id: "result"});
         extraNode = createElement(idoc, ibody, 'span', {id: "extra"});
