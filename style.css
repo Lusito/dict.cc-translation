@@ -4,7 +4,7 @@ input[type='submit'],
 select,
 input[type='checkbox'],
 input[type='radio'] {
-    background-image: -webkit-linear-gradient(#ededed, #ededed 38%, #dedede);
+    background-image: linear-gradient(#EDEDED, #EDEDED 38%, #DEDEDE);
     border: 1px solid rgba(0, 0, 0, 0.25);
     border-radius: 2px;
     color: #444;
@@ -19,7 +19,7 @@ input[type='submit']:hover,
 select:hover,
 input[type='checkbox']:hover,
 input[type='radio']:hover {
-    background-image: linear-gradient(rgb(240, 240, 240), rgb(240, 240, 240) 38%, rgb(224, 224, 224));
+    background-image: linear-gradient(#F4F4F4, #F4F4F4 38%, #EDEDED);
     color: black;
     border-color: rgba(0, 0, 0, 0.298039);
 }
@@ -29,9 +29,6 @@ input[type='submit'],
 select {
     padding: 2px 8px;
     height: 26px;
-}
-select {
-    padding: 2px;
 }
 input[type="number"],
 input[type="password"],
@@ -117,4 +114,21 @@ input[type='submit']:active:after {
     transition: 0s;
     transform: scale(0,0);
     opacity: .3;
+}
+
+select {
+    padding: 2px 24px 2px 8px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image:
+        url(downarrow.svg),
+        linear-gradient(#EDEDED, #EDEDED 38%, #DEDEDE);
+    background-position: calc(100% - -1px) -1px, left top;
+    background-size: 27px 27px, 100% 100%;
+    background-repeat: no-repeat;
+}
+select:hover {
+    background-image:
+        url(downarrow.svg),
+        linear-gradient(#F4F4F4, #F4F4F4 38%, #EDEDED);
 }
