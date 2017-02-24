@@ -89,4 +89,7 @@ settings.onReady(function () {
         }
     });
     on(go, 'click', runSearch);
+	
+	// workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=1338909
+	setTimeout(() => search.focus(), 100);
 });
