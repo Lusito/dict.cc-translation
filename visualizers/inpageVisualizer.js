@@ -21,6 +21,7 @@
 
 /* global messageUtil */
 
+// Shows a mini translation layer above the current website.
 var inpageVisualizer = {
     show: function (config) {
         messageUtil.sendToTab(config.tab, 'showMiniLayer', {

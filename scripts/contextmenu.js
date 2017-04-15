@@ -19,6 +19,8 @@
  
  * ***** END LICENSE BLOCK ***** */
 
+// This file creates and recreates the context menu (when settings changed)
+
 /* global messageUtil, browser, translator, settings */
 
 (function () {

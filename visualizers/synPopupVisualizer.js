@@ -21,6 +21,7 @@
 
 /* global popup */
 
+// Shows a bigger popup window using syn.dict.cc
 var synPopupVisualizer = {
     show: function (config) {
         var url = config.protocol + 'syn.dict.cc/' + config.params;

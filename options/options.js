@@ -28,103 +28,6 @@ var secondLanguage = byId('secondLanguage');
 var languageDirection = byId('languageDirection');
 var selectedTranslationRow = null;
 
-function createButton(labelL10nKey, callback) {
-    var button = document.createElement('button');
-    button.setAttribute('data-l10n-id', labelL10nKey);
-    on(button, 'click', callback);
-    return button;
-}
-
-function createDialog(className, titleL10nKey, buttons) {
-    var overlay = document.createElement('div');
-    overlay.className = 'dialogOverlay';
-    var dialog = document.createElement('div');
-    dialog.className = 'dialog ' + className;
-    var titleNode = document.createElement('h2');
-    titleNode.setAttribute('data-l10n-id', titleL10nKey);
-    var contentNode = document.createElement('div');
-    var buttonsNode = document.createElement('div');
-    buttonsNode.className = 'dialogButtons';
-    dialog.appendChild(titleNode);
-    dialog.appendChild(contentNode);
-    dialog.appendChild(buttonsNode);
-    var buttonNodes = {};
-    for (var key in buttons) {
-        var button = createButton(key, buttons[key]);
-        buttonNodes[key] = button;
-        buttonsNode.appendChild(button);
-    }
-    overlay.appendChild(dialog);
-    document.body.appendChild(overlay);
-    return {
-        domNode: dialog,
-        contentNode: contentNode,
-        buttonNodes: buttonNodes,
-        close: function () {
-            document.body.removeChild(overlay);
-        }
-    };
-}
-
-function alert(titleL10nKey, contentL10nKey, content, callback) {
-    var dialog = createDialog('alert', titleL10nKey, {
-        'alert_ok': function () {
-            dialog.close();
-            if (callback)
-                callback();
-        }
-    });
-    if (contentL10nKey)
-        dialog.contentNode.setAttribute('data-l10n-id', contentL10nKey);
-    if (content)
-        dialog.contentNode.textContent = content;
-    dialog.buttonNodes.alert_ok.focus();
-    translateChildren(dialog.domNode);
-}
-
-function confirm(titleL10nKey, contentL10nKey, content, callback) {
-    var dialog = createDialog('confirm', titleL10nKey, {
-        'confirm_ok': function () {
-            dialog.close();
-            callback(true);
-        },
-        'confirm_cancel': function () {
-            dialog.close();
-            callback(false);
-        }
-    });
-    if (contentL10nKey)
-        dialog.contentNode.setAttribute('data-l10n-id', contentL10nKey);
-    if (content)
-        dialog.contentNode.textContent = content;
-    dialog.buttonNodes.confirm_ok.focus();
-    translateChildren(dialog.domNode);
-}
-
-function prompt(titleL10nKey, value, callback) {
-    var input = document.createElement('input');
-    input.value = value;
-    var dialog = createDialog('prompt', titleL10nKey, {
-        'prompt_ok': function () {
-            dialog.close();
-            callback(input.value);
-        },
-        'prompt_cancel': function () {
-            dialog.close();
-            callback(null);
-        }
-    });
-    dialog.contentNode.appendChild(input);
-    input.focus();
-    on(input, 'keydown', function (e) {
-        if (e.keyCode === 13) {
-            dialog.close();
-            callback(input.value);
-        }
-    });
-    translateChildren(dialog.domNode);
-}
-
 function initializeTabs() {
     var tabs = document.querySelectorAll('#tabs > div');
     var pages = document.querySelectorAll('#pages > div');
@@ -183,6 +86,7 @@ function translationsToJSON() {
     }
     return list;
 }
+
 function addTranslationRow(label, languagePair) {
     var row = document.createElement('tr');
     translationList.appendChild(row);
@@ -206,6 +110,7 @@ function addTranslationRow(label, languagePair) {
         startLabelEdit(row);
     });
 }
+
 function translationsFromJSON(list) {
     selectedTranslationRow = null;
     translationList.innerHTML = '';
@@ -214,6 +119,7 @@ function translationsFromJSON(list) {
         addTranslationRow(entry.v, entry.k);
     }
 }
+
 function setLanguageList(list) {
     list.push({k: 'DE', v: 'German'});
     list.push({k: 'EN', v: 'English'});
@@ -235,6 +141,7 @@ function setLanguageList(list) {
         secondLanguage.appendChild(option);
     }
 }
+
 function languagesToJSON() {
     var list = [];
     var options = secondLanguage.children;
@@ -245,6 +152,7 @@ function languagesToJSON() {
     }
     return list;
 }
+
 function languagesFromJSON(value) {
     setLanguageList(value);
 }
@@ -286,10 +194,12 @@ function storePreferences() {
     settings.set("translation.languages", languagesToJSON());
     settings.save();
 }
+
 function setElementsDisabled(elements, disabled) {
     for (var i = 0; i < elements.length; i++)
         elements[i].disabled = disabled;
 }
+
 function updateDisabledElements() {
     var modifierElements = [
         byId("quick_ctrl"),
@@ -361,7 +271,9 @@ function initializeDisabledConnections() {
         on(elementsDisabling[i], 'click', updateDisabledElements);
     }
 }
+
 var updateWarnings = function () {};
+
 function initializeWarningConnections() {
     var quick_ctrl = byId("quick_ctrl");
     var quick_shift = byId("quick_shift");
@@ -390,6 +302,7 @@ function startLabelEdit(row) {
             cell.textContent = value;
     });
 }
+
 function initializeTranslationButtons() {
     on(byId('moveUp'), 'click', function () {
         if (selectedTranslationRow) {
@@ -477,6 +390,7 @@ function setLanguageLoading(loading) {
     byId('refresh').style.display = loading ? 'none' : '';
     byId('loadingIndicator').style.display = loading ? 'block' : '';
 }
+
 function onLanguageListUpdate(languages) {
     setLanguageLoading(false);
     if (languages && languages.length > 0)

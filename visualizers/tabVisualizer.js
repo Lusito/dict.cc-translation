@@ -21,6 +21,7 @@
 
 /* global browser */
 
+// Opens a tab (or updates it) using www.dict.cc
 var tabVisualizer = {
     lastTab: null,
     show: function (config) {

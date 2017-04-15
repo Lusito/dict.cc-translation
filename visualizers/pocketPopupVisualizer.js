@@ -21,6 +21,7 @@
 
 /* global popup */
 
+// Shows a small popup window using pocket.dict.cc
 var pocketPopupVisualizer = {
     show: function (config) {
         var url = config.protocol + 'pocket.dict.cc/' + config.params;

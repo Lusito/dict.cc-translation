@@ -19,6 +19,9 @@
  
  * ***** END LICENSE BLOCK ***** */
 
+// This file intercepts clicks (if appropriate), detects words under the cursor and shows a mini in-page translation
+// Ideally, a popup panel would be used to show the translation, but that is not available in web-extensions.
+
 /* global messageUtil, settings, browser, METHOD_INPAGE */
 
 var allowedAscii = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

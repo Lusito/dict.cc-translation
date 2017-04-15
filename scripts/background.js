@@ -62,7 +62,7 @@ messageUtil.receive('showTranslationResult', function (data, sender) {
     }
 });
 
-// for audio playback:
+// Notes for future development of audio playback:
 //http://audio.dict.cc/speak.audio.php?type=wav&id=57760&lang=en_rec_ip&lp=DEEN
 // lang= <sprachkürzel lower>_rec_ip
 // id=57760, js global variable idArr: (index = row in page)
