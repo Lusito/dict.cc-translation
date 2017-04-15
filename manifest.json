@@ -67,8 +67,12 @@
         "page": "options/options.html"
     },
     "permissions": [
-        "https://*.dict.cc/",
-        "http://*.dict.cc/",
+        "http://www.dict.cc/",
+        "https://www.dict.cc/",
+        "http://syn.dict.cc/",
+        "https://syn.dict.cc/",
+        "http://pocket.dict.cc/",
+        "https://pocket.dict.cc/",
         "contextMenus",
         "storage",
         "tabs"
