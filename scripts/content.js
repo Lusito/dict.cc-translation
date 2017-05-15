@@ -29,44 +29,7 @@ var config = {};
 var lastActionTime = 0;
 var leftDown = false;
 var rightDown = false;
-
-// hopefully we don't need this code at all
-//function detectWordFromEventChrome(evt) {
-//    var elem = evt.target;
-//    var x = evt.x;
-//    var y = evt.y;
-//    if (elem.nodeType === elem.TEXT_NODE) {
-//        var range = elem.ownerDocument.createRange();
-//        range.selectNodeContents(elem);
-//        var currentPos = 0;
-//        var endPos = range.endOffset;
-//        while (currentPos + 1 < endPos) {
-//            range.setStart(elem, currentPos);
-//            range.setEnd(elem, currentPos + 1);
-//            if (range.getBoundingClientRect().left <= x && range.getBoundingClientRect().right >= x &&
-//                    range.getBoundingClientRect().top <= y && range.getBoundingClientRect().bottom >= y) {
-//                range.expand("word");
-//                var ret = range.toString();
-//                range.detach();
-//                return(ret);
-//            }
-//            currentPos += 1;
-//        }
-//    } else {
-//        for (var i = 0; i < elem.childNodes.length; i++) {
-//            var range = elem.childNodes[i].ownerDocument.createRange();
-//            range.selectNodeContents(elem.childNodes[i]);
-//            if (range.getBoundingClientRect().left <= x && range.getBoundingClientRect().right >= x &&
-//                    range.getBoundingClientRect().top <= y && range.getBoundingClientRect().bottom >= y) {
-//                range.detach();
-//                return(getWordAtPoint(elem.childNodes[i], x, y));
-//            } else {
-//                range.detach();
-//            }
-//        }
-//    }
-//    return(null);
-//}
+var miniLayer = null;
 
 function isWordChar(str, i) {
     var code = str.charCodeAt(i);
@@ -141,7 +104,6 @@ function updateWordUnderCursor(e) {
     if (!text) {
         text = detectWordFromEvent(e);
     }
-    console.log(text);
     messageUtil.send("setWordUnderCursor", {
         text: text,
         x: e.clientX,
@@ -453,7 +415,6 @@ function MiniLayer(x, y, onload) {
         tdoc.body.removeChild(overlay);
     };
 }
-var miniLayer = null;
 
 function destroyPanels() {
     if (miniLayer) {
@@ -477,28 +438,31 @@ function showMiniLayerResult(response) {
             miniLayer.showResult(response.links);
     }
 }
-settings.onReady(function () {
+
+function onSettingsChanged(settings) {
+    config = {
+        method: settings['quick.method'],
+        translations: settings['translation.list'],
+        contextEnabled: settings['context.enabled'],
+        selected: settings['quick.selected'],
+        quickEnabled: settings['quick.enabled'],
+        ctrl: settings['quick.ctrl'],
+        shift: settings['quick.shift'],
+        alt: settings['quick.alt'],
+        menu: settings['quick.right'],
+        rocker: settings['quick.rocker']
+    };
+}
+
+messageUtil.receive('contentStartup', function(settings) {
     window.addEventListener("click", preventMouseEventAfterAction, true);
     window.addEventListener("contextmenu", preventMouseEventAfterAction, true);
     window.addEventListener("mousedown", onMouseDown, true);
     window.addEventListener("mouseup", onMouseUp, true);
 
-    function updateConfig() {
-        config = {
-            method: settings.get('quick.method'),
-            translations: settings.get('translation.list'),
-            contextEnabled: settings.get('context.enabled'),
-            selected: settings.get('quick.selected'),
-            quickEnabled: settings.get('quick.enabled'),
-            ctrl: settings.get('quick.ctrl'),
-            shift: settings.get('quick.shift'),
-            alt: settings.get('quick.alt'),
-            menu: settings.get('quick.right'),
-            rocker: settings.get('quick.rocker')
-        };
-    }
-    messageUtil.receive('settingsChanged', updateConfig);
+    messageUtil.receive('settingsChanged', onSettingsChanged);
     messageUtil.receive('showMiniLayer', showMiniLayer);
     messageUtil.receive('showMiniLayerResult', showMiniLayerResult);
-    updateConfig();
+    onSettingsChanged(settings);
 });
+messageUtil.send('contentScriptLoaded');

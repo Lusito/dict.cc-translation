@@ -37,6 +37,10 @@ messageUtil.receive('showPopup', function (data, sender) {
     popup.open(data.url, incognito, data.width, data.height);
 });
 
+messageUtil.receive('contentScriptLoaded', function (data, sender) {
+    messageUtil.sendToTab(sender.tab, 'contentStartup', settings.getAll());
+});
+
 messageUtil.receive('showTranslationResult', function (data, sender) {
     var index = data.href.indexOf('?');
     var config = {

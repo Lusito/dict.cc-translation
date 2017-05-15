@@ -57,7 +57,6 @@
                 "lib/constants.js",
                 "lib/htmlUtils.js",
                 "lib/messageUtil.js",
-                "lib/settings.js",
                 "scripts/content.js"
             ],
             "matches": ["*://*/*"]
