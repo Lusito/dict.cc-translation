@@ -63,6 +63,13 @@
             "matches": ["*://*/*"]
         }
     ],
+    "commands": {
+        "_execute_browser_action": {
+            "suggested_key": {
+                "default": "Alt+Q"
+            }
+        }
+    },
     "options_ui": {
         "page": "options/options.html"
     },
