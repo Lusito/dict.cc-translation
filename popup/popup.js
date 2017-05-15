@@ -38,67 +38,99 @@ settings.onReady(function () {
         return params;
     }
 
-    // All attributes which will be kept during sanitization
-    var attributeWhiteList = ['href', 'style', 'align', 'target'];
-    // All potentially dangerous tag names as a css-selector
-    var tagBlackListSelector = 'script, iframe, svg, link, style, img, base, basefont, object, embed, applet, source, video, audio, canvas, input, form';
-
-    // Remove tags which are in tagBlackListSelector (parent is not checked, as the caller makes sure it's of a different type)
-    function sanitizeTags(parent) {
-        var elements = parent.querySelectorAll(tagBlackListSelector);
-        for (var i = 0; i < elements.length; i++) {
-            var e = elements[i];
-            e.parentElement.removeChild(e);
+    function parseDescriptionLink(a) {
+        var result = [];
+        var nodes = a.childNodes;
+        for(var i=0; i<nodes.length; i++) {
+            var node = nodes[i];
+            if(node.tagName) {
+                result.push({
+                    tagName: node.tagName,
+                    textContent: node.textContent
+                });
+            } else if(node.nodeType === 3) {
+                result.push(node.textContent);
+            }
         }
+        return result;
     }
 
-    // Makes sure links are sanitary urls (i.e. no javascript code)
-    function sanitizeLinks(parent, languagePair) {
+    function getSafeHref(a, urlPrefix, urlSuffix) {
+        var href = a.getAttribute('href');
+        if (href.indexOf('/?') === 0) {
+            href = urlPrefix + href + urlSuffix;
+        } else if (href.indexOf('http') !== 0)  {
+            href = '#'; // not as expected, could be javascript, so override
+        }
+        return href;
+    }
+
+    function parseDefinitions(doc, languagePair) {
         var urlPrefix = getProtocol() + 'www.dict.cc';
         var urlSuffix = '&lp=' + languagePair;
-        var links = parent.querySelectorAll('a');
-        for (var i = 0; i < links.length; i++) {
-            var a = links[i];
-            var href = a.getAttribute('href');
-            if (href.indexOf('/?') === 0) {
-                a.href = urlPrefix + href + urlSuffix;
-            } else if (href.indexOf('http') !== 0)  {
-                a.href = '#'; // not as expected, could be javascript, so override
+        
+        var rows = doc.querySelectorAll("dl > dt, dl > dd");
+        var definitions = [];
+        var definition = null;
+        for(var i=0; i<rows.length; i++) {
+            var row = rows[i];
+            if(row.tagName === 'DT') {
+                var a = row.querySelector('a');
+                if(a) {
+                    definition = {
+                        textContent: a.textContent,
+                        href: getSafeHref(a, urlPrefix, urlSuffix),
+                        descriptions: []
+                    };
+                    definitions.push(definition);
+                }
+            } else if(definition && row.tagName === 'DD') {
+                var links = row.querySelectorAll('a');
+                for(var j=0; j<links.length; j++) {
+                    var a = links[j];
+                    definition.descriptions.push({
+                        href: getSafeHref(a, urlPrefix, urlSuffix),
+                        nodes: parseDescriptionLink(a)
+                    });
+                }
             }
-            a.target = '_blank';
         }
+        return definitions;
     }
 
-    // Get an array of all attribute names which are not in the whitelist
-    function getUnusedAttributeNames(attributes) {
-        var names = [];
-        for (var i = 0; i < attributes.length; i++) {
-            var name = attributes[i].name;
-            if(attributeWhiteList.indexOf(name) === -1)
-                names.push(name);
-        }
-        return names;
-    }
-
-    // Removes all attributes on the element we don't use
-    function sanitizeAttributesOn(element) {
-        var attributes = getUnusedAttributeNames(element.attributes);
-        for (var i= 0; i < attributes.length; i++) {
-            element.removeAttribute(attributes[i]);
-        }
-    }
-
-    // Calls sanitizeAttributesOn for parent and all nested children
-    function sanitizeAttributes(parent) {
-        sanitizeAttributesOn(parent);
-        var elements = parent.querySelectorAll('*');
-        for (var i = 0; i < elements.length; i++) {
-            sanitizeAttributesOn(elements[i]);
+    function generateResult(result, definitions) {
+        for(var i=0; i<definitions.length; i++) {
+            var def = definitions[i];
+            var dt = createElement(document, result, 'dt');
+            createElement(document, dt, 'a', {
+                href: def.href,
+                textContent: def.textContent,
+                target: '_blank'
+            });
+            var dd = createElement(document, result, 'dd');
+            for(var j=0; j<def.descriptions.length; j++) {
+                var desc = def.descriptions[j];
+                var a = createElement(document, dd, 'a', {
+                    href: desc.href,
+                    target: '_blank'
+                });
+                for(var k=0; k<desc.nodes.length; k++) {
+                    var node = desc.nodes[k];
+                    if(node.tagName) {
+                        createElement(document, a, node.tagName, {textContent: node.textContent});
+                    } else {
+                        a.appendChild(document.createTextNode(node));
+                    }
+                }
+                if((j+1)<def.descriptions.length) {
+                    createElement(document, dd, 'br');
+                }
+            }
         }
     }
 
     // Makes a request to search pocket.dict.cc with the configured parameters.
-    // Sanitizes the resulting HTML and stores (part of) it in the popup html for display only.
+    // Parses the resulting HTML and generates content for the popup html
     function runSearch() {
         var word = search.value.trim();
         if (word !== '') {
@@ -111,14 +143,12 @@ settings.onReady(function () {
 
             result.textContent = browser.i18n.getMessage("loading");
             request.getHTML(url, function (doc) {
-                var dl = doc.querySelector("dl");
-                if (!dl) {
+                var definitions = parseDefinitions(doc, languagePair);
+                if (!definitions.length) {
                     result.textContent = browser.i18n.getMessage("resultFailed");
                 } else {
-                    sanitizeTags(dl);
-                    sanitizeLinks(dl, languagePair);
-                    sanitizeAttributes(dl);
-                    result.innerHTML = dl.innerHTML;
+                    result.innerHTML = '';
+                    generateResult(result, definitions);
                 }
             }, function () {
                 result.textContent = browser.i18n.getMessage("resultFailed");

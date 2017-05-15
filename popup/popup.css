@@ -37,6 +37,8 @@ a {
 dt {
     font-weight: bold;
     font-size: 10pt;
+}
+dt:not(:first-child) {
     margin-top: 13px;
 }
 dd {
