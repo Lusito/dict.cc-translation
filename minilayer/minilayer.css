@@ -21,8 +21,9 @@ body {
     background: #F0F0F0;
 }
 
-a:first-child {
-    height: 16px;
+#logo {
+    min-height: 16px;
+    min-width: 16px;
 }
 
 a {

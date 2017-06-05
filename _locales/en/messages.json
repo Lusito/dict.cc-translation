@@ -1,0 +1,122 @@
+{
+    "extensionName": { "message": "Dict.cc Translation", "description": "Name of the extension." },
+    "extensionDescription": { "message": "The add-on uses dict.cc to translate words and phrases in any website, epub or pdf. In-page translation. No need to select the word, just click on it!", "description": "Description of the extension." },
+    "actionTitle" : { "message": "Quick translation", "description": "Action button title" },
+
+	"noQuickKeys": { "message": "You need to specify at least one key for the quick click.", "description": "" },
+	"refreshFailed": { "message": "Failed to retrieve language list from dict.cc!\nPlease try again later.", "description": "" },
+	"loading": { "message": "Loading..", "description": "" },
+	"translateTo": { "message": "Translate to:", "description": "" },
+	"resultFailed": { "message": "Failed to get translation result", "description": "" },
+	"menuSelection": { "message": "Translate \"$1\"", "description": "" },
+	"menuNone": { "message": "No word detected", "description": "" },
+	"menuSub": { "message": "[$1]", "description": "" },
+	"enterLabel": { "message": "Type in the label:", "description": "" },
+	"enterLanguagePair": { "message": "Type in the language pair:", "description": "" },
+
+	"language_en": { "message": "English", "description": "" },
+	"language_de": { "message": "German", "description": "" },
+
+	"options_label": { "message": "Options", "description": "" },
+	"options_title": { "message": "Options", "description": "" },
+
+	"alert_ok": { "message": "OK", "description": "" },
+	"alert_title_error": { "message": "Error", "description": "" },
+
+	"confirm_delete": { "message": "Delete this item?", "description": "" },
+	"confirm_ok": { "message": "OK", "description": "" },
+	"confirm_cancel": { "message": "Cancel", "description": "" },
+
+	"confirm_removeAll": { "message": "Do you really want to remove all entries?", "description": "" },
+	"confirm_restore_defaults": { "message": "Do you really want to reset all settings to their defaults?", "description": "" },
+	"confirm_restore_defaults_content": { "message": "This cannot be undone.", "description": "" },
+
+	"prompt_ok": { "message": "OK", "description": "" },
+	"prompt_cancel": { "message": "Cancel", "description": "" },
+    
+	"popup_button": { "message": "Go!", "description": "" },
+	"popup_placeholder": { "message": "Translate..", "description": "" },
+
+	"prefPane_title": { "message": "Dict.cc add-on settings", "description": "" },
+	"tabs_context_title": { "message": "Context Menu", "description": "" },
+	"tabs_quick_title": { "message": "Quick Click", "description": "" },
+	"tabs_language_title": { "message": "Translation List", "description": "" },
+	"tabs_help": { "message": "Help", "description": "" },
+
+	"tabs_context_enable": { "message": "Enable Context Menu", "description": "" },
+	"tabs_context_enable__title": { "message": "Add translation options to the context menu.", "description": "" },
+
+	"tabs_results_title": { "message": "Show results as", "description": "" },
+	"tabs_results_syn": { "message": "Popup (all details)", "description": "" },
+	"tabs_results_pocket": { "message": "Popup (pocket version)", "description": "" },
+	"tabs_results_tab": { "message": "New tab (regular Dict.cc)", "description": "" },
+	"tabs_results_mini": { "message": "Micro panel", "description": "" },
+	"tabs_results_micropanel_title": { "message": "Click on a micro panel result shows as", "description": "" },
+	"tabs_result_multiWindow": { "message": "Create a new window/tab for every request", "description": "" },
+	"tabs_result_multiWindow__title": { "message": "Uncheck this if you want to reuse the last tab for the results.", "description": "" },
+
+	"tabs_quick_enable": { "message": "Enable quick click", "description": "" },
+	"tabs_quick_enable__title": { "message": "This will use the first translation (in the translation list) to search for words you click on while holding the selected keys.", "description": "" },
+	"tabs_quick_selected": { "message": "Use selected text if available", "description": "" },
+	"tabs_quick_selected__title": { "message": "Prefer selected text (if there is any) to the word under the cursor.", "description": "" },
+	"tabs_quick_right": { "message": "Enable right click for more options", "description": "" },
+	"tabs_quick_right__title": { "message": "Show all translations instead of the context menu when quick right clicking.", "description": "" },
+	"tabs_quick_keys_title": { "message": "Keys to press (simultaneously)", "description": "" },
+	"tabs_quick_keys_ctrl": { "message": "Ctrl", "description": "" },
+	"tabs_quick_keys_ctrl__title": { "message": "You need to press the ctrl key to use quick click.", "description": "" },
+	"tabs_quick_keys_shift": { "message": "Shift", "description": "" },
+	"tabs_quick_keys_shift__title": { "message": "You need to press the shift key to use quick click.", "description": "" },
+	"tabs_quick_keys_alt": { "message": "Alt", "description": "" },
+	"tabs_quick_keys_alt__title": { "message": "You need to press the alt key to use quick click.", "description": "" },
+	"tabs_quick_keys_warning": { "message": "Warning:", "description": "" },
+	"tabs_quick_keys_warning_shift": { "message": "In newer Firefox versions, using shift as only modifier causes problems with the quick context menu.", "description": "" },
+	"tabs_quick_keys_warning_alt": { "message": "In multi-process Firefox, using alt as only modifier causes problems.", "description": "" },
+	"tabs_quick_keys_warning_chrome": { "message": "Quick Click does not work for PDF files in Chrome. You'll need to select the text and use the context-menu.", "description": "" },
+	"tabs_quick_rocker": { "message": "Enable rocker gestures", "description": "" },
+	"tabs_quick_rocker__title": { "message": "Holding right mouse, then pressing left mouse for quick translation and vice versa for a context menu.", "description": "" },
+
+	"tabs_language_use_https": { "message": "Use secure requests (HTTPS)", "description": "" },
+	"tabs_language_list__title": { "message": "The list of translations to add to the menu.", "description": "" },
+	"tabs_language_list_label": { "message": "Label", "description": "" },
+	"tabs_language_list_languagepair": { "message": "Language Pair", "description": "" },
+
+	"tabs_language_modify_title": { "message": "Modify", "description": "" },
+	"tabs_language_modify_up": { "message": "Move entry up", "description": "" },
+	"tabs_language_modify_up__title": { "message": "Move the selected item up in the list.", "description": "" },
+	"tabs_language_modify_down": { "message": "Move entry down", "description": "" },
+	"tabs_language_modify_down__title": { "message": "Move the selected item down in the list.", "description": "" },
+	"tabs_language_modify_edit": { "message": "Edit label", "description": "" },
+	"tabs_language_modify_edit__title": { "message": "Change the label of the selected entry.", "description": "" },
+	"tabs_language_modify_remove": { "message": "Remove entry", "description": "" },
+	"tabs_language_modify_remove__title": { "message": "Remove the selected entry from the list.", "description": "" },
+	"tabs_language_modify_removeAll": { "message": "Clear list", "description": "" },
+	"tabs_language_modify_removeAll__title": { "message": "Clear the entire list.", "description": "" },
+
+
+	"tabs_language_add_title": { "message": "Add new entry", "description": "" },
+	"tabs_language_add_first_before": { "message": "First:", "description": "" },
+	"tabs_language_add_first__title": { "message": "First Language", "description": "" },
+	"tabs_language_add_second_before": { "message": "Second:", "description": "" },
+	"tabs_language_add_second__title": { "message": "Second Language", "description": "" },
+	"tabs_language_add_manual": { "message": "Manual", "description": "" },
+	"tabs_language_add_manual__title": { "message": "Add a new entry manually.", "description": "" },
+	"tabs_language_add_refresh": { "message": "Refresh", "description": "" },
+	"tabs_language_add_refresh__title": { "message": "Refresh the list of available languages from dict.cc.", "description": "" },
+
+	"tabs_language_add_direction_before": { "message": "Direction:", "description": "" },
+	"tabs_language_add_direction__title": { "message": "Select which way to translate.", "description": "" },
+	"tabs_language_add_direction_toBoth": { "message": "Both ways", "description": "" },
+	"tabs_language_add_direction_toSecond": { "message": "From first to second language", "description": "" },
+	"tabs_language_add_direction_toFirst": { "message": "From second to first language", "description": "" },
+	"tabs_language_add_do": { "message": "Add", "description": "" },
+	"tabs_language_add_do__title": { "message": "Add a new entry using the selected values.", "description": "" },
+
+    "tabs_help_dict_text" : { "message": "I am not the author of dict.cc. I just wrote the add-on. Send questions about dict.cc to:", "description": "" },
+    "tabs_help_issues_text": { "message": "Problems, questions and other feedback on the add-on can be reported on GitHub:", "description": "" },
+
+	"button_restore_defaults": { "message": "Reset to defaults", "description": "" },
+	"button_save": { "message": "Save", "description": "" },
+	"button_cancel": { "message": "Cancel", "description": "" },
+    
+	"empty_dummy": { "message": "", "description": "ignore this one" }
+}

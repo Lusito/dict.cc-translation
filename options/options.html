@@ -1,81 +1,80 @@
 <!DOCTYPE HTML>
 <html>
     <head>
+        <meta charset="utf-8"/>
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <link href="../style.css" type="text/css" rel="stylesheet">
         <link href="options.css" type="text/css" rel="stylesheet">
-        <title data-l10n-id="prefPane_title"></title>
     </head>
     <body>
         <div id="tooltip"></div>
-        <div id="title" data-l10n-id="prefPane_title"></div>
         <div id="tabs">
-            <div data-l10n-id="tabs_context_title" class="active"></div>
-            <div data-l10n-id="tabs_quick_title"></div>
-            <div data-l10n-id="tabs_language_title"></div>
+            <div class="active"><div class="tab-box"></div><div class="tab-label" data-l10n-id="tabs_context_title"></div></div>
+            <div><div class="tab-box"></div><div class="tab-label" data-l10n-id="tabs_quick_title"></div></div>
+            <div><div class="tab-box"></div><div class="tab-label" data-l10n-id="tabs_language_title"></div></div>
+            <div><div class="tab-box"></div><div class="tab-label" data-l10n-id="tabs_help"></div></div>
         </div>
         <div id="pages">
             <div class="active">
                 <div>
-                    <div><input type="checkbox" id="context_enabled"><label for="context_enabled" data-l10n-id="tabs_context_enable"></label></div>
-                    <div><input type="checkbox" id="context_showFirst"><label for="context_showFirst" data-l10n-id="tabs_context_showFirst"></label></div>
-                    <div><input type="checkbox" id="context_multiWindow"><label for="context_multiWindow" data-l10n-id="tabs_result_multiWindow"></label></div>
-                    <div><input type="checkbox" id="context_asPanel"><label for="context_asPanel" data-l10n-id="tabs_result_asPanel"></label></div>
+                    <div><label><input type="checkbox" id="context_enabled"><span data-l10n-id="tabs_context_enable"></span></label></div>
+                    <div><label><input type="checkbox" id="context_multiWindow"><span data-l10n-id="tabs_result_multiWindow"></span></label></div>
                 </div>
                 <div>
                     <fieldset>
                         <legend data-l10n-id="tabs_results_title"></legend>
-                        <div><input type="radio" name="context_method" id="context_method0" value="0"><label for="context_method0" data-l10n-id="tabs_results_syn"></label></div>
-                        <div><input type="radio" name="context_method" id="context_method1" value="1"><label for="context_method1" data-l10n-id="tabs_results_pocket"></label></div>
-                        <div><input type="radio" name="context_method" id="context_method2" value="2"><label for="context_method2" data-l10n-id="tabs_results_tab"></label></div>
-                        <div><input type="radio" name="context_method" id="context_method3" value="3"><label for="context_method3" data-l10n-id="tabs_results_mini"></label></div>
-                        <div><input type="radio" name="context_method" id="context_method4" value="4"><label for="context_method4" data-l10n-id="tabs_results_sidebar"></label></div>
+                        <div><label><input type="radio" name="context_method" id="context_method0" value="0"><span data-l10n-id="tabs_results_syn"></span></label></div>
+                        <div><label><input type="radio" name="context_method" id="context_method1" value="1"><span data-l10n-id="tabs_results_pocket"></span></label></div>
+                        <div><label><input type="radio" name="context_method" id="context_method2" value="2"><span data-l10n-id="tabs_results_tab"></span></label></div>
+                        <div><label><input type="radio" name="context_method" id="context_method3" value="3"><span data-l10n-id="tabs_results_mini"></span></label></div>
                     </fieldset>
                 </div>
             </div>
             <div>
                 <div>
-                    <div><input type="checkbox" id="quick_enabled"><label for="quick_enabled" data-l10n-id="tabs_quick_enable"></label></div>
+                    <div><label><input type="checkbox" id="quick_enabled"><span data-l10n-id="tabs_quick_enable"></span></label></div>
                     <fieldset>
                         <legend data-l10n-id="tabs_quick_keys_title"></legend>
-                        <input type="checkbox" id="quick_ctrl"><label for="quick_ctrl" data-l10n-id="tabs_quick_keys_ctrl"></label>
-                        <input type="checkbox" id="quick_shift"><label for="quick_shift" data-l10n-id="tabs_quick_keys_shift"></label>
-                        <input type="checkbox" id="quick_alt"><label for="quick_alt" data-l10n-id="tabs_quick_keys_alt"></label>
-                        <div class="warning" id="quick_warning_shift">
+                        <label><input type="checkbox" id="quick_ctrl"><span data-l10n-id="tabs_quick_keys_ctrl"></span></label>
+                        <label><input type="checkbox" id="quick_shift"><span data-l10n-id="tabs_quick_keys_shift"></span></label>
+                        <label><input type="checkbox" id="quick_alt"><span data-l10n-id="tabs_quick_keys_alt"></span></label>
+                        <div class="warning" id="quick_warning_shift" style="display: none;">
                             <span data-l10n-id="tabs_quick_keys_warning"></span>
                             <span data-l10n-id="tabs_quick_keys_warning_shift"></span>
                         </div>
-                        <div class="warning" id="quick_warning_alt">
+                        <div class="warning" id="quick_warning_alt" style="display: none;">
                             <span data-l10n-id="tabs_quick_keys_warning"></span>
                             <span data-l10n-id="tabs_quick_keys_warning_alt"></span>
                         </div>
                     </fieldset>
-                    <div><input type="checkbox" id="quick_rocker"><label for="quick_rocker" data-l10n-id="tabs_quick_rocker"></label></div>
-                    <div><input type="checkbox" id="quick_selected"><label for="quick_selected" data-l10n-id="tabs_quick_selected"></label></div>
-                    <div><input type="checkbox" id="quick_right"><label for="quick_right" data-l10n-id="tabs_quick_right"></label></div>
-                    <div><input type="checkbox" id="quick_multiWindow"><label for="quick_multiWindow" data-l10n-id="tabs_result_multiWindow"></label></div>
-                    <div><input type="checkbox" id="quick_asPanel"><label for="quick_asPanel" data-l10n-id="tabs_result_asPanel"></label></div>
+                    <div><label><input type="checkbox" id="quick_rocker"><span data-l10n-id="tabs_quick_rocker"></span></label></div>
+                    <div><label><input type="checkbox" id="quick_selected"><span data-l10n-id="tabs_quick_selected"></span></label></div>
+                    <div><label><input type="checkbox" id="quick_right"><span data-l10n-id="tabs_quick_right"></span></label></div>
+                    <div><label><input type="checkbox" id="quick_multiWindow"><span data-l10n-id="tabs_result_multiWindow"></span></label></div>
+                    <div class="warning" id="quick_warning_chrome" style="display: none;">
+                        <span data-l10n-id="tabs_quick_keys_warning"></span>
+                        <span data-l10n-id="tabs_quick_keys_warning_chrome"></span>
+                    </div>
                 </div>
                 <div>
                     <fieldset>
                         <legend data-l10n-id="tabs_results_title"></legend>
-                        <div><input type="radio" name="quick_method" id="quick_method0" value="0"><label for="quick_method0" data-l10n-id="tabs_results_syn"></label></div>
-                        <div><input type="radio" name="quick_method" id="quick_method1" value="1"><label for="quick_method1" data-l10n-id="tabs_results_pocket"></label></div>
-                        <div><input type="radio" name="quick_method" id="quick_method2" value="2"><label for="quick_method2" data-l10n-id="tabs_results_tab"></label></div>
-                        <div><input type="radio" name="quick_method" id="quick_method3" value="3"><label for="quick_method3" data-l10n-id="tabs_results_mini"></label></div>
-                        <div><input type="radio" name="quick_method" id="quick_method4" value="4"><label for="quick_method4" data-l10n-id="tabs_results_sidebar"></label></div>
+                        <div><label><input type="radio" name="quick_method" id="quick_method0" value="0"><span data-l10n-id="tabs_results_syn"></span></label></div>
+                        <div><label><input type="radio" name="quick_method" id="quick_method1" value="1"><span data-l10n-id="tabs_results_pocket"></span></label></div>
+                        <div><label><input type="radio" name="quick_method" id="quick_method2" value="2"><span data-l10n-id="tabs_results_tab"></span></label></div>
+                        <div><label><input type="radio" name="quick_method" id="quick_method3" value="3"><span data-l10n-id="tabs_results_mini"></span></label></div>
                     </fieldset>
                     <fieldset>
                         <legend data-l10n-id="tabs_results_micropanel_title"></legend>
-                        <div><input type="radio" name="micro_method" id="micro_method0" value="0"><label for="micro_method0" data-l10n-id="tabs_results_syn"></label></div>
-                        <div><input type="radio" name="micro_method" id="micro_method1" value="1"><label for="micro_method1" data-l10n-id="tabs_results_pocket"></label></div>
-                        <div><input type="radio" name="micro_method" id="micro_method2" value="2"><label for="micro_method2" data-l10n-id="tabs_results_tab"></label></div>
-                        <div><input type="radio" name="micro_method" id="micro_method4" value="4"><label for="micro_method4" data-l10n-id="tabs_results_sidebar"></label></div>
+                        <div><label><input type="radio" name="micro_method" id="micro_method0" value="0"><span data-l10n-id="tabs_results_syn"></span></label></div>
+                        <div><label><input type="radio" name="micro_method" id="micro_method1" value="1"><span data-l10n-id="tabs_results_pocket"></span></label></div>
+                        <div><label><input type="radio" name="micro_method" id="micro_method2" value="2"><span data-l10n-id="tabs_results_tab"></span></label></div>
                     </fieldset>
                 </div>
             </div>
             <div>
                 <div>
-                    <input id="translation_useHttps" type="checkbox"><label for="translation_useHttps" data-l10n-id="tabs_language_use_https"></label>
+                    <label><input id="translation_useHttps" type="checkbox"><span data-l10n-id="tabs_language_use_https"></span></label>
                     <table id="translationsTableHead">
                         <tr><th data-l10n-id="tabs_language_list_label"></th><th width="100px" data-l10n-id="tabs_language_list_languagepair"></th></tr>
                     </table>
@@ -127,11 +126,28 @@
                     </fieldset>
                 </div>
             </div>
+            <div>
+                <p>
+                    <span data-l10n-id="tabs_help_dict_text"></span>
+                    <a href="http://users.dict.cc/Paul/" target="_blank">Paul Hemetsberger</a>
+                </p>
+                <p>
+                    <span data-l10n-id="tabs_help_issues_text"></span><br/>
+                    <a href="https://github.com/Lusito/dict.cc-translation/issues" target="_blank">https://github.com/Lusito/dict.cc-translation/issues</a>
+                </p>
+            </div>
         </div>
         <div id="buttons">
             <button id="restore_defaults" data-l10n-id="button_restore_defaults"></button>
             <button id="save" data-l10n-id="button_save"></button>
             <button id="cancel" data-l10n-id="button_cancel"></button>
         </div>
+        <script src="../lib/browser.js"></script>
+        <script src="../lib/constants.js"></script>
+        <script src="../lib/request.js"></script>
+        <script src="../lib/settings.js"></script>
+        <script src="../lib/messageUtil.js"></script>
+        <script src="../lib/htmlUtils.js"></script>
+        <script src="options.js"></script>
     </body>
 </html>
