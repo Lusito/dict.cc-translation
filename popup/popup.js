@@ -38,9 +38,9 @@ settings.onReady(function () {
         return params;
     }
 
-    function parseDescriptionLink(a) {
+    function parseDescriptionNodes(parent) {
         var result = [];
-        var nodes = a.childNodes;
+        var nodes = parent.childNodes;
         for(var i=0; i<nodes.length; i++) {
             var node = nodes[i];
             if(node.tagName) {
@@ -59,17 +59,29 @@ settings.onReady(function () {
         var href = a.getAttribute('href');
         if (href.indexOf('/?') === 0) {
             href = urlPrefix + href + urlSuffix;
+        } else if (href.indexOf('?') === 0) {
+            href = urlPrefix + '/' + href + urlSuffix;
         } else if (href.indexOf('http') !== 0)  {
             href = '#'; // not as expected, could be javascript, so override
         }
         return href;
     }
 
-    function parseDefinitions(doc, languagePair) {
+    function parseDefinitionLists(doc, languagePair) {
+        var lists = [];
+        var dls = doc.querySelectorAll("dl");
+        for(var i=0; i<dls.length; i++) {
+            var definitions = parseDefinitions(dls[i], languagePair);
+            if(definitions.length > 0)
+                lists.push(definitions);
+        }
+        return lists;
+    }
+    function parseDefinitions(dl, languagePair) {
         var urlPrefix = getProtocol() + 'www.dict.cc';
         var urlSuffix = '&lp=' + languagePair;
-        
-        var rows = doc.querySelectorAll("dl > dt, dl > dd");
+
+        var rows = dl.querySelectorAll("dt,dd");
         var definitions = [];
         var definition = null;
         for(var i=0; i<rows.length; i++) {
@@ -83,6 +95,12 @@ settings.onReady(function () {
                         descriptions: []
                     };
                     definitions.push(definition);
+                } else {
+                    definition = {
+                        nodes: parseDescriptionNodes(row),
+                        descriptions: []
+                    };
+                    definitions.push(definition);
                 }
             } else if(definition && row.tagName === 'DD') {
                 var links = row.querySelectorAll('a');
@@ -90,7 +108,7 @@ settings.onReady(function () {
                     var a = links[j];
                     definition.descriptions.push({
                         href: getSafeHref(a, urlPrefix, urlSuffix),
-                        nodes: parseDescriptionLink(a)
+                        nodes: parseDescriptionNodes(a)
                     });
                 }
             }
@@ -102,11 +120,25 @@ settings.onReady(function () {
         for(var i=0; i<definitions.length; i++) {
             var def = definitions[i];
             var dt = createElement(document, result, 'dt');
-            createElement(document, dt, 'a', {
-                href: def.href,
-                textContent: def.textContent,
-                target: '_blank'
-            });
+            if(def.href) {
+                createElement(document, dt, 'a', {
+                    href: def.href,
+                    textContent: def.textContent,
+                    target: '_blank'
+                });
+            } else if(def.nodes) {
+                for(var k=0; k<def.nodes.length; k++) {
+                    var node = def.nodes[k];
+                    if(node.tagName) {
+                        createElement(document, dt, node.tagName, {textContent: node.textContent});
+                    } else {
+                        dt.appendChild(document.createTextNode(node));
+                    }
+                    if((k+1)<def.descriptions.length) {
+                        createElement(document, dd, 'br');
+                    }
+                }
+            }
             var dd = createElement(document, result, 'dd');
             for(var j=0; j<def.descriptions.length; j++) {
                 var desc = def.descriptions[j];
@@ -139,16 +171,19 @@ settings.onReady(function () {
 
 
             if (result === null)
-                result = createElement(document, document.body, 'dl', {id: 'result'});
+                result = createElement(document, document.body, 'div', {id: 'result'});
 
             result.textContent = browser.i18n.getMessage("loading");
             request.getHTML(url, function (doc) {
-                var definitions = parseDefinitions(doc, languagePair);
-                if (!definitions.length) {
+                var definitionLists = parseDefinitionLists(doc, languagePair);
+                if (!definitionLists.length) {
                     result.textContent = browser.i18n.getMessage("resultFailed");
                 } else {
                     result.innerHTML = '';
-                    generateResult(result, definitions);
+                    for(var i=0; i<definitionLists.length; i++) {
+                        var destination = createElement(document, result, 'dl');
+                        generateResult(destination, definitionLists[i]);
+                    }
                 }
             }, function () {
                 result.textContent = browser.i18n.getMessage("resultFailed");

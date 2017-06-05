@@ -21,7 +21,12 @@ body {
 #form > *:last-child {
     margin-right: 0;
 }
+#result {
+    display: flex;
+    flex-direction: row;
+}
 dl {
+    flex-grow: 1;
     max-height: 400px;
     max-width: 400px;
     overflow: auto;
@@ -29,6 +34,9 @@ dl {
     padding: 5px;
     border: 1px solid #bfbfbf;
     border-radius: 2px;
+}
+dl:not(:first-child) {
+    margin-left: 6px;
 }
 a {
     text-decoration: none;
