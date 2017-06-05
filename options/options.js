@@ -2,31 +2,24 @@
  
  * Author: Santo Pfingsten (Lusito)
  
- * This file is part of The Firefox Dict.cc Addon.
+ * This file is part of the dict.cc web-extension.
  
- * The Firefox Dict.cc Addon is free software: you can redistribute it and/or modify
+ * The dict.cc web-extension is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  
- * The Firefox Dict.cc Addon is distributed in the hope that it will be useful,
+ * The dict.cc web-extension is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  
  * You should have received a copy of the GNU General Public License
- * along with The Firefox Dict.cc Addon.  If not, see http://www.gnu.org/licenses/.
+ * along with the dict.cc web-extension.  If not, see http://www.gnu.org/licenses/.
  
  * ***** END LICENSE BLOCK ***** */
 
-var preferences = {};
-
-function byId(id) {
-    return document.getElementById(id);
-}
-function on(node, event, callback) {
-    node.addEventListener(event, callback);
-}
+/* global byId, settings, request, messageUtil */
 
 var preferenceElements = {};
 var translationList = byId('translation_list');
@@ -34,110 +27,6 @@ var firstLanguage = byId('firstLanguage');
 var secondLanguage = byId('secondLanguage');
 var languageDirection = byId('languageDirection');
 var selectedTranslationRow = null;
-
-function createButton(labelL10nKey, callback) {
-    var button = document.createElement('button');
-    button.setAttribute('data-l10n-id', labelL10nKey);
-    on(button, 'click', callback);
-    return button;
-}
-
-function createDialog(className, titleL10nKey, buttons) {
-    var overlay = document.createElement('div');
-    overlay.className = 'dialogOverlay';
-    var dialog = document.createElement('div');
-    dialog.className = 'dialog ' + className;
-    var titleNode = document.createElement('h2');
-    titleNode.setAttribute('data-l10n-id', titleL10nKey);
-    var contentNode = document.createElement('div');
-    var buttonsNode = document.createElement('div');
-    buttonsNode.className = 'dialogButtons';
-    dialog.appendChild(titleNode);
-    dialog.appendChild(contentNode);
-    dialog.appendChild(buttonsNode);
-    var buttonNodes = {};
-    for (var key in buttons) {
-        var button = createButton(key, buttons[key]);
-        buttonNodes[key] = button;
-        buttonsNode.appendChild(button);
-    }
-    overlay.appendChild(dialog);
-    document.body.appendChild(overlay);
-    return {
-        domNode: dialog,
-        contentNode: contentNode,
-        buttonNodes: buttonNodes,
-        close: function () {
-            document.body.removeChild(overlay);
-        }
-    };
-}
-
-function alert(titleL10nKey, contentL10nKey, content, callback) {
-    var dialog = createDialog('alert', titleL10nKey, {
-        'alert_ok': function () {
-            dialog.close();
-            if (callback)
-                callback();
-        }
-    });
-    if (contentL10nKey)
-        dialog.contentNode.setAttribute('data-l10n-id', contentL10nKey);
-    if (content)
-        dialog.contentNode.textContent = content;
-    var l10n = ['alert_ok', titleL10nKey];
-    if (contentL10nKey)
-        l10n.push(contentL10nKey);
-    dialog.buttonNodes.alert_ok.focus();
-    self.port.emit('requestTranslation', l10n);
-}
-
-function confirm(titleL10nKey, contentL10nKey, content, callback) {
-    var dialog = createDialog('confirm', titleL10nKey, {
-        'confirm_ok': function () {
-            dialog.close();
-            callback(true);
-        },
-        'confirm_cancel': function () {
-            dialog.close();
-            callback(false);
-        }
-    });
-    if (contentL10nKey)
-        dialog.contentNode.setAttribute('data-l10n-id', contentL10nKey);
-    if (content)
-        dialog.contentNode.textContent = content;
-    var l10n = ['confirm_ok', 'confirm_cancel', titleL10nKey];
-    if (contentL10nKey)
-        l10n.push(contentL10nKey);
-    dialog.buttonNodes.confirm_ok.focus();
-    self.port.emit('requestTranslation', l10n);
-}
-
-function prompt(titleL10nKey, value, callback) {
-    var input = document.createElement('input');
-    input.value = value;
-    var dialog = createDialog('prompt', titleL10nKey, {
-        'prompt_ok': function () {
-            dialog.close();
-            callback(input.value);
-        },
-        'prompt_cancel': function () {
-            dialog.close();
-            callback(null);
-        }
-    });
-    dialog.contentNode.appendChild(input);
-    input.focus();
-    on(input, 'keydown', function (e) {
-        if (e.keyCode === 13) {
-            dialog.close();
-            callback(input.value);
-        }
-    });
-    var l10n = ['prompt_ok', 'prompt_cancel', titleL10nKey];
-    self.port.emit('requestTranslation', l10n);
-}
 
 function initializeTabs() {
     var tabs = document.querySelectorAll('#tabs > div');
@@ -156,70 +45,10 @@ function initializeTabs() {
         linkTab(tabs[i]);
 }
 
-function initializeTooltips() {
-    var tooltip = byId('tooltip');
-    var hasTooltip = false;
-    var tooltipShowTimeoutHandle;
-    var showTooltipDelay = 500;
-    var lastMouseX, lastMouseY;
-    function showTooltip() {
-        tooltipShowTimeoutHandle = null;
-        if (hasTooltip) {
-            tooltip.style.left = 0;
-            tooltip.style.top = 0;
-            tooltip.className = 'visible';
-            var width = tooltip.clientWidth;
-            var height = tooltip.clientHeight;
-            if (lastMouseY > document.body.clientHeight / 2)
-                tooltip.style.top = (lastMouseY - height) + 'px';
-            else
-                tooltip.style.top = lastMouseY + 'px';
-            if (lastMouseX > document.body.clientWidth / 2)
-                tooltip.style.left = (lastMouseX - width - 8) + 'px';
-            else
-                tooltip.style.left = (lastMouseX + 15) + 'px';
-        }
-    }
-    function moveTooltip(x, y) {
-        if (tooltipShowTimeoutHandle) {
-            clearTimeout(tooltipShowTimeoutHandle);
-            tooltipShowTimeoutHandle = null;
-        }
-        if (hasTooltip) {
-            tooltipShowTimeoutHandle = setTimeout(showTooltip, showTooltipDelay);
-            lastMouseX = x;
-            lastMouseY = y;
-        }
-    }
-    function prepareTooltip(x, y, title) {
-        tooltip.textContent = title;
-        hasTooltip = true;
-        moveTooltip(x, y);
-    }
-    function hideTooltip() {
-        tooltip.className = '';
-        hasTooltip = false;
-    }
-    document.body.addEventListener('mousemove', function (e) {
-        moveTooltip(e.clientX, e.clientY);
-    });
-    function registerTooltip(element) {
-        element.addEventListener('mouseover', function (e) {
-            prepareTooltip(e.clientX, e.clientY, element.title);
-        });
-        element.addEventListener('mouseout', hideTooltip);
-    }
-    var titledElements = document.querySelectorAll('[title]');
-    for (var i = 0; i < titledElements.length; i++)
-        registerTooltip(titledElements[i]);
-}
-
 function initializePreferenceElements() {
     var checkboxIds = [
         "context_enabled",
-        "context_showFirst",
         "context_multiWindow",
-        "context_asPanel",
         "quick_enabled",
         "quick_right",
         "quick_ctrl",
@@ -227,7 +56,6 @@ function initializePreferenceElements() {
         "quick_alt",
         "quick_selected",
         "quick_multiWindow",
-        "quick_asPanel",
         "quick_rocker",
         "translation_useHttps"
     ];
@@ -249,15 +77,16 @@ function initializePreferenceElements() {
     }
 }
 
-function serializeTranslations() {
+function translationsToJSON() {
     var list = [];
     var rows = translationList.children;
     for (var i = 0; i < rows.length; i++) {
         var cells = rows[i].children;
         list.push({k: cells[1].textContent, v: cells[0].textContent});
     }
-    return JSON.stringify(list);
+    return list;
 }
+
 function addTranslationRow(label, languagePair) {
     var row = document.createElement('tr');
     translationList.appendChild(row);
@@ -281,15 +110,16 @@ function addTranslationRow(label, languagePair) {
         startLabelEdit(row);
     });
 }
-function unserializeTranslations(value) {
+
+function translationsFromJSON(list) {
     selectedTranslationRow = null;
-    var list = JSON.parse(value);
     translationList.innerHTML = '';
     for (var i = 0; i < list.length; i++) {
         var entry = list[i];
         addTranslationRow(entry.v, entry.k);
     }
 }
+
 function setLanguageList(list) {
     list.push({k: 'DE', v: 'German'});
     list.push({k: 'EN', v: 'English'});
@@ -311,7 +141,8 @@ function setLanguageList(list) {
         secondLanguage.appendChild(option);
     }
 }
-function serializeLanguages() {
+
+function languagesToJSON() {
     var list = [];
     var options = secondLanguage.children;
     for (var i = 0; i < options.length; i++) {
@@ -319,15 +150,16 @@ function serializeLanguages() {
         if (option.value !== 'DE' && option.value !== 'EN')
             list.push({k: option.value, v: option.textContent});
     }
-    return JSON.stringify(list);
+    return list;
 }
-function unserializeLanguages(value) {
-    setLanguageList(JSON.parse(value));
+
+function languagesFromJSON(value) {
+    setLanguageList(value);
 }
 
 function loadPreferences() {
     for (var key in preferenceElements) {
-        var value = preferences[key];
+        var value = settings.get(key);
         var el = preferenceElements[key];
         if (el.parentElement)
             el.checked = value;
@@ -339,89 +171,82 @@ function loadPreferences() {
         }
     }
 
-    unserializeTranslations(preferences["translation.list"]);
-    unserializeLanguages(preferences["translation.languages"]);
+    translationsFromJSON(settings.get("translation.list"));
+    languagesFromJSON(settings.get("translation.languages"));
+    updateWarnings();
 }
 
 function storePreferences() {
     for (var key in preferenceElements) {
         var el = preferenceElements[key];
         if (el.parentElement)
-            preferences[key] = el.checked;
+            settings.set(key, el.checked);
         else {
             for (var i = 0; i < el.length; i++) {
                 var radio = el[i];
                 if (radio.checked)
-                    preferences[key] = parseInt(radio.value);
+                    settings.set(key, parseInt(radio.value));
             }
         }
     }
 
-    preferences["translation.list"] = serializeTranslations();
-    preferences["translation.languages"] = serializeLanguages();
+    settings.set("translation.list", translationsToJSON());
+    settings.set("translation.languages", languagesToJSON());
+    settings.save();
 }
+
 function setElementsDisabled(elements, disabled) {
     for (var i = 0; i < elements.length; i++)
         elements[i].disabled = disabled;
 }
+
 function updateDisabledElements() {
-    var quickElements = [
+    var modifierElements = [
         byId("quick_ctrl"),
         byId("quick_shift"),
-        byId("quick_alt"),
+        byId("quick_alt")
+    ];
+    var quickElements = [
         byId("quick_method0"),
         byId("quick_method1"),
         byId("quick_method2"),
         byId("quick_method3"),
-        byId("quick_method4"),
         byId("micro_method0"),
         byId("micro_method1"),
         byId("micro_method2"),
-        byId("micro_method4"),
         byId("quick_selected"),
         byId("quick_right"),
-        byId("quick_rocker"),
-        byId("quick_multiWindow"),
-        byId("quick_asPanel")
+        byId("quick_multiWindow")
     ];
     var contextElements = [
         byId("context_method0"),
         byId("context_method1"),
         byId("context_method2"),
         byId("context_method3"),
-        byId("context_method4"),
-        byId("context_showFirst"),
-        byId("context_multiWindow"),
-        byId("context_asPanel")
+        byId("context_multiWindow")
     ];
     var microMethodElements = [
         byId("micro_method0"),
         byId("micro_method1"),
-        byId("micro_method2"),
-        byId("micro_method4")
+        byId("micro_method2")
     ];
 
     var quickEnabled = byId("quick_enabled").checked;
-    setElementsDisabled(quickElements, !quickEnabled);
-    if (quickEnabled) {
+    setElementsDisabled(modifierElements, !quickEnabled);
+    var quickRocker = byId("quick_rocker").checked;
+    setElementsDisabled(quickElements, !quickEnabled && !quickRocker);
+    if (quickEnabled || quickRocker) {
         if (!byId('quick_method3').checked)
             setElementsDisabled(microMethodElements, true);
         var microMethod2 = byId('micro_method2');
         if (!byId('quick_method2').checked && (microMethod2.disabled || !microMethod2.checked))
             byId("quick_multiWindow").disabled = true;
-        var isPopup = byId('quick_method0').checked || byId('quick_method1').checked;
-        if(!isPopup)
-            isPopup = byId('quick_method3').checked && (byId('micro_method0').checked || byId('micro_method1').checked);
-        if (!isPopup)
-            byId("quick_asPanel").disabled = true;
     }
     var contextEnabled = byId("context_enabled").checked;
     setElementsDisabled(contextElements, !contextEnabled);
     if (contextEnabled) {
         if (!byId('context_method2').checked)
             byId("context_multiWindow").disabled = true;
-        if (!byId('context_method0').checked && !byId('context_method1').checked)
-            byId("context_asPanel").disabled = true;
     }
 }
 
@@ -429,40 +254,40 @@ function initializeDisabledConnections() {
     var elementsDisabling = [
         byId("context_enabled"),
         byId("quick_enabled"),
+        byId("quick_rocker"),
         byId("quick_method0"),
         byId("quick_method1"),
         byId("quick_method2"),
         byId("quick_method3"),
-        byId("quick_method4"),
         byId("micro_method0"),
         byId("micro_method1"),
         byId("micro_method2"),
-        byId("micro_method4"),
         byId("context_method0"),
         byId("context_method1"),
         byId("context_method2"),
-        byId("context_method3"),
-        byId("context_method4")
+        byId("context_method3")
     ];
     for (var i = 0; i < elementsDisabling.length; i++) {
         on(elementsDisabling[i], 'click', updateDisabledElements);
     }
 }
 
+var updateWarnings = function () {};
+
 function initializeWarningConnections() {
     var quick_ctrl = byId("quick_ctrl");
     var quick_shift = byId("quick_shift");
     var quick_alt = byId("quick_alt");
     var quick_right = byId("quick_right");
-    
+
     var quick_warning_shift = byId("quick_warning_shift");
     var quick_warning_alt = byId("quick_warning_alt");
-    function updateWarnings() {
-        var warnShift = quick_shift.checked && quick_right.checked &&  !quick_ctrl.checked && !quick_alt.checked;
+    updateWarnings = function () {
+        var warnShift = quick_shift.checked && quick_right.checked && !quick_ctrl.checked && !quick_alt.checked;
         var warnAlt = quick_alt.checked && !quick_ctrl.checked && !quick_shift.checked;
         quick_warning_shift.style.display = warnShift ? 'block' : 'none';
         quick_warning_alt.style.display = warnAlt ? 'block' : 'none';
-    }
+    };
     updateWarnings();
     on(quick_ctrl, 'click', updateWarnings);
     on(quick_shift, 'click', updateWarnings);
@@ -477,6 +302,7 @@ function startLabelEdit(row) {
             cell.textContent = value;
     });
 }
+
 function initializeTranslationButtons() {
     on(byId('moveUp'), 'click', function () {
         if (selectedTranslationRow) {
@@ -533,7 +359,7 @@ function initializeTranslationButtons() {
     });
     on(byId('refresh'), 'click', function () {
         setLanguageLoading(true);
-        self.port.emit('requestLanguageUpdate');
+        requestLanguageUpdate();
     });
     on(byId('add'), 'click', function () {
         var first = firstLanguage.value;
@@ -560,9 +386,11 @@ function initializeTranslationButtons() {
 
 function setLanguageLoading(loading) {
     secondLanguage.disabled = loading;
+    byId('loadingIndicator').style.width = byId('refresh').clientWidth + 'px';
     byId('refresh').style.display = loading ? 'none' : '';
     byId('loadingIndicator').style.display = loading ? 'block' : '';
 }
+
 function onLanguageListUpdate(languages) {
     setLanguageLoading(false);
     if (languages && languages.length > 0)
@@ -571,14 +399,31 @@ function onLanguageListUpdate(languages) {
         alert('alert_title_error', 'refreshFailed');
 }
 
-on(byId('cancel'), 'click', function () {
-    self.port.emit('cancel');
-});
+function requestLanguageUpdate() {
+    var url = 'http://contribute.dict.cc/?action=buildup';
+    var hrefPrefix = 'http://contribute.dict.cc/?action=buildup&targetlang=';
+    request.getHTML(url, function (doc) {
+
+        var elements = doc.getElementsByTagName("a");
+        var list = new Array();
+        for (var i = 0; i < elements.length; i++) {
+            if (elements[i].href.indexOf(hrefPrefix) === 0) {
+                var lang = elements[i].href.substring(hrefPrefix.length);
+                var name = elements[i].textContent;
+                list.push({k: lang, v: name});
+            }
+        }
+        onLanguageListUpdate(list);
+    }, function () {
+        onLanguageListUpdate(null);
+    });
+}
 
 on(byId('restore_defaults'), 'click', function () {
     confirm('confirm_restore_defaults', "confirm_restore_defaults_content", null, function (result) {
         if (result) {
-            self.port.emit('restore_defaults');
+            settings.restoreDefaults();
+            byId('save').focus();
         }
     });
 });
@@ -587,36 +432,35 @@ on(byId('save'), 'click', function () {
     if (!byId('quick_enabled').checked || byId('quick_ctrl').checked
             || byId('quick_shift').checked || byId('quick_alt').checked) {
         storePreferences();
-        self.port.emit('save', preferences);
+        window.close();
     } else {
         alert('alert_title_error', 'noQuickKeys');
     }
 });
 
+on(byId('cancel'), 'click', function () {
+    // close on chrome
+    window.close();
+    // on firefox, there is no popup window to close, so go back in history
+    window.history.back();
+});
+
+translateChildren(document);
 initializeTabs();
-initializeTooltips();
 initializePreferenceElements();
 initializeDisabledConnections();
 initializeTranslationButtons();
-initializeWarningConnections();
+if (navigator.userAgent.toLowerCase().indexOf("firefox") >= 0)
+    initializeWarningConnections();
+else
+    byId('quick_warning_chrome').style.display = '';
+byId('save').focus();
 
-self.port.emit('init');
-self.port.on('languageListUpdate', onLanguageListUpdate);
-
-self.port.on('show', function (prefs) {
-    preferences = prefs;
+settings.onReady(function () {
     loadPreferences();
     updateDisabledElements();
-    byId('save').focus();
-});
-
-//byId('title').innerHTML = '<div data-l10n-id="prefPane_title">ddd</div>';
-//self.port.emit('requestTranslation', ['prefPane_title']);
-self.port.on('translationResult', function (map) {
-    for (var key in map) {
-        var value = map[key];
-        var elements = document.querySelectorAll('[data-l10n-id=' + key + ']');
-        for (var i = 0; i < elements.length; i++)
-            elements[i].textContent = value;
-    }
+    messageUtil.receive('settingsChanged', function () {
+        loadPreferences();
+        updateDisabledElements();
+    });
 });
