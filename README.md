@@ -1,4 +1,6 @@
-#Dict.cc Translation Web-Extension
+# Dict.cc Translation Web-Extension
+
+[Install on Firefox](https://addons.mozilla.org/de/firefox/addon/dictcc-translation/)
 
 ## About the add-on
 The add-on uses [Dict.cc](https://www.dict.cc/) to translate words and phrases in any website, epub or pdf.
