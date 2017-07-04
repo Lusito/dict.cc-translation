@@ -21,7 +21,7 @@
 
 // This file creates and recreates the context menu (when settings changed)
 
-/* global messageUtil, browser, translator, settings */
+/* global messageUtil, browser, translator, settings, isFirefox */
 
 (function () {
 
@@ -110,14 +110,16 @@
         createEntry(browser.i18n.getMessage("options_label"), function () {
             browser.runtime.openOptionsPage();
         });
+
+        if(isFirefox) {
+            browser.contextMenus.create({
+                title: browser.i18n.getMessage("options_label"),
+                contexts: ["browser_action"],
+                onclick: function () {
+                    browser.runtime.openOptionsPage();
+                }
+            });
+        }
     }
     settings.onReady(recreate);
-
-    browser.contextMenus.create({
-		title: browser.i18n.getMessage("options_label"),
-		contexts: ["browser_action"],
-		onclick: function () {
-			browser.runtime.openOptionsPage();
-		}
-	});
 })();
