@@ -19,7 +19,7 @@
  
  * ***** END LICENSE BLOCK ***** */
 
-/* global byId, settings, request, messageUtil */
+/* global byId, settings, request, messageUtil, isFirefox */
 
 var preferenceElements = {};
 var translationList = byId('translation_list');
@@ -400,8 +400,9 @@ function onLanguageListUpdate(languages) {
 }
 
 function requestLanguageUpdate() {
-    var url = 'http://contribute.dict.cc/?action=buildup';
-    var hrefPrefix = 'http://contribute.dict.cc/?action=buildup&targetlang=';
+    var protocol = byId('translation_useHttps').checked ? 'https://' : 'http://';
+    var url = protocol + 'contribute.dict.cc/?action=buildup';
+    var hrefPrefix = protocol + 'contribute.dict.cc/?action=buildup&targetlang=';
     request.getHTML(url, function (doc) {
 
         var elements = doc.getElementsByTagName("a");
@@ -432,17 +433,20 @@ on(byId('save'), 'click', function () {
     if (!byId('quick_enabled').checked || byId('quick_ctrl').checked
             || byId('quick_shift').checked || byId('quick_alt').checked) {
         storePreferences();
-        window.close();
+        if(!isFirefox)
+            window.close();
     } else {
         alert('alert_title_error', 'noQuickKeys');
     }
 });
 
 on(byId('cancel'), 'click', function () {
-    // close on chrome
-    window.close();
-    // on firefox, there is no popup window to close, so go back in history
-    window.history.back();
+    if(isFirefox) {
+        loadPreferences();
+        updateDisabledElements();
+    } else {
+        window.close();
+    }
 });
 
 translateChildren(document);
@@ -450,11 +454,14 @@ initializeTabs();
 initializePreferenceElements();
 initializeDisabledConnections();
 initializeTranslationButtons();
-if (navigator.userAgent.toLowerCase().indexOf("firefox") >= 0)
+if (isFirefox)
     initializeWarningConnections();
 else
     byId('quick_warning_chrome').style.display = '';
 byId('save').focus();
+
+if(isFirefox)
+    document.body.className += "firefox";
 
 settings.onReady(function () {
     loadPreferences();
