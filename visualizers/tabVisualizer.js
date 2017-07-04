@@ -19,7 +19,7 @@
  
  * ***** END LICENSE BLOCK ***** */
 
-/* global browser */
+/* global browser, runAsPromise */
 
 // Opens a tab (or updates it) using www.dict.cc
 var tabVisualizer = {
@@ -32,7 +32,7 @@ var tabVisualizer = {
             tabConfig.url = config.protocol + 'www.dict.cc/' + config.params;
         if (config.multiWindow || !tabVisualizer.lastTab) {
             tabVisualizer.lastTab = null;
-            browser.tabs.create(tabConfig, function (tab) {
+            runAsPromise(browser.tabs, 'create', [tabConfig]).then(function (tab) {
                 tabVisualizer.lastTab = tab.id;
             });
         } else {
