@@ -26,6 +26,8 @@ var tabVisualizer = {
     lastTab: null,
     show: function (config) {
         var tabConfig = {};
+        if (config.tab && isFirefox && parseFloat(browserInfo.version) >= 57)
+            tabConfig.openerTabId = config.tab.id;
         if (config.url)
             tabConfig.url = config.url;
         else
@@ -40,6 +42,7 @@ var tabVisualizer = {
         }
     }
 };
+
 browser.tabs.onRemoved.addListener(function (tabId) {
     if (tabId === tabVisualizer.lastTab)
         tabVisualizer.lastTab = null;
