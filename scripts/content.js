@@ -292,6 +292,10 @@ function MiniLayer(x, y, onload) {
         idoc = iframe.contentDocument || iframe.contentWindow.document;
         ibody = idoc.body;
         addLink(idoc, "minilayer/minilayer.css");
+        on(idoc, 'keydown', function(e) {
+            if(e.keyCode === 27)
+                destroyPanels();
+        });
         
         var ihead = idoc.querySelector('head');
         var meta = createElement(idoc, ihead, 'meta');
@@ -303,6 +307,7 @@ function MiniLayer(x, y, onload) {
         resultNode = createElement(idoc, div, 'span', {id: "result"});
         extraNode = createElement(idoc, ibody, 'span', {id: "extra"});
         setTimeout(onload, 0);
+        a.focus();
     };
     overlay.appendChild(iframe);
 
