@@ -77,9 +77,9 @@
         return browser.contextMenus.create(options);
     }
 
-    function createTranslationEntry(translation) {
+    function createTranslationEntry(translation, title) {
         return browser.contextMenus.create({
-            title: translation.v,
+            title: title || translation.v,
             contexts: menuContexts,
             onclick: function (info, tab) {
                 translator.run({
@@ -97,15 +97,26 @@
         if (!settings.get('context.enabled'))
             return;
 
+        if(settings.get('context.simple')) {
+            var translations = settings.get('translation.list');
+            if (translations.length) {
+                var t = translations[0];
+                createTranslationEntry(t, browser.i18n.getMessage("translateAs", t.v));
+            }
+            return;
+        }
+
         createLabel(browser.i18n.getMessage("translateTo"), "translationLabel");
         createSeparator();
 
         var translations = settings.get('translation.list');
-        for (var i = 0; i < translations.length; i++) {
-            createTranslationEntry(translations[i]);
-        }
+        if (translations.length) {
+            for (var i = 0; i < translations.length; i++) {
+                createTranslationEntry(translations[i]);
+            }
 
-        createSeparator();
+            createSeparator();
+        }
 
         createEntry(browser.i18n.getMessage("options_label"), function () {
             browser.runtime.openOptionsPage();

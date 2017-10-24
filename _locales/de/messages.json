@@ -7,6 +7,7 @@
 	"refreshFailed": { "message": "Die Sprachenliste konnte nicht von dict.cc geladen werden!\nBitte später nochmal versuchen.", "description": "" },
 	"loading": { "message": "Lädt", "description": "" },
 	"translateTo": { "message": "Übersetzen nach:", "description": "" },
+	"translateAs": { "message": "Übersetzen mit $1", "description": "" },
 	"resultFailed": { "message": "Die Übersetzung konnte nicht geladen werden!", "description": "" },
 	"menuSelection": { "message": "\"$1\" übersetzen", "description": "" },
 	"menuNone": { "message": "Kein Wort gefunden", "description": "" },
@@ -45,6 +46,8 @@
 
 	"tabs_context_enable": { "message": "Kontextmenü aktivieren", "description": "" },
 	"tabs_context_enable__title": { "message": "Übersetzungseinträge zum Kontextmenü hinzufügen.", "description": "" },
+	"tabs_context_simple": { "message": "Simple Context Menu", "description": "" },
+	"tabs_context_simple__title": { "message": "Only show the first translation option in the context menu", "description": "" },
 
 	"tabs_results_title": { "message": "Ergebnisse anzeigen in", "description": "" },
 	"tabs_results_syn": { "message": "Popup (Alle Details)", "description": "" },

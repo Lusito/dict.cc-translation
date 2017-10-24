@@ -48,6 +48,7 @@ function initializeTabs() {
 function initializePreferenceElements() {
     var checkboxIds = [
         "context_enabled",
+        "context_simple",
         "context_multiWindow",
         "quick_enabled",
         "quick_right",
@@ -219,6 +220,7 @@ function updateDisabledElements() {
         byId("quick_multiWindow")
     ];
     var contextElements = [
+        byId("context_simple"),
         byId("context_method0"),
         byId("context_method1"),
         byId("context_method2"),

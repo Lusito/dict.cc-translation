@@ -444,6 +444,7 @@ function onSettingsChanged(settings) {
         method: settings['quick.method'],
         translations: settings['translation.list'],
         contextEnabled: settings['context.enabled'],
+        contextSimple: settings['context.simple'],
         selected: settings['quick.selected'],
         quickEnabled: settings['quick.enabled'],
         ctrl: settings['quick.ctrl'],
