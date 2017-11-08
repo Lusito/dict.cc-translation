@@ -4,22 +4,22 @@
  
  * This file is part of the dict.cc web-extension.
  
- * The dict.cc web-extension is free software: you can redistribute it and/or modify
+ * This web-extension is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  
- * The dict.cc web-extension is distributed in the hope that it will be useful,
+ * This web-extension is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  
  * You should have received a copy of the GNU General Public License
- * along with the dict.cc web-extension.  If not, see http://www.gnu.org/licenses/.
+ * along with this web-extension.  If not, see http://www.gnu.org/licenses/.
  
  * ***** END LICENSE BLOCK ***** */
 
-/* global byId, settings, request, messageUtil */
+/* global byId, settings, request, messageUtil, isFirefox */
 
 var preferenceElements = {};
 var translationList = byId('translation_list');
@@ -48,6 +48,7 @@ function initializeTabs() {
 function initializePreferenceElements() {
     var checkboxIds = [
         "context_enabled",
+        "context_simple",
         "context_multiWindow",
         "quick_enabled",
         "quick_right",
@@ -219,6 +220,7 @@ function updateDisabledElements() {
         byId("quick_multiWindow")
     ];
     var contextElements = [
+        byId("context_simple"),
         byId("context_method0"),
         byId("context_method1"),
         byId("context_method2"),
@@ -400,8 +402,9 @@ function onLanguageListUpdate(languages) {
 }
 
 function requestLanguageUpdate() {
-    var url = 'http://contribute.dict.cc/?action=buildup';
-    var hrefPrefix = 'http://contribute.dict.cc/?action=buildup&targetlang=';
+    var protocol = byId('translation_useHttps').checked ? 'https://' : 'http://';
+    var url = protocol + 'contribute.dict.cc/?action=buildup';
+    var hrefPrefix = protocol + 'contribute.dict.cc/?action=buildup&targetlang=';
     request.getHTML(url, function (doc) {
 
         var elements = doc.getElementsByTagName("a");
@@ -432,17 +435,20 @@ on(byId('save'), 'click', function () {
     if (!byId('quick_enabled').checked || byId('quick_ctrl').checked
             || byId('quick_shift').checked || byId('quick_alt').checked) {
         storePreferences();
-        window.close();
+        if(!isFirefox)
+            window.close();
     } else {
         alert('alert_title_error', 'noQuickKeys');
     }
 });
 
 on(byId('cancel'), 'click', function () {
-    // close on chrome
-    window.close();
-    // on firefox, there is no popup window to close, so go back in history
-    window.history.back();
+    if(isFirefox) {
+        loadPreferences();
+        updateDisabledElements();
+    } else {
+        window.close();
+    }
 });
 
 translateChildren(document);
@@ -450,11 +456,14 @@ initializeTabs();
 initializePreferenceElements();
 initializeDisabledConnections();
 initializeTranslationButtons();
-if (navigator.userAgent.toLowerCase().indexOf("firefox") >= 0)
+if (isFirefox)
     initializeWarningConnections();
 else
     byId('quick_warning_chrome').style.display = '';
 byId('save').focus();
+
+if(isFirefox)
+    document.body.className += "firefox";
 
 settings.onReady(function () {
     loadPreferences();

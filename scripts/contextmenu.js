@@ -4,24 +4,24 @@
  
  * This file is part of the dict.cc web-extension.
  
- * The dict.cc web-extension is free software: you can redistribute it and/or modify
+ * This web-extension is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  
- * The dict.cc web-extension is distributed in the hope that it will be useful,
+ * This web-extension is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  
  * You should have received a copy of the GNU General Public License
- * along with the dict.cc web-extension.  If not, see http://www.gnu.org/licenses/.
+ * along with this web-extension.  If not, see http://www.gnu.org/licenses/.
  
  * ***** END LICENSE BLOCK ***** */
 
 // This file creates and recreates the context menu (when settings changed)
 
-/* global messageUtil, browser, translator, settings */
+/* global messageUtil, browser, translator, settings, isFirefox */
 
 (function () {
 
@@ -77,9 +77,9 @@
         return browser.contextMenus.create(options);
     }
 
-    function createTranslationEntry(translation) {
+    function createTranslationEntry(translation, title) {
         return browser.contextMenus.create({
-            title: translation.v,
+            title: title || translation.v,
             contexts: menuContexts,
             onclick: function (info, tab) {
                 translator.run({
@@ -97,20 +97,40 @@
         if (!settings.get('context.enabled'))
             return;
 
+        if(settings.get('context.simple')) {
+            var translations = settings.get('translation.list');
+            if (translations.length) {
+                var t = translations[0];
+                createTranslationEntry(t, browser.i18n.getMessage("translateAs", t.v));
+            }
+            return;
+        }
+
         createLabel(browser.i18n.getMessage("translateTo"), "translationLabel");
         createSeparator();
 
         var translations = settings.get('translation.list');
-        for (var i = 0; i < translations.length; i++) {
-            createTranslationEntry(translations[i]);
-        }
+        if (translations.length) {
+            for (var i = 0; i < translations.length; i++) {
+                createTranslationEntry(translations[i]);
+            }
 
-        createSeparator();
+            createSeparator();
+        }
 
         createEntry(browser.i18n.getMessage("options_label"), function () {
             browser.runtime.openOptionsPage();
         });
+
+        if(isFirefox) {
+            browser.contextMenus.create({
+                title: browser.i18n.getMessage("options_label"),
+                contexts: ["browser_action"],
+                onclick: function () {
+                    browser.runtime.openOptionsPage();
+                }
+            });
+        }
     }
     settings.onReady(recreate);
-
 })();

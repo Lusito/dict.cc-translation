@@ -7,6 +7,7 @@
 	"refreshFailed": { "message": "Failed to retrieve language list from dict.cc!\nPlease try again later.", "description": "" },
 	"loading": { "message": "Loading..", "description": "" },
 	"translateTo": { "message": "Translate to:", "description": "" },
+	"translateAs": { "message": "Translate using $1", "description": "" },
 	"resultFailed": { "message": "Failed to get translation result", "description": "" },
 	"menuSelection": { "message": "Translate \"$1\"", "description": "" },
 	"menuNone": { "message": "No word detected", "description": "" },
@@ -45,6 +46,8 @@
 
 	"tabs_context_enable": { "message": "Enable Context Menu", "description": "" },
 	"tabs_context_enable__title": { "message": "Add translation options to the context menu.", "description": "" },
+	"tabs_context_simple": { "message": "Simple Context Menu", "description": "" },
+	"tabs_context_simple__title": { "message": "Only show the first translation option in the context menu", "description": "" },
 
 	"tabs_results_title": { "message": "Show results as", "description": "" },
 	"tabs_results_syn": { "message": "Popup (all details)", "description": "" },

@@ -2,9 +2,10 @@ html,
 body {
     margin: 0;
     padding: 0;
-    background: white;
+    background: #FBFBFB;
     font-family: "Open Sans", sans-serif;
-    width: 700px;
+    width: 100%;
+    /*min-width: 700px;*/
     font-size: 13px;
     display: flex;
     flex-direction: column;
@@ -12,8 +13,17 @@ body {
 body {
     max-width: 700px;
     background: #F0F0F0;
-    padding: 10px;
+    padding: 0;
     box-sizing: border-box;
+}
+#wrapper {
+    padding: 10px;
+}
+body.firefox > #wrapper {
+    border: 1px solid #C1C1C1;
+}
+body:not(.firefox) {
+    min-width: 700px;
 }
 
 label >input:disabled+span {
