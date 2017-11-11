@@ -36,7 +36,9 @@ export function removeAllChildren(node: HTMLElement) {
     }
 }
 
-export function createElement(doc: Document, parent: HTMLElement | null, tagName: string, params?: { [s: string]: any }) {
+type ElementAttributes = { [s: string]: string|number|boolean };
+
+export function createElement(doc: Document, parent: HTMLElement | null, tagName: string, params?: ElementAttributes) {
     let e = doc.createElement(tagName);
     if (params) {
         for (let key in params) {
@@ -59,14 +61,16 @@ export function addLink(doc: Document, path: string) {
     }
 }
 
-export function createButton(labelL10nKey: string, callback: (this: HTMLInputElement, ev: MouseEvent) => any) {
+type MouseEventCallback = (this: HTMLInputElement, ev: MouseEvent) => any;
+
+export function createButton(labelL10nKey: string, callback: MouseEventCallback) {
     let button = document.createElement('button');
     button.setAttribute('data-l10n-id', labelL10nKey);
     on(button, 'click', callback);
     return button;
 }
 
-export function createDialog(className: string, titleL10nKey: string, buttons: { [s: string]: (this: HTMLInputElement, ev: MouseEvent) => any }) {
+export function createDialog(className: string, titleL10nKey: string, buttons: { [s: string]: MouseEventCallback }) {
     let overlay = document.createElement('div');
     overlay.className = 'dialogOverlay';
     let dialog = document.createElement('div');

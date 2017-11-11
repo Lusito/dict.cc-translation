@@ -8,14 +8,21 @@ import { settings } from "./lib/settings";
 import * as request from "./lib/request";
 import { byId, createElement, on } from "./lib/htmlUtils";
 
+type DefinitionNode = {
+    tagName?: string,
+    textContent: string
+};
+
+interface Description {
+    href: string,
+    nodes: DefinitionNode[];
+}
+
 type Definition = {
     textContent?: string,
     href?: string;
-    nodes?: any[];//fixme
-    descriptions: {
-        href: string,
-        nodes: any[];//fixme
-    }[]
+    nodes?: DefinitionNode[];
+    descriptions: Description[]
 };
 
 settings.onReady(function () {
@@ -36,17 +43,19 @@ settings.onReady(function () {
     }
 
     function parseDescriptionNodes(parent: HTMLElement) {
-        let result = [];
+        let result: DefinitionNode[] = [];
         let nodes = parent.childNodes;
         for (let i = 0; i < nodes.length; i++) {
             let node = nodes[i];
             if ((node as HTMLElement).tagName) {
                 result.push({
                     tagName: (node as HTMLElement).tagName,
-                    textContent: node.textContent
+                    textContent: node.textContent || ''
                 });
             } else if (node.nodeType === 3) {
-                result.push(node.textContent);
+                result.push({
+                    textContent: node.textContent || ''
+                });
             }
         }
         return result;
@@ -120,7 +129,7 @@ settings.onReady(function () {
             if (def.href) {
                 createElement(document, dt, 'a', {
                     href: def.href,
-                    textContent: def.textContent,
+                    textContent: def.textContent || '?',
                     target: '_blank'
                 });
             } else if (def.nodes) {
@@ -129,7 +138,7 @@ settings.onReady(function () {
                     if (node.tagName) {
                         createElement(document, dt, node.tagName, { textContent: node.textContent });
                     } else {
-                        dt.appendChild(document.createTextNode(node));
+                        dt.appendChild(document.createTextNode(node.textContent));
                     }
                     if ((k + 1) < def.descriptions.length) {
                         createElement(document, dd, 'br');
@@ -146,7 +155,7 @@ settings.onReady(function () {
                     if (node.tagName) {
                         createElement(document, a, node.tagName, { textContent: node.textContent });
                     } else {
-                        a.appendChild(document.createTextNode(node));
+                        a.appendChild(document.createTextNode(node.textContent));
                     }
                 }
                 if ((j + 1) < def.descriptions.length) {

@@ -23,7 +23,9 @@ export enum TranslationMethod {
     INPAGE
 }
 
-export type SettingsMap = { [s: string]: any };
+//Fixme: types
+type SettingsValue = any; // string | boolean | number | TranslationEntry[]
+export type SettingsMap = { [s: string]: SettingsValue };
 export const settings = {
     storage: (browser.storage.sync || browser.storage.local) as browser.storage.StorageArea,
     map: {} as SettingsMap,
@@ -54,7 +56,7 @@ export const settings = {
             callback();
     },
     getAll: function () {
-        let result: { [s: string]: any } = {};
+        let result: SettingsMap = {};
         for (let key in settings.defaults) {
             if (settings.map.hasOwnProperty(key))
                 result[key] = settings.map[key];
@@ -68,7 +70,7 @@ export const settings = {
             return settings.map[key];
         return settings.defaults[key];
     },
-    set: function (key: string, value: any) {
+    set: function (key: string, value: SettingsValue) {
         settings.map[key] = value;
     },
     save: function () {

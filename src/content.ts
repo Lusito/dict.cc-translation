@@ -14,7 +14,7 @@ import { SettingsMap, TranslationEntry, TranslationMethod } from "./lib/settings
 
 interface Config {
     method?: number,
-    translations?: any,//fixme
+    translations?: TranslationEntry[],
     contextEnabled?: boolean,
     contextSimple?: boolean,
     selected?: boolean,
@@ -25,6 +25,7 @@ interface Config {
     menu?: boolean,
     rocker?: boolean,
 }
+
 const allowedAscii = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 let config: Config = {};
 let lastActionTime = 0;
@@ -47,17 +48,25 @@ declare global {
         rangeParent: Node;
         rangeOffset: number;
     }
+
     interface CaretPosition {
         offsetNode: Node;
         offset: number;
     }
+
+    interface RangeParent extends Node {
+        length?: number;
+        value?: string;
+    }
+
     interface Document {
         caretPositionFromPoint: (x: number, y: number) => CaretPosition;
     }
 }
 
+
 function detectWordFromEvent(evt: MouseEvent) {
-    let rangeParent: any;
+    let rangeParent: RangeParent;
     let rangeOffset;
     if (evt.rangeParent) {
         rangeParent = evt.rangeParent;
@@ -216,6 +225,7 @@ function onMouseDown(e: MouseEvent) {
 
     return action === null;
 }
+
 function getTopLeftFromIframe() {
     let left = 0, top = 0;
     let win = window;
@@ -234,7 +244,10 @@ function getTopLeftFromIframe() {
 
     return [left, top];
 }
-const COMMON_STYLES = {
+
+type StyleMap = { [s: string]: string | number };
+
+const COMMON_STYLES:StyleMap = {
     display: "block",
     float: "none",
     margin: 0,
@@ -247,7 +260,8 @@ const COMMON_STYLES = {
     "box-shadow": "none",
     background: "none"
 };
-const OVERLAY_STYLES = {
+
+const OVERLAY_STYLES:StyleMap = {
     position: "fixed",
     "z-index": 1000000000,
     top: 0,
@@ -256,12 +270,13 @@ const OVERLAY_STYLES = {
     bottom: 0,
     background: "rgba(128, 128, 128, 0.22)"
 };
-const DEFAULT_PANEL_STYLES = {
+
+const DEFAULT_PANEL_STYLES:StyleMap = {
     position: "fixed",
     "box-shadow": "0 0 4px 1px #adadad"
 };
 
-const MICRO_PANEL_STYLES = {
+const MICRO_PANEL_STYLES:StyleMap = {
     left: "-1000px",
     top: 0,
     right: "auto",
@@ -271,10 +286,10 @@ const MICRO_PANEL_STYLES = {
     "border-radius": "3px"
 };
 
-function applyForcedStyles(elem: HTMLElement, ...stylesArgs: any[]) {
+function applyForcedStyles(elem: HTMLElement, ...stylesArgs: StyleMap[]) {
     for (let styles of stylesArgs) {
         for (let key in styles) {
-            elem.style.setProperty(key, styles[key], "important");
+            elem.style.setProperty(key, styles[key].toString(), "important");
         }
     }
 }
@@ -315,30 +330,32 @@ class MiniLayer {
         this.tdoc = window.top.document;
         this.iframe = this.tdoc.createElement('iframe');
         applyForcedStyles(this.iframe, COMMON_STYLES, DEFAULT_PANEL_STYLES, MICRO_PANEL_STYLES);
-        this.iframe.onload = () => {
-            this.idoc = this.iframe.contentDocument || this.iframe.contentWindow.document;
-            this.ibody = this.idoc.body;
-            addLink(this.idoc, "dist/minilayer.css");
-            on(this.idoc, 'keydown', function (e) {
-                if (e.keyCode === 27)
-                    destroyPanels();
-            });
-
-            let ihead = this.idoc.querySelector('head');
-            if (ihead) {
-                let meta = createElement(this.idoc, ihead, 'meta');
-                meta.setAttribute('charset', "utf-8");
-            }
-
-            let div = createElement(this.idoc, this.ibody, 'div');
-            let a = createElement(this.idoc, div, 'a', { target: "_blank", href: "http://www.dict.cc/", id: "logo" });
-            createElement(this.idoc, a, 'img', { src: browser.runtime.getURL("icons/icon16.png"), alt: "dict.cc" });
-            this.resultNode = createElement(this.idoc, div, 'span', { id: "result" });
-            this.extraNode = createElement(this.idoc, this.ibody, 'span', { id: "extra" });
-            setTimeout(onload, 0);
-            a.focus();
-        };
+        this.iframe.onload = () => this.onIframeLoad();
         this.overlay.appendChild(this.iframe);
+    }
+
+    private onIframeLoad() {
+        this.idoc = this.iframe.contentDocument || this.iframe.contentWindow.document;
+        this.ibody = this.idoc.body;
+        addLink(this.idoc, "dist/minilayer.css");
+        on(this.idoc, 'keydown', function (e) {
+            if (e.keyCode === 27)
+                destroyPanels();
+        });
+
+        let ihead = this.idoc.querySelector('head');
+        if (ihead) {
+            let meta = createElement(this.idoc, ihead, 'meta');
+            meta.setAttribute('charset', "utf-8");
+        }
+
+        let div = createElement(this.idoc, this.ibody, 'div');
+        let a = createElement(this.idoc, div, 'a', { target: "_blank", href: "http://www.dict.cc/", id: "logo" });
+        createElement(this.idoc, a, 'img', { src: browser.runtime.getURL("icons/icon16.png"), alt: "dict.cc" });
+        this.resultNode = createElement(this.idoc, div, 'span', { id: "result" });
+        this.extraNode = createElement(this.idoc, this.ibody, 'span', { id: "extra" });
+        setTimeout(onload, 0);
+        a.focus();
     }
 
     private updateSize() {
@@ -369,6 +386,7 @@ class MiniLayer {
             top: top + 'px'
         });
     }
+
     private setup(text: string | null, extraNodes: HTMLElement[] | null) {
         removeAllChildren(this.resultNode);
         if (text)
@@ -384,6 +402,7 @@ class MiniLayer {
                 this.extraNode.appendChild(node);
         }
     }
+
     private createMenuEntry(text: string, translation: TranslationEntry) {
         let link = createElement(this.idoc, null, "a", {
             textContent: translation.v
@@ -394,6 +413,7 @@ class MiniLayer {
         });
         return link;
     }
+
     private createResultEntry(def: DCCResultLink) {
         let link = createElement(this.idoc, null, "a", {
             textContent: def.label,
@@ -408,9 +428,10 @@ class MiniLayer {
         return link;
     }
 
-
     public showMenu(label: string, text: string) {
         let translations = config.translations;
+        if (!translations)
+            return;
         let extraNodes = [];
         for (let translation of translations) {
             let raquo = createElement(this.idoc, null, "span", {
@@ -422,7 +443,8 @@ class MiniLayer {
         }
         this.setup(label, extraNodes);
         this.updateSize();
-    };
+    }
+
     public showResult(links: DCCResultLink[]) {
         this.setup(null, null);
         for (let i = 0; i < links.length; i++) {
@@ -432,14 +454,17 @@ class MiniLayer {
                 this.resultNode.appendChild(this.idoc.createTextNode(", "));
         }
         this.updateSize();
-    };
+    }
+
     public showMessage(text: string) {
         this.setup(text, null);
         this.updateSize();
-    };
+    }
+
     public showLoading() {
         this.showMessage(browser.i18n.getMessage("loading"));
-    };
+    }
+
     public translateQuick(text: string, languagePair?: string) {
         if (miniLayer)
             miniLayer.showLoading();
@@ -448,7 +473,8 @@ class MiniLayer {
             languagePair: languagePair,
             dcc: true
         });
-    };
+    }
+
     public destroy() {
         this.tdoc.body.removeChild(this.overlay);
     }
@@ -468,6 +494,7 @@ function showMiniLayer(cfg: VisualizerConfig) {
             miniLayer.translateQuick(cfg.text, cfg.languagePair);
     });
 }
+
 function showMiniLayerResult(response: DCCResult) {
     if (miniLayer) {
         if (response.error)
@@ -504,4 +531,5 @@ messageUtil.receive('contentStartup', function (settings) {
     messageUtil.receive('showMiniLayerResult', showMiniLayerResult);
     onSettingsChanged(settings);
 });
+
 messageUtil.send('contentScriptLoaded');
