@@ -21,18 +21,15 @@ body {
 #form {
     display: flex;
     flex-direction: row;
-}
-
-#form>input {
-    flex-grow: 1;
-}
-
-#form>* {
-    margin-right: 5px;
-}
-
-#form>*:last-child {
-    margin-right: 0;
+    >input {
+        flex-grow: 1;
+    }
+    >* {
+        margin-right: 5px;
+    }
+    >*:last-child {
+        margin-right: 0;
+    }
 }
 
 #result {

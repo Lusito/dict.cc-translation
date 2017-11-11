@@ -71,44 +71,37 @@ label>input[type=radio]+span {
     margin: 0 0 10px 0;
     min-height: 280px;
     background: white;
-}
-
-#pages>div {
-    height: 100%;
-    overflow: auto;
-}
-
-#pages>div:not(:last-child) {
-    display: flex;
-    flex-direction: row;
-}
-
-#pages>div:not(.active) {
-    display: none;
-}
-
-#pages>div>div:first-child {
-    margin-right: 10px;
-}
-
-#pages>div>div {
-    width: 50%;
-    flex-grow: 1;
-    box-sizing: border-box;
-    position: relative;
-}
-
-#pages>div>div>*:not(:first-child) {
-    margin-top: 5px;
+    >div {
+        height: 100%;
+        overflow: auto;
+        >div:first-child {
+            margin-right: 10px;
+        }
+        >div {
+            width: 50%;
+            flex-grow: 1;
+            box-sizing: border-box;
+            position: relative;
+        }
+        >div>*:not(:first-child) {
+            margin-top: 5px;
+        }
+    }
+    >div:not(:last-child) {
+        display: flex;
+        flex-direction: row;
+    }
+    >div:not(.active) {
+        display: none;
+    }
 }
 
 #buttons {
     flex-shrink: 0;
     text-align: right;
-}
-
-#buttons>#restore_defaults {
-    float: left;
+    >#restore_defaults {
+        float: left;
+    }
 }
 
 #manual {
@@ -148,11 +141,10 @@ button.half2 {
 table {
     width: 100%;
     border-collapse: collapse;
-}
-
-table button,
-table select {
-    width: 100%;
+    button,
+    select {
+        width: 100%;
+    }
 }
 
 #translationsTable {
@@ -166,25 +158,22 @@ table select {
     right: 0;
     user-select: none;
     -moz-user-select: none;
-}
-
-#translationsTableHead th:last-child {
-    text-align: right;
-    padding-right: 20px;
-}
-
-#translationsTable td:last-child {
-    text-align: left;
+    td:last-child {
+        text-align: left;
+    }
+    tr.active {
+        background: highlight;
+    }
 }
 
 #translationsTableHead {
     margin: 3px 1px 2px 1px;
     user-select: none;
     -moz-user-select: none;
-}
-
-#translationsTable tr.active {
-    background: highlight;
+    th:last-child {
+        text-align: right;
+        padding-right: 20px;
+    }
 }
 
 #translationsTableHead th,
@@ -245,29 +234,43 @@ table select {
     border-radius: 4px;
     margin-top: 2px;
     padding: 3px;
-}
-
-.warning>span:first-child {
-    color: #E88E00;
-    font-weight: bold;
+    >span:first-child {
+        color: #E88E00;
+        font-weight: bold;
+    }
 }
 
 #tabs {
     height: 28px;
     padding: 0 0 0 0;
     overflow: visible;
-}
-
-#tabs>div {
-    position: relative;
-    width: 160px;
-    height: 28px;
-    overflow: hidden;
-    float: left;
-    margin: 0 -22px 0 0;
-    cursor: pointer;
-    user-select: none;
-    -moz-user-select: none;
+    >div {
+        position: relative;
+        width: 160px;
+        height: 28px;
+        overflow: hidden;
+        float: left;
+        margin: 0 -22px 0 0;
+        cursor: pointer;
+        user-select: none;
+        -moz-user-select: none;
+    }
+    >div:nth-child(1) {
+        z-index: 3;
+    }
+    >div:nth-child(2) {
+        z-index: 2;
+    }
+    >div:nth-child(3) {
+        z-index: 1;
+    }
+    >div.active {
+        z-index: 40;
+        padding-bottom: 1px;
+    }
+    >div.active .tab-box {
+        background: white;
+    }
 }
 
 .tab-box {
@@ -286,25 +289,4 @@ table select {
     position: absolute;
     top: 7px;
     left: 23px;
-}
-
-#tabs>div:nth-child(1) {
-    z-index: 3;
-}
-
-#tabs>div:nth-child(2) {
-    z-index: 2;
-}
-
-#tabs>div:nth-child(3) {
-    z-index: 1;
-}
-
-#tabs>div.active {
-    z-index: 40;
-    padding-bottom: 1px;
-}
-
-#tabs>div.active .tab-box {
-    background: white;
 }
