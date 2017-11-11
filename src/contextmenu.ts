@@ -7,8 +7,9 @@
 // This file creates and recreates the context menu (when settings changed)
 import * as messageUtil from "./lib/messageUtil";
 import * as translator from "./lib/translator";
-import { TranslationEntry, settings } from "./lib/settings";
+import { settings } from "./lib/settings";
 import { isFirefox } from "./lib/browserInfo";
+import { TranslationEntry } from "./lib/settingsSignature";
 
 export function initContextMenu() {
     interface WordUnderCursor {

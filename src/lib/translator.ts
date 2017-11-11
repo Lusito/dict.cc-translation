@@ -29,7 +29,7 @@ export interface RunConfig {
 }
 
 export interface VisualizerConfig {
-    languagePair?: string;
+    languagePair?: string | null;
     text?: string;
     url?: string;
     x?: number;
@@ -79,7 +79,7 @@ export function getFirstLanguagePair() {
     return translations[0].k;
 }
 
-export function runDCC(text: string, languagePair: string, callback: (result: DCCResult) => void) {
+export function runDCC(text: string, languagePair: string | null, callback: (result: DCCResult) => void) {
     if (!languagePair)
         languagePair = getFirstLanguagePair();
     if (!languagePair)

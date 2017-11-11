@@ -7,8 +7,9 @@
 import { byId, on, translateChildren, prompt, alert, confirm } from "./lib/htmlUtils";
 import * as request from "./lib/request";
 import * as messageUtil from "./lib/messageUtil";
-import { TranslationEntry, settings } from "./lib/settings";
+import { settings } from "./lib/settings";
 import { isFirefox } from "./lib/browserInfo";
+import { TranslationEntry } from "./lib/settingsSignature";
 
 let selectedTranslationRow: HTMLTableRowElement | null = null;
 
@@ -111,7 +112,10 @@ function translationsToJSON() {
     let rows = translationList.children;
     for (let i = 0; i < rows.length; i++) {
         let cells = rows[i].children;
-        list.push({ k: cells[1].textContent, v: cells[0].textContent });
+        let k = cells[1].textContent;
+        let v = cells[0].textContent;
+        if (k && v)
+            list.push({ k: k, v: v });
     }
     return list;
 }
@@ -169,12 +173,12 @@ function setLanguageList(list: TranslationEntry[]) {
     }
 }
 
-function languagesToJSON() {
+function languagesToJSON(): TranslationEntry[] {
     let list = [];
     let options = secondLanguage.children;
     for (let i = 0; i < options.length; i++) {
         let option = options[i] as HTMLOptionElement;
-        if (option.value !== 'DE' && option.value !== 'EN')
+        if (option.value !== 'DE' && option.value !== 'EN' && option.textContent)
             list.push({ k: option.value, v: option.textContent });
     }
     return list;
@@ -182,10 +186,10 @@ function languagesToJSON() {
 
 function loadPreferences() {
     for (let key in preferenceElements) {
-        let value = settings.get(key);
+        let value = settings.get(key as any);
         let el = preferenceElements[key];
         if ((el as HTMLInputElement).parentElement)
-            (el as HTMLInputElement).checked = value;
+            (el as HTMLInputElement).checked = value as boolean;
         else {
             let list = el as NodeListOf<HTMLInputElement>;
             for (let i = 0; i < list.length; i++) {
@@ -204,13 +208,13 @@ function storePreferences() {
     for (let key in preferenceElements) {
         let el = preferenceElements[key];
         if ((el as HTMLInputElement).parentElement)
-            settings.set(key, (el as HTMLInputElement).checked);
+            settings.set(key as any, (el as HTMLInputElement).checked);
         else {
             let list = el as NodeListOf<HTMLInputElement>;
             for (let i = 0; i < list.length; i++) {
                 let radio = list[i];
                 if (radio.checked)
-                    settings.set(key, parseInt(radio.value));
+                    settings.set(key as any, parseInt(radio.value));
             }
         }
     }

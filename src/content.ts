@@ -10,7 +10,7 @@
 import * as messageUtil from "./lib/messageUtil";
 import { createElement, addLink, on, removeAllChildren } from "./lib/htmlUtils";
 import { DCCResult, DCCResultLink, VisualizerConfig } from "./lib/translator";
-import { SettingsMap, TranslationEntry, TranslationMethod } from "./lib/settings";
+import { SettingsSignature, TranslationEntry, TranslationMethod } from "./lib/settingsSignature";
 
 interface Config {
     method?: number,
@@ -465,7 +465,7 @@ class MiniLayer {
         this.showMessage(browser.i18n.getMessage("loading"));
     }
 
-    public translateQuick(text: string, languagePair?: string) {
+    public translateQuick(text: string, languagePair?: string | null) {
         if (miniLayer)
             miniLayer.showLoading();
         messageUtil.send('requestQuickTranslation', {
@@ -504,7 +504,7 @@ function showMiniLayerResult(response: DCCResult) {
     }
 }
 
-function onSettingsChanged(settings: SettingsMap) {
+function onSettingsChanged(settings: SettingsSignature) {
     config = {
         method: settings['quick.method'],
         translations: settings['translation.list'],
