@@ -14,7 +14,7 @@ type Callback = () => void;
 export interface TranslationEntry {
     k: string;
     v: string;
-};
+}
 
 export enum TranslationMethod {
     SYN_WINDOW,

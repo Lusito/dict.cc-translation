@@ -7,6 +7,7 @@
 export function byId(id: string) {
     return document.getElementById(id);
 }
+
 export function on<K extends keyof HTMLElementEventMap>(node: Node, event: K, callback: (this: HTMLInputElement, ev: HTMLElementEventMap[K]) => any) {
     node.addEventListener(event, callback);
 }
@@ -36,7 +37,7 @@ export function removeAllChildren(node: HTMLElement) {
     }
 }
 
-type ElementAttributes = { [s: string]: string|number|boolean };
+type ElementAttributes = { [s: string]: string | number | boolean };
 
 export function createElement(doc: Document, parent: HTMLElement | null, tagName: string, params?: ElementAttributes) {
     let e = doc.createElement(tagName);

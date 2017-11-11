@@ -83,6 +83,7 @@ settings.onReady(function () {
         }
         return lists;
     }
+
     function parseDefinitions(dl: HTMLDListElement, languagePair: string) {
         let urlPrefix = getProtocol() + 'www.dict.cc';
         let urlSuffix = '&lp=' + languagePair;

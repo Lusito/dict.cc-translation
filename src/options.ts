@@ -179,6 +179,7 @@ function languagesToJSON() {
     }
     return list;
 }
+
 function loadPreferences() {
     for (let key in preferenceElements) {
         let value = settings.get(key);

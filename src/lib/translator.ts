@@ -27,6 +27,7 @@ export interface RunConfig {
     y: number;
     url?: string;
 }
+
 export interface VisualizerConfig {
     languagePair?: string;
     text?: string;
@@ -39,30 +40,37 @@ export interface VisualizerConfig {
     tab?: browser.tabs.Tab;
     incognito?: boolean;
 }
+
 export interface DCCResultLink {
     href: string;
     label: string;
     style: string;
 }
+
 export interface DCCResult {
     links?: DCCResultLink[];
     error?: string;
-};
+}
+
 export function getProtocol() {
     return settings.get('translation.useHttps') ? 'https://' : 'http://';
 }
+
 export function getOpenMethod(isQuick: boolean) {
     return settings.get(isQuick ? 'quick.method' : 'context.method');
 }
+
 export function getMultiWindow(isQuick: boolean) {
     return settings.get(isQuick ? 'quick.multiWindow' : 'context.multiWindow');
 }
+
 export function createParams(text: string, languagePair: string) {
     let params = '?lp=' + languagePair;
     if (text)
         params += '&s=' + encodeURIComponent(text);
     return params;
 }
+
 export function getFirstLanguagePair() {
     let translations = settings.get('translation.list');
     if (!translations.length)
@@ -70,6 +78,7 @@ export function getFirstLanguagePair() {
 
     return translations[0].k;
 }
+
 export function runDCC(text: string, languagePair: string, callback: (result: DCCResult) => void) {
     if (!languagePair)
         languagePair = getFirstLanguagePair();
@@ -113,6 +122,7 @@ export function runDCC(text: string, languagePair: string, callback: (result: DC
         });
     });
 }
+
 export function run(config: RunConfig, isQuick: boolean, tab: browser.tabs.Tab) {
     let lp = config.languagePair || getFirstLanguagePair();
     if (!lp)

@@ -247,7 +247,7 @@ function getTopLeftFromIframe() {
 
 type StyleMap = { [s: string]: string | number };
 
-const COMMON_STYLES:StyleMap = {
+const COMMON_STYLES: StyleMap = {
     display: "block",
     float: "none",
     margin: 0,
@@ -261,7 +261,7 @@ const COMMON_STYLES:StyleMap = {
     background: "none"
 };
 
-const OVERLAY_STYLES:StyleMap = {
+const OVERLAY_STYLES: StyleMap = {
     position: "fixed",
     "z-index": 1000000000,
     top: 0,
@@ -271,12 +271,12 @@ const OVERLAY_STYLES:StyleMap = {
     background: "rgba(128, 128, 128, 0.22)"
 };
 
-const DEFAULT_PANEL_STYLES:StyleMap = {
+const DEFAULT_PANEL_STYLES: StyleMap = {
     position: "fixed",
     "box-shadow": "0 0 4px 1px #adadad"
 };
 
-const MICRO_PANEL_STYLES:StyleMap = {
+const MICRO_PANEL_STYLES: StyleMap = {
     left: "-1000px",
     top: 0,
     right: "auto",
