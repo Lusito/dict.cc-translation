@@ -7,6 +7,7 @@
 // This file intercepts clicks (if appropriate), detects words under the cursor and shows a mini in-page translation
 // Ideally, a popup panel would be used to show the translation, but that is not available in web-extensions.
 
+import * as browser from 'webextension-polyfill';
 import * as messageUtil from "./lib/messageUtil";
 import { createElement, addLink, on, removeAllChildren } from "./lib/htmlUtils";
 import { DCCResult, DCCResultLink, VisualizerConfig } from "./lib/translator";
@@ -308,6 +309,7 @@ function createPanelOverlay() {
 }
 
 class MiniLayer {
+    onLoad: () => void;
     overlay: HTMLDivElement;
     y: number;
     x: number;
@@ -317,7 +319,7 @@ class MiniLayer {
     ibody: HTMLElement;
     resultNode: HTMLElement;
     extraNode: HTMLElement;
-    constructor(x: number, y: number, onload: () => void) {
+    constructor(x: number, y: number, onLoad: () => void) {
         // If in a frame, add frame position
         if (window.top !== window.self) {
             let tl = getTopLeftFromIframe();
@@ -326,6 +328,7 @@ class MiniLayer {
         }
         this.x = x;
         this.y = y;
+        this.onLoad = onLoad;
         this.overlay = createPanelOverlay();
         this.tdoc = window.top.document;
         this.iframe = this.tdoc.createElement('iframe');
@@ -354,7 +357,7 @@ class MiniLayer {
         createElement(this.idoc, a, 'img', { src: browser.runtime.getURL("icons/icon16.png"), alt: "dict.cc" });
         this.resultNode = createElement(this.idoc, div, 'span', { id: "result" });
         this.extraNode = createElement(this.idoc, this.ibody, 'span', { id: "extra" });
-        setTimeout(onload, 0);
+        setTimeout(this.onLoad, 0);
         a.focus();
     }
 

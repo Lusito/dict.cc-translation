@@ -6,6 +6,7 @@
 
 // This file manages all settings, their defaults and changes
 
+import * as browser from 'webextension-polyfill';
 import * as messageUtil from "./messageUtil";
 import { isFirefox } from "./browserInfo";
 import { TranslationMethod, TranslationEntry, SettingsTypeMap, SettingsSignature } from "./settingsSignature";
@@ -89,7 +90,7 @@ class Settings {
     }
 
     private load() {
-        this.storage.get(null, (map) => {
+        this.storage.get(null).then((map) => {
             this.map = map;
             if (this.readyCallbacks) {
                 for (let callback of this.readyCallbacks)

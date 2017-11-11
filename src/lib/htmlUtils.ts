@@ -4,6 +4,8 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
+import * as browser from 'webextension-polyfill';
+
 export function byId(id: string) {
     return document.getElementById(id);
 }

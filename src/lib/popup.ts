@@ -6,6 +6,7 @@
 
 // This file contains helpers to manage the popup windows (one for normal, one for incognito)
 
+import * as browser from 'webextension-polyfill';
 export let cache: { [s: string]: number } = {};
 
 export function open(url: string, incognito: boolean, width: number, height: number) {

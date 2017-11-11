@@ -4,6 +4,7 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
+import * as browser from 'webextension-polyfill';
 import { VisualizerConfig } from "../lib/translator";
 import { isFirefox, browserInfo } from "../lib/browserInfo";
 

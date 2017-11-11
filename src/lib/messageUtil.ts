@@ -6,6 +6,8 @@
 
 // This file contains communication helpers
 
+import * as browser from 'webextension-polyfill';
+
 //fixme: types
 export type Callback = (params: any, sender?: any, sendResponse?: any) => any;
 // export type Callback = (params: any, sender?: browser.runtime.MessageSender, sendResponse?: (response:any)=>void) => any;

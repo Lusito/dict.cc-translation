@@ -4,14 +4,16 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.3
 
+declare module 'webextension-polyfill' {
+
 ////////////////////
 // Alarms
 ////////////////////
 /**
  * Use the browser.alarms API to schedule code to run periodically or at a specified time in the future. * Permissions:  "alarms"
  */
-declare namespace browser.alarms {
-    interface AlarmCreateInfo {
+export namespace alarms {
+    export interface AlarmCreateInfo {
         /** Optional. Length of time in minutes after which the onAlarm event should fire.  */
         delayInMinutes?: number;
         /** Optional. If set, the onAlarm event should fire every periodInMinutes minutes after the initial event specified by when or delayInMinutes. If not set, the alarm will only fire once.  */
@@ -20,7 +22,7 @@ declare namespace browser.alarms {
         when?: number;
     }
 
-    interface Alarm {
+    export interface Alarm {
         /** Optional. If not null, the alarm is a repeating alarm and will fire again in periodInMinutes minutes.  */
         periodInMinutes?: number;
         /** Time at which this alarm was scheduled to fire, in milliseconds past the epoch (e.g. Date.now() + n). For performance reasons, the alarm may have been delayed an arbitrary amount beyond this. */
@@ -29,7 +31,7 @@ declare namespace browser.alarms {
         name: string;
     }
 
-    interface AlarmEvent extends events.Event<(alarm: Alarm) => void> { }
+    export interface AlarmEvent extends events.Event<(alarm: Alarm) => void> { }
 
     /**
      * Creates an alarm. Near the time(s) specified by alarmInfo, the onAlarm event is fired. If there is another alarm with the same name (or no name if none is specified), it will be cancelled and replaced by this alarm.
@@ -74,7 +76,7 @@ declare namespace browser.alarms {
     export function get(name: string, ): Promise<Alarm>;
 
     /** Fired when an alarm has elapsed. Useful for event pages. */
-    var onAlarm: AlarmEvent;
+    export var onAlarm: AlarmEvent;
 }
 
 ////////////////////
@@ -84,9 +86,9 @@ declare namespace browser.alarms {
  * Use the browser.bookmarks API to create, organize, and otherwise manipulate bookmarks. Also see Override Pages, which you can use to create a custom Bookmark Manager page.
  * Permissions:  "bookmarks"
  */
-declare namespace browser.bookmarks {
+export namespace bookmarks {
     /** A node (either a bookmark or a folder) in the bookmark tree. Child nodes are ordered within their parent folder. */
-    interface BookmarkTreeNode {
+    export interface BookmarkTreeNode {
         /** Optional. The 0-based position of this node within its parent folder.  */
         index?: number;
         /** Optional. When this node was created, in milliseconds since the epoch (new Date(dateAdded)).  */
@@ -111,48 +113,48 @@ declare namespace browser.bookmarks {
         unmodifiable?: any;
     }
 
-    interface BookmarkRemoveInfo {
+    export interface BookmarkRemoveInfo {
         index: number;
         parentId: string;
     }
 
-    interface BookmarkMoveInfo {
+    export interface BookmarkMoveInfo {
         index: number;
         oldIndex: number;
         parentId: string;
         oldParentId: string;
     }
 
-    interface BookmarkChangeInfo {
+    export interface BookmarkChangeInfo {
         url?: string;
         title: string;
     }
 
-    interface BookmarkReorderInfo {
+    export interface BookmarkReorderInfo {
         childIds: string[];
     }
 
-    interface BookmarkRemovedEvent extends events.Event<(id: string, removeInfo: BookmarkRemoveInfo) => void> { }
+    export interface BookmarkRemovedEvent extends events.Event<(id: string, removeInfo: BookmarkRemoveInfo) => void> { }
 
-    interface BookmarkImportEndedEvent extends events.Event<() => void> { }
+    export interface BookmarkImportEndedEvent extends events.Event<() => void> { }
 
-    interface BookmarkMovedEvent extends events.Event<(id: string, moveInfo: BookmarkMoveInfo) => void> { }
+    export interface BookmarkMovedEvent extends events.Event<(id: string, moveInfo: BookmarkMoveInfo) => void> { }
 
-    interface BookmarkImportBeganEvent extends events.Event<() => void> { }
+    export interface BookmarkImportBeganEvent extends events.Event<() => void> { }
 
-    interface BookmarkChangedEvent extends events.Event<(id: string, changeInfo: BookmarkChangeInfo) => void> { }
+    export interface BookmarkChangedEvent extends events.Event<(id: string, changeInfo: BookmarkChangeInfo) => void> { }
 
-    interface BookmarkCreatedEvent extends events.Event<(id: string, bookmark: BookmarkTreeNode) => void> { }
+    export interface BookmarkCreatedEvent extends events.Event<(id: string, bookmark: BookmarkTreeNode) => void> { }
 
-    interface BookmarkChildrenReordered extends events.Event<(id: string, reorderInfo: BookmarkReorderInfo) => void> { }
+    export interface BookmarkChildrenReordered extends events.Event<(id: string, reorderInfo: BookmarkReorderInfo) => void> { }
 
-    interface BookmarkSearchQuery {
+    export interface BookmarkSearchQuery {
         query?: string;
         url?: string;
         title?: string;
     }
 
-    interface BookmarkCreateArg {
+    export interface BookmarkCreateArg {
         /** Optional. Defaults to the Other Bookmarks folder.  */
         parentId?: string;
         index?: number;
@@ -160,20 +162,20 @@ declare namespace browser.bookmarks {
         url?: string;
     }
 
-    interface BookmarkDestinationArg {
+    export interface BookmarkDestinationArg {
         parentId?: string;
         index?: number;
     }
 
-    interface BookmarkChangesArg {
+    export interface BookmarkChangesArg {
         title?: string;
         url?: string;
     }
 
     /** @deprecated since Chrome 38. Bookmark write operations are no longer limited by Chrome. */
-    var MAX_WRITE_OPERATIONS_PER_HOUR: number;
+    export var MAX_WRITE_OPERATIONS_PER_HOUR: number;
     /** @deprecated since Chrome 38. Bookmark write operations are no longer limited by Chrome. */
-    var MAX_SUSTAINED_WRITE_OPERATIONS_PER_MINUTE: number;
+    export var MAX_SUSTAINED_WRITE_OPERATIONS_PER_MINUTE: number;
 
     /**
      * Searches for BookmarkTreeNodes matching the given query. Queries specified with an object produce BookmarkTreeNodes matching all specified properties.
@@ -236,19 +238,19 @@ declare namespace browser.bookmarks {
     export function removeTree(id: string): Promise<void>;
 
     /** Fired when a bookmark or folder is removed. When a folder is removed recursively, a single notification is fired for the folder, and none for its contents. */
-    var onRemoved: BookmarkRemovedEvent;
+    export var onRemoved: BookmarkRemovedEvent;
     /** Fired when a bookmark import session is ended. */
-    var onImportEnded: BookmarkImportEndedEvent;
+    export var onImportEnded: BookmarkImportEndedEvent;
     /** Fired when a bookmark import session is begun. Expensive observers should ignore onCreated updates until onImportEnded is fired. Observers should still handle other notifications immediately. */
-    var onImportBegan: BookmarkImportBeganEvent;
+    export var onImportBegan: BookmarkImportBeganEvent;
     /** Fired when a bookmark or folder changes. Note: Currently, only title and url changes trigger this. */
-    var onChanged: BookmarkChangedEvent;
+    export var onChanged: BookmarkChangedEvent;
     /** Fired when a bookmark or folder is moved to a different parent folder. */
-    var onMoved: BookmarkMovedEvent;
+    export var onMoved: BookmarkMovedEvent;
     /** Fired when a bookmark or folder is created. */
-    var onCreated: BookmarkCreatedEvent;
+    export var onCreated: BookmarkCreatedEvent;
     /** Fired when the children of a folder have changed their order due to the order being sorted in the UI. This is not called as a result of a move(). */
-    var onChildrenReordered: BookmarkChildrenReordered;
+    export var onChildrenReordered: BookmarkChildrenReordered;
 }
 
 ////////////////////
@@ -257,15 +259,15 @@ declare namespace browser.bookmarks {
 /**
  * Use browser actions to put icons in the main Google Chrome toolbar, to the right of the address bar. In addition to its icon, a browser action can also have a tooltip, a badge, and a popup. * Manifest:  "browser_action": {...}
  */
-declare namespace browser.browserAction {
-    interface BadgeBackgroundColorDetails {
+export namespace browserAction {
+    export interface BadgeBackgroundColorDetails {
         /** An array of four integers in the range [0,255] that make up the RGBA color of the badge. For example, opaque red is [255, 0, 0, 255]. Can also be a string with a CSS value, with opaque red being #FF0000 or #F00. */
         color: string | ColorArray;
         /** Optional. Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.  */
         tabId?: number;
     }
 
-    interface BadgeTextDetails {
+    export interface BadgeTextDetails {
         /** Any number of characters can be passed, but only about four can fit in the space. */
         text: string;
         /** Optional. Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.  */
@@ -274,19 +276,19 @@ declare namespace browser.browserAction {
 
     type ColorArray = [number, number, number, number];
 
-    interface TitleDetails {
+    export interface TitleDetails {
         /** The string the browser action should display when moused over. */
         title: string;
         /** Optional. Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.  */
         tabId?: number;
     }
 
-    interface TabDetails {
+    export interface TabDetails {
         /** Optional. Specify the tab to get the information. If no tab is specified, the non-tab-specific information is returned.  */
         tabId?: number;
     }
 
-    interface TabIconDetails {
+    export interface TabIconDetails {
         /** Optional. Either a relative image path or a dictionary {size -> relative image path} pointing to icon to be set. If the icon is specified as a dictionary, the actual image to be used is chosen depending on screen's pixel density. If the number of image pixels that fit into one screen space unit equals scale, then image with size scale * 19 will be selected. Initially only scales 1 and 2 will be supported. At least one image must be specified. Note that 'details.path = foo' is equivalent to 'details.imageData = {'19': foo}'  */
         path?: any;
         /** Optional. Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.  */
@@ -295,14 +297,14 @@ declare namespace browser.browserAction {
         imageData?: ImageData;
     }
 
-    interface PopupDetails {
+    export interface PopupDetails {
         /** Optional. Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.  */
         tabId?: number;
         /** The html file to show in a popup. If set to the empty string (''), no popup is shown. */
         popup: string;
     }
 
-    interface BrowserClickedEvent extends events.Event<(tab: tabs.Tab) => void> { }
+    export interface BrowserClickedEvent extends events.Event<(tab: tabs.Tab) => void> { }
 
     /**
      * Since Chrome 22.
@@ -350,7 +352,7 @@ declare namespace browser.browserAction {
     export function setIcon(details: TabIconDetails): Promise<void>;
 
     /** Fired when a browser action icon is clicked. This event will not fire if the browser action has a popup. */
-    var onClicked: BrowserClickedEvent;
+    export var onClicked: BrowserClickedEvent;
 }
 
 ////////////////////
@@ -359,8 +361,8 @@ declare namespace browser.browserAction {
 /**
  * Use the browser.browsingData API to remove browsing data from a user's local profile. * Permissions:  "browsingData"
  */
-declare namespace browser.browsingData {
-    interface OriginTypes {
+export namespace browsingData {
+    export interface OriginTypes {
         /** Optional. Websites that have been installed as hosted applications (be careful!).  */
         protectedWeb?: boolean;
         /** Optional. Extensions and packaged applications a user has installed (be _really_ careful!).  */
@@ -370,7 +372,7 @@ declare namespace browser.browsingData {
     }
 
     /** Options that determine exactly what data will be removed. */
-    interface RemovalOptions {
+    export interface RemovalOptions {
         /**
          * Optional.
           * Since Chrome 21.
@@ -385,7 +387,7 @@ declare namespace browser.browsingData {
      * Since Chrome 27.
      * A set of data types. Missing data types are interpreted as false.
      */
-    interface DataTypeSet {
+    export interface DataTypeSet {
         /** Optional. Websites' WebSQL data.  */
         webSQL?: boolean;
         /** Optional. Websites' IndexedDB data.  */
@@ -420,7 +422,7 @@ declare namespace browser.browsingData {
         serviceWorkers?: boolean;
     }
 
-    interface SettingsCallback {
+    export interface SettingsCallback {
         options: RemovalOptions;
         /** All of the types will be present in the result, with values of true if they are both selected to be removed and permitted to be removed, otherwise false. */
         dataToRemove: DataTypeSet;
@@ -446,7 +448,7 @@ declare namespace browser.browsingData {
      */
     export function removeFileSystems(options: RemovalOptions): Promise<void>;
     /**
-     * Clears various types of browsing data stored in a user's profile.
+     * Clears export various types of browsing data stored in a user's profile.
      * @param dataToRemove The set of data types to remove.
      */
     export function remove(options: RemovalOptions, dataToRemove: DataTypeSet): Promise<void>;
@@ -494,8 +496,8 @@ declare namespace browser.browsingData {
 /**
  * Use the commands API to add keyboard shortcuts that trigger actions in your extension, for example, an action to open the browser action or send a command to the extension. * Manifest:  "commands": {...}
  */
-declare namespace browser.commands {
-    interface Command {
+export namespace commands {
+    export interface Command {
         /** Optional. The name of the Extension Command  */
         name?: string;
         /** Optional. The Extension Command description  */
@@ -504,7 +506,7 @@ declare namespace browser.commands {
         shortcut?: string;
     }
 
-    interface CommandEvent extends events.Event<(command: string) => void> { }
+    export interface CommandEvent extends events.Event<(command: string) => void> { }
 
     /**
      * Returns all the registered extension commands for this extension and their shortcut (if active).
@@ -512,7 +514,7 @@ declare namespace browser.commands {
     export function getAll(callback: (commands: Command[]) => void): void;
 
     /** Fired when a registered command is activated using a keyboard shortcut. */
-    var onCommand: CommandEvent;
+    export var onCommand: CommandEvent;
 }
 
 ////////////////////
@@ -521,8 +523,8 @@ declare namespace browser.commands {
 /**
  * Use the browser.contextMenus API to add items to Google Chrome's context menu. You can choose what types of objects your context menu additions apply to, such as images, hyperlinks, and pages. * Permissions:  "contextMenus"
  */
-declare namespace browser.contextMenus {
-    interface OnClickData {
+export namespace contextMenus {
+    export interface OnClickData {
         /**
          * Optional.
           * Since Chrome 35.
@@ -588,7 +590,7 @@ declare namespace browser.contextMenus {
         srcUrl?: string;
     }
 
-    interface CreateProperties {
+    export interface CreateProperties {
         /** Optional. Lets you restrict the item to apply only to documents whose URL matches one of the given patterns. (This applies to frames as well.) For details on the format of a pattern, see Match Patterns.  */
         documentUrlPatterns?: string[];
         /** Optional. The initial state of a checkbox or radio item: true for selected and false for unselected. Only one radio item can be selected at a time in a given group of radio items.  */
@@ -607,7 +609,7 @@ declare namespace browser.contextMenus {
         targetUrlPatterns?: string[];
         /**
          * Optional.
-          * A function that will be called back when the menu item is clicked. Event pages cannot use this; instead, they should register a listener for browser.contextMenus.onClicked.
+          * A export function that will be called back when the menu item is clicked. Event pages cannot use this; instead, they should register a listener for browser.contextMenus.onClicked.
          * @param info Information sent when a context menu item is clicked.
          * @param tab The details of the tab where the click took place. Note: this parameter only present for extensions.
          */
@@ -624,7 +626,7 @@ declare namespace browser.contextMenus {
         id?: string;
     }
 
-    interface UpdateProperties {
+    export interface UpdateProperties {
         documentUrlPatterns?: string[];
         checked?: boolean;
         title?: string;
@@ -638,13 +640,13 @@ declare namespace browser.contextMenus {
         type?: string;
     }
 
-    interface MenuClickedEvent extends events.Event<(info: OnClickData, tab?: tabs.Tab) => void> { }
+    export interface MenuClickedEvent extends events.Event<(info: OnClickData, tab?: tabs.Tab) => void> { }
 
     /**
      * Since Chrome 38.
      * The maximum number of top level extension items that can be added to an extension action context menu. Any items beyond this limit will be ignored.
      */
-    var ACTION_MENU_TOP_LEVEL_LIMIT: number;
+    export var ACTION_MENU_TOP_LEVEL_LIMIT: number;
 
     /**
      * Removes all context menu items added by this extension.
@@ -657,13 +659,13 @@ declare namespace browser.contextMenus {
     /**
      * Updates a previously created context menu item.
      * @param id The ID of the item to update.
-     * @param updateProperties The properties to update. Accepts the same values as the create function.
+     * @param updateProperties The properties to update. Accepts the same values as the create export function.
      */
     export function update(id: string, updateProperties: UpdateProperties): Promise<void>;
     /**
      * Updates a previously created context menu item.
      * @param id The ID of the item to update.
-     * @param updateProperties The properties to update. Accepts the same values as the create function.
+     * @param updateProperties The properties to update. Accepts the same values as the create export function.
      */
     export function update(id: number, updateProperties: UpdateProperties): Promise<void>;
     /**
@@ -681,7 +683,7 @@ declare namespace browser.contextMenus {
      * Since Chrome 21.
      * Fired when a context menu item is clicked.
      */
-    var onClicked: MenuClickedEvent;
+    export var onClicked: MenuClickedEvent;
 }
 
 ////////////////////
@@ -690,9 +692,9 @@ declare namespace browser.contextMenus {
 /**
  * Use the browser.cookies API to query and modify cookies, and to be notified when they change. * Permissions:  "cookies", host permissions
  */
-declare namespace browser.cookies {
+export namespace cookies {
     /** Represents information about an HTTP cookie. */
-    interface Cookie {
+    export interface Cookie {
         /** The domain of the cookie (e.g. "www.google.com", "example.com"). */
         domain: string;
         /** The name of the cookie. */
@@ -716,14 +718,14 @@ declare namespace browser.cookies {
     }
 
     /** Represents a cookie store in the browser. An incognito mode window, for instance, uses a separate cookie store from a non-incognito window. */
-    interface CookieStore {
+    export interface CookieStore {
         /** The unique identifier for the cookie store. */
         id: string;
         /** Identifiers of all the browser tabs that share this cookie store. */
         tabIds: number[];
     }
 
-    interface GetAllDetails {
+    export interface GetAllDetails {
         /** Optional. Restricts the retrieved cookies to those whose domains match or are subdomains of this one.  */
         domain?: string;
         /** Optional. Filters the cookies by name.  */
@@ -740,7 +742,7 @@ declare namespace browser.cookies {
         secure?: boolean;
     }
 
-    interface SetDetails {
+    export interface SetDetails {
         /** Optional. The domain of the cookie. If omitted, the cookie becomes a host-only cookie.  */
         domain?: string;
         /** Optional. The name of the cookie. Empty by default if omitted.  */
@@ -761,13 +763,13 @@ declare namespace browser.cookies {
         secure?: boolean;
     }
 
-    interface Details {
+    export interface Details {
         name: string;
         url: string;
         storeId?: string;
     }
 
-    interface CookieChangeInfo {
+    export interface CookieChangeInfo {
         /** Information about the cookie that was set or removed. */
         cookie: Cookie;
         /** True if a cookie was removed. */
@@ -779,7 +781,7 @@ declare namespace browser.cookies {
         cause: string;
     }
 
-    interface CookieChangedEvent extends events.Event<(changeInfo: CookieChangeInfo) => void> { }
+    export interface CookieChangedEvent extends events.Event<(changeInfo: CookieChangeInfo) => void> { }
 
     /**
      * Lists all existing cookie stores.
@@ -811,7 +813,7 @@ declare namespace browser.cookies {
     export function get(details: Details, callback: (cookie: Cookie | null) => void): void;
 
     /** Fired when a cookie is set or removed. As a special case, note that updating a cookie's properties is implemented as a two step process: the cookie to be updated is first removed entirely, generating a notification with "cause" of "overwrite" . Afterwards, a new cookie is written with the updated values, generating a second notification with "cause" "explicit". */
-    var onChanged: CookieChangedEvent;
+    export var onChanged: CookieChangedEvent;
 }
 
 ////////////////////
@@ -819,9 +821,9 @@ declare namespace browser.cookies {
 ////////////////////
 /**
  * Use the browser.devtools.inspectedWindow API to interact with the inspected window: obtain the tab ID for the inspected page, evaluate the code in the context of the inspected window, reload the page, or obtain the list of resources within the page. */
-declare namespace browser.devtools.inspectedWindow {
+export namespace devtools.inspectedWindow {
     /** A resource within the inspected page, such as a document, a script, or an image. */
-    interface Resource {
+    export interface Resource {
         /** The URL of the resource. */
         url: string;
         /**
@@ -839,7 +841,7 @@ declare namespace browser.devtools.inspectedWindow {
         setContent(content: string, commit: boolean): Promise<Object>;
     }
 
-    interface ReloadOptions {
+    export interface ReloadOptions {
         /** Optional. If specified, the string will override the value of the User-Agent HTTP header that's sent while loading the resources of the inspected page. The string will also override the value of the navigator.userAgent property that's returned to any scripts that are running within the inspected page.  */
         userAgent?: string;
         /** Optional. When true, the loader will ignore the cache for all inspected page resources loaded before the load event is fired. The effect is similar to pressing Ctrl+Shift+R in the inspected window or within the Developer Tools window.  */
@@ -848,13 +850,13 @@ declare namespace browser.devtools.inspectedWindow {
         injectedScript?: string;
         /**
          * Optional.
-          * If specified, this script evaluates into a function that accepts three string arguments: the source to preprocess, the URL of the source, and a function name if the source is an DOM event handler. The preprocessorerScript function should return a string to be compiled by Chrome in place of the input source. In the case that the source is a DOM event handler, the returned source must compile to a single JS function.
+          * If specified, this script evaluates into a export function that accepts three string arguments: the source to preprocess, the URL of the source, and a export function name if the source is an DOM event handler. The preprocessorerScript export function should return a string to be compiled by Chrome in place of the input source. In the case that the source is a DOM event handler, the returned source must compile to a single JS export function.
          * @deprecated Deprecated since Chrome 41. Please avoid using this parameter, it will be removed soon.
          */
         preprocessorScript?: string;
     }
 
-    interface EvaluationExceptionInfo {
+    export interface EvaluationExceptionInfo {
         /** Set if the error occurred on the DevTools side before the expression is evaluated. */
         isError: boolean;
         /** Set if the error occurred on the DevTools side before the expression is evaluated. */
@@ -869,17 +871,17 @@ declare namespace browser.devtools.inspectedWindow {
         value: string;
     }
 
-    interface ResourceAddedEvent extends events.Event<(resource: Resource) => void> { }
+    export interface ResourceAddedEvent extends events.Event<(resource: Resource) => void> { }
 
-    interface ResourceContentCommittedEvent extends events.Event<(resource: Resource, content: string) => void> { }
+    export interface ResourceContentCommittedEvent extends events.Event<(resource: Resource, content: string) => void> { }
 
     /** The ID of the tab being inspected. This ID may be used with tabs.* API. */
-    var tabId: number;
+    export var tabId: number;
 
     /** Reloads the inspected page. */
     export function reload(reloadOptions: ReloadOptions): void;
     /**
-     * Evaluates a JavaScript expression in the context of the main frame of the inspected page. The expression must evaluate to a JSON-compliant object, otherwise an exception is thrown. The eval function can report either a DevTools-side error or a JavaScript exception that occurs during evaluation. In either case, the result parameter of the callback is undefined. In the case of a DevTools-side error, the isException parameter is non-null and has isError set to true and code set to an error code. In the case of a JavaScript error, isException is set to true and value is set to the string value of thrown object.
+     * Evaluates a JavaScript expression in the context of the main frame of the inspected page. The expression must evaluate to a JSON-compliant object, otherwise an exception is thrown. The eval export function can report either a DevTools-side error or a JavaScript exception that occurs during evaluation. In either case, the result parameter of the callback is undefined. In the case of a DevTools-side error, the isException parameter is non-null and has isError set to true and code set to an error code. In the case of a JavaScript error, isException is set to true and value is set to the string value of thrown object.
      * @param expression An expression to evaluate.
      * Parameter result: The result of evaluation.
      * Parameter exceptionInfo: An object providing details if an exception occurred while evaluating the expression.
@@ -891,9 +893,9 @@ declare namespace browser.devtools.inspectedWindow {
     export function getResources(callback: (resources: Resource[]) => void): void;
 
     /** Fired when a new resource is added to the inspected page. */
-    var onResourceAdded: ResourceAddedEvent;
+    export var onResourceAdded: ResourceAddedEvent;
     /** Fired when a new revision of the resource is committed (e.g. user saves an edited version of the resource in the Developer Tools). */
-    var onResourceContentCommitted: ResourceContentCommittedEvent;
+    export var onResourceContentCommitted: ResourceContentCommittedEvent;
 }
 
 ////////////////////
@@ -901,9 +903,9 @@ declare namespace browser.devtools.inspectedWindow {
 ////////////////////
 /**
  * Use the browser.devtools.network API to retrieve the information about network requests displayed by the Developer Tools in the Network panel. */
-declare namespace browser.devtools.network {
+export namespace devtools.network {
     /** Represents a network request for a document resource (script, image and so on). See HAR Specification for reference. */
-    interface Request {
+    export interface Request {
         /**
          * Returns content of the response body.
          * Parameter content: Content of the response body (potentially encoded).
@@ -912,9 +914,9 @@ declare namespace browser.devtools.network {
         getContent(callback: (content: string, encoding: string) => void): void;
     }
 
-    interface RequestFinishedEvent extends events.Event<(request: Request) => void> { }
+    export interface RequestFinishedEvent extends events.Event<(request: Request) => void> { }
 
-    interface NavigatedEvent extends events.Event<(url: string) => void> { }
+    export interface NavigatedEvent extends events.Event<(url: string) => void> { }
 
     /**
      * Returns HAR log that contains all known network requests.
@@ -923,9 +925,9 @@ declare namespace browser.devtools.network {
     export function getHAR(): Promise<Object>;
 
     /** Fired when a network request is finished and all request data are available. */
-    var onRequestFinished: RequestFinishedEvent;
+    export var onRequestFinished: RequestFinishedEvent;
     /** Fired when the inspected window navigates to a new page. */
-    var onNavigated: NavigatedEvent;
+    export var onNavigated: NavigatedEvent;
 }
 
 ////////////////////
@@ -933,15 +935,15 @@ declare namespace browser.devtools.network {
 ////////////////////
 /**
  * Use the browser.devtools.panels API to integrate your extension into Developer Tools window UI: create your own panels, access existing panels, and add sidebars. */
-declare namespace browser.devtools.panels {
-    interface PanelShownEvent extends events.Event<(window: windows.Window) => void> { }
+export namespace devtools.panels {
+    export interface PanelShownEvent extends events.Event<(window: windows.Window) => void> { }
 
-    interface PanelHiddenEvent extends events.Event<() => void> { }
+    export interface PanelHiddenEvent extends events.Event<() => void> { }
 
-    interface PanelSearchEvent extends events.Event<(action: string, queryString?: string) => void> { }
+    export interface PanelSearchEvent extends events.Event<(action: string, queryString?: string) => void> { }
 
     /** Represents a panel created by extension. */
-    interface ExtensionPanel {
+    export interface ExtensionPanel {
         /**
          * Appends a button to the status bar of the panel.
          * @param iconPath Path to the icon of the button. The file should contain a 64x24-pixel image composed of two 32x24 icons. The left icon is used when the button is inactive; the right icon is displayed when the button is pressed.
@@ -957,10 +959,10 @@ declare namespace browser.devtools.panels {
         onSearch: PanelSearchEvent;
     }
 
-    interface ButtonClickedEvent extends events.Event<() => void> { }
+    export interface ButtonClickedEvent extends events.Event<() => void> { }
 
     /** A button created by the extension. */
-    interface Button {
+    export interface Button {
         /**
          * Updates the attributes of the button. If some of the arguments are omitted or null, the corresponding attributes are not updated.
          * @param iconPath Path to the new icon of the button.
@@ -972,10 +974,10 @@ declare namespace browser.devtools.panels {
         onClicked: ButtonClickedEvent;
     }
 
-    interface SelectionChangedEvent extends events.Event<() => void> { }
+    export interface SelectionChangedEvent extends events.Event<() => void> { }
 
     /** Represents the Elements panel. */
-    interface ElementsPanel {
+    export interface ElementsPanel {
         /**
          * Creates a pane within panel's sidebar.
          * @param title Text that is displayed in sidebar caption.
@@ -990,7 +992,7 @@ declare namespace browser.devtools.panels {
      * Since Chrome 41.
      * Represents the Sources panel.
      */
-    interface SourcesPanel {
+    export interface SourcesPanel {
         /**
          * Creates a pane within panel's sidebar.
          * @param title Text that is displayed in sidebar caption.
@@ -1001,12 +1003,12 @@ declare namespace browser.devtools.panels {
         onSelectionChanged: SelectionChangedEvent;
     }
 
-    interface ExtensionSidebarPaneShownEvent extends events.Event<(window: windows.Window) => void> { }
+    export interface ExtensionSidebarPaneShownEvent extends events.Event<(window: windows.Window) => void> { }
 
-    interface ExtensionSidebarPaneHiddenEvent extends events.Event<() => void> { }
+    export interface ExtensionSidebarPaneHiddenEvent extends events.Event<() => void> { }
 
     /** A sidebar created by the extension. */
-    interface ExtensionSidebarPane {
+    export interface ExtensionSidebarPane {
         /**
          * Sets the height of the sidebar.
          * @param height A CSS-like size specification, such as '100px' or '12ex'.
@@ -1046,12 +1048,12 @@ declare namespace browser.devtools.panels {
     }
 
     /** Elements panel. */
-    var elements: ElementsPanel;
+    export var elements: ElementsPanel;
     /**
      * Since Chrome 38.
      * Sources panel.
      */
-    var sources: SourcesPanel;
+    export var sources: SourcesPanel;
 
     /**
      * Creates an extension panel.
@@ -1062,7 +1064,7 @@ declare namespace browser.devtools.panels {
      */
     export function create(title: string, iconPath: string, pagePath: string): Promise<ExtensionPanel>;
     /**
-     * Specifies the function to be called when the user clicks a resource link in the Developer Tools window. To unset the handler, either call the method with no parameters or pass null as the parameter.
+     * Specifies the export function to be called when the user clicks a resource link in the Developer Tools window. To unset the handler, either call the method with no parameters or pass null as the parameter.
      * Parameter resource: A devtools.inspectedWindow.Resource object for the resource that was clicked.
      */
     export function setOpenResourceHandler(callback?: (resource: devtools.inspectedWindow.Resource) => void): void;
@@ -1081,15 +1083,15 @@ declare namespace browser.devtools.panels {
 /**
  * Use the browser.downloads API to programmatically initiate, monitor, manipulate, and search for downloads. * Permissions:  "downloads"
  */
-declare namespace browser.downloads {
-    interface HeaderNameValuePair {
+export namespace downloads {
+    export interface HeaderNameValuePair {
         /** Name of the HTTP header. */
         name: string;
         /** Value of the HTTP header. */
         value: string;
     }
 
-    interface DownloadOptions {
+    export interface DownloadOptions {
         /** Optional. Post body.  */
         body?: string;
         /** Optional. Use a file-chooser to allow the user to select a filename regardless of whether filename is set or already exists.  */
@@ -1106,7 +1108,7 @@ declare namespace browser.downloads {
         conflictAction?: string;
     }
 
-    interface DownloadDelta {
+    export interface DownloadDelta {
         /** Optional. The change in danger, if any.  */
         danger?: StringDelta;
         /** Optional. The change in url, if any.  */
@@ -1137,23 +1139,23 @@ declare namespace browser.downloads {
         exists?: BooleanDelta;
     }
 
-    interface BooleanDelta {
+    export interface BooleanDelta {
         current?: boolean;
         previous?: boolean;
     }
 
     /** Since Chrome 34. */
-    interface DoubleDelta {
+    export interface DoubleDelta {
         current?: number;
         previous?: number;
     }
 
-    interface StringDelta {
+    export interface StringDelta {
         current?: string;
         previous?: string;
     }
 
-    interface DownloadItem {
+    export interface DownloadItem {
         /** Number of bytes received so far from the host, without considering file compression. */
         bytesReceived: number;
         /** Indication of whether this download is thought to be safe or known to be suspicious. */
@@ -1172,11 +1174,11 @@ declare namespace browser.downloads {
         mime: string;
         /** Number of bytes in the whole file post-decompression, or -1 if unknown. */
         fileSize: number;
-        /** The time when the download began in ISO 8601 format. May be passed directly to the Date constructor: browser.downloads.search({}, function(items){items.forEach(function(item){console.log(new Date(item.startTime))})}) */
+        /** The time when the download began in ISO 8601 format. May be passed directly to the Date constructor: browser.downloads.search({}, export function(items){items.forEach(export function(item){console.log(new Date(item.startTime))})}) */
         startTime: string;
         /** Optional. Why the download was interrupted. Several kinds of HTTP errors may be grouped under one of the errors beginning with SERVER_. Errors relating to the network begin with NETWORK_, errors relating to the process of writing the file to the file system begin with FILE_, and interruptions initiated by the user begin with USER_.  */
         error?: string;
-        /** Optional. The time when the download ended in ISO 8601 format. May be passed directly to the Date constructor: browser.downloads.search({}, function(items){items.forEach(function(item){if (item.endTime) console.log(new Date(item.endTime))})})  */
+        /** Optional. The time when the download ended in ISO 8601 format. May be passed directly to the Date constructor: browser.downloads.search({}, export function(items){items.forEach(export function(item){if (item.endTime) console.log(new Date(item.endTime))})})  */
         endTime?: string;
         /** An identifier that is persistent across browser sessions. */
         id: number;
@@ -1184,7 +1186,7 @@ declare namespace browser.downloads {
         incognito: boolean;
         /** Absolute URL. */
         referrer: string;
-        /** Optional. Estimated time when the download will complete in ISO 8601 format. May be passed directly to the Date constructor: browser.downloads.search({}, function(items){items.forEach(function(item){if (item.estimatedEndTime) console.log(new Date(item.estimatedEndTime))})})  */
+        /** Optional. Estimated time when the download will complete in ISO 8601 format. May be passed directly to the Date constructor: browser.downloads.search({}, export function(items){items.forEach(export function(item){if (item.estimatedEndTime) console.log(new Date(item.estimatedEndTime))})})  */
         estimatedEndTime?: string;
         /** True if the download is in progress and paused, or else if it is interrupted and can be resumed starting from where it was interrupted. */
         canResume: boolean;
@@ -1196,13 +1198,13 @@ declare namespace browser.downloads {
         byExtensionName?: string;
     }
 
-    interface GetFileIconOptions {
+    export interface GetFileIconOptions {
         /** Optional. * The size of the returned icon. The icon will be square with dimensions size * size pixels. The default and largest size for the icon is 32x32 pixels. The only supported sizes are 16 and 32. It is an error to specify any other size.
  */
         size?: number;
     }
 
-    interface DownloadQuery {
+    export interface DownloadQuery {
         /** Optional. Set elements of this array to DownloadItem properties in order to sort search results. For example, setting orderBy=['startTime'] sorts the DownloadItem by their start time in ascending order. To specify descending order, prefix with a hyphen: '-startTime'.  */
         orderBy?: string[];
         /** Optional. Limits results to DownloadItem whose url matches the given regular expression.  */
@@ -1255,20 +1257,20 @@ declare namespace browser.downloads {
         exists?: boolean;
     }
 
-    interface DownloadFilenameSuggestion {
+    export interface DownloadFilenameSuggestion {
         /** The DownloadItem's new target DownloadItem.filename, as a path relative to the user's default Downloads directory, possibly containing subdirectories. Absolute paths, empty paths, and paths containing back-references ".." will be ignored. */
         filename: string;
         /** Optional. The action to take if filename already exists.  */
         conflictAction?: string;
     }
 
-    interface DownloadChangedEvent extends events.Event<(downloadDelta: DownloadDelta) => void> { }
+    export interface DownloadChangedEvent extends events.Event<(downloadDelta: DownloadDelta) => void> { }
 
-    interface DownloadCreatedEvent extends events.Event<(downloadItem: DownloadItem) => void> { }
+    export interface DownloadCreatedEvent extends events.Event<(downloadItem: DownloadItem) => void> { }
 
-    interface DownloadErasedEvent extends events.Event<(downloadId: number) => void> { }
+    export interface DownloadErasedEvent extends events.Event<(downloadId: number) => void> { }
 
-    interface DownloadDeterminingFilenameEvent extends events.Event<(downloadItem: DownloadItem, suggest: (suggestion?: DownloadFilenameSuggestion) => void) => void> { }
+    export interface DownloadDeterminingFilenameEvent extends events.Event<(downloadItem: DownloadItem, suggest: (suggestion?: DownloadFilenameSuggestion) => void) => void> { }
 
     /**
      * Find DownloadItem. Set query to the empty object to get all DownloadItem. To get a specific DownloadItem, set only the id field. To page through a large number of items, set orderBy: ['-startTime'], set limit to the number of items per page, and set startedAfter to the startTime of the last item from the last page.
@@ -1280,12 +1282,12 @@ declare namespace browser.downloads {
      */
     export function pause(downloadId: number): Promise<void>;
     /**
-     * Retrieve an icon for the specified download. For new downloads, file icons are available after the onCreated event has been received. The image returned by this function while a download is in progress may be different from the image returned after the download is complete. Icon retrieval is done by querying the underlying operating system or toolkit depending on the platform. The icon that is returned will therefore depend on a number of factors including state of the download, platform, registered file types and visual theme. If a file icon cannot be determined, runtime.lastError will contain an error message.
+     * Retrieve an icon for the specified download. For new downloads, file icons are available after the onCreated event has been received. The image returned by this export function while a download is in progress may be different from the image returned after the download is complete. Icon retrieval is done by querying the underlying operating system or toolkit depending on the platform. The icon that is returned will therefore depend on a number of factors including state of the download, platform, registered file types and visual theme. If a file icon cannot be determined, runtime.lastError will contain an error message.
      * @param downloadId The identifier for the download.
      */
     export function getFileIcon(downloadId: number, ): Promise<string>;
     /**
-     * Retrieve an icon for the specified download. For new downloads, file icons are available after the onCreated event has been received. The image returned by this function while a download is in progress may be different from the image returned after the download is complete. Icon retrieval is done by querying the underlying operating system or toolkit depending on the platform. The icon that is returned will therefore depend on a number of factors including state of the download, platform, registered file types and visual theme. If a file icon cannot be determined, runtime.lastError will contain an error message.
+     * Retrieve an icon for the specified download. For new downloads, file icons are available after the onCreated event has been received. The image returned by this export function while a download is in progress may be different from the image returned after the download is complete. Icon retrieval is done by querying the underlying operating system or toolkit depending on the platform. The icon that is returned will therefore depend on a number of factors including state of the download, platform, registered file types and visual theme. If a file icon cannot be determined, runtime.lastError will contain an error message.
      * @param downloadId The identifier for the download.
      */
     export function getFileIcon(downloadId: number, options: GetFileIconOptions, ): Promise<string>;
@@ -1335,13 +1337,13 @@ declare namespace browser.downloads {
     export function setShelfEnabled(enabled: boolean): void;
 
     /** When any of a DownloadItem's properties except bytesReceived and estimatedEndTime changes, this event fires with the downloadId and an object containing the properties that changed. */
-    var onChanged: DownloadChangedEvent;
+    export var onChanged: DownloadChangedEvent;
     /** This event fires with the DownloadItem object when a download begins. */
-    var onCreated: DownloadCreatedEvent;
+    export var onCreated: DownloadCreatedEvent;
     /** Fires with the downloadId when a download is erased from history. */
-    var onErased: DownloadErasedEvent;
+    export var onErased: DownloadErasedEvent;
     /** During the filename determination process, extensions will be given the opportunity to override the target DownloadItem.filename. Each extension may not register more than one listener for this event. Each listener must call suggest exactly once, either synchronously or asynchronously. If the listener calls suggest asynchronously, then it must return true. If the listener neither calls suggest synchronously nor returns true, then suggest will be called automatically. The DownloadItem will not complete until all listeners have called suggest. Listeners may call suggest without any arguments in order to allow the download to use downloadItem.filename for its filename, or pass a suggestion object to suggest in order to override the target filename. If more than one extension overrides the filename, then the last extension installed whose listener passes a suggestion object to suggest wins. In order to avoid confusion regarding which extension will win, users should not install extensions that may conflict. If the download is initiated by download and the target filename is known before the MIME type and tentative filename have been determined, pass filename to download instead. */
-    var onDeterminingFilename: DownloadDeterminingFilenameEvent;
+    export var onDeterminingFilename: DownloadDeterminingFilenameEvent;
 }
 
 ////////////////////
@@ -1349,9 +1351,9 @@ declare namespace browser.downloads {
 ////////////////////
 /**
  * The events namespace contains common types used by APIs dispatching events to notify you when something interesting happens. */
-declare namespace browser.events {
-    /** Filters URLs for various criteria. See event filtering. All criteria are case sensitive. */
-    interface UrlFilter {
+export namespace events {
+    /** Filters URLs for export various criteria. See event filtering. All criteria are case sensitive. */
+    export interface UrlFilter {
         /** Optional. Matches if the scheme of the URL is equal to any of the schemes specified in the array.  */
         schemes?: string[];
         /**
@@ -1403,7 +1405,7 @@ declare namespace browser.events {
     }
 
     /** An object which allows the addition and removal of listeners for a Chrome event. */
-    interface Event<T extends Function> {
+    export interface Event<T extends Function> {
         /**
          * Registers an event listener callback to an event.
          */
@@ -1446,7 +1448,7 @@ declare namespace browser.events {
     }
 
     /** Description of a declarative rule for handling events. */
-    interface Rule {
+    export interface Rule {
         /** Optional. Optional priority of this rule. Defaults to 100.  */
         priority?: number;
         /** List of conditions that can trigger the actions. */
@@ -1469,28 +1471,28 @@ declare namespace browser.events {
 ////////////////////
 /**
  * The browser.extension API has utilities that can be used by any extension page. It includes support for exchanging messages between an extension and its content scripts or between extensions, as described in detail in Message Passing. */
-declare namespace browser.extension {
-    interface FetchProperties {
+export namespace extension {
+    export interface FetchProperties {
         /** Optional. The window to restrict the search to. If omitted, returns all views.  */
         windowId?: number;
         /** Optional. The type of view to get. If omitted, returns all views (including background pages and tabs). Valid values: 'tab', 'notification', 'popup'.  */
         type?: string;
     }
 
-    interface LastError {
+    export interface LastError {
         /** Description of the error that has taken place. */
         message: string;
     }
 
-    interface OnRequestEvent extends events.Event<((request: any, sender: runtime.MessageSender, sendResponse: (response: any) => void) => void) | ((sender: runtime.MessageSender, sendResponse: (response: any) => void) => void)> { }
+    export interface OnRequestEvent extends events.Event<((request: any, sender: runtime.MessageSender, sendResponse: (response: any) => void) => void) | ((sender: runtime.MessageSender, sendResponse: (response: any) => void) => void)> { }
 
     /**
      * Since Chrome 7.
      * True for content scripts running inside incognito tabs, and for extension pages running inside an incognito process. The latter only applies to extensions with 'split' incognito_behavior.
      */
-    var inIncognitoContext: boolean;
+    export var inIncognitoContext: boolean;
     /** Set for the lifetime of a callback if an ansychronous extension api has resulted in an error. If no error has occured lastError will be undefined. */
-    var lastError: LastError;
+    export var lastError: LastError;
 
     /** Returns the JavaScript 'window' object for the background page running inside the current extension. Returns null if the extension has no background page. */
     export function getBackgroundPage(): Window | null;
@@ -1522,16 +1524,16 @@ declare namespace browser.extension {
      * Sends a single request to other listeners within the extension. Similar to runtime.connect, but only sends a single request with an optional response. The extension.onRequest event is fired in each page of the extension.
      * @deprecated Deprecated since Chrome 33. Please use runtime.sendMessage.
      * @param extensionId The extension ID of the extension you want to connect to. If omitted, default is your own extension.
-     * @param responseCallback If you specify the responseCallback parameter, it should be a function that looks like this:
-     * function(any response) {...};
+     * @param responseCallback If you specify the responseCallback parameter, it should be a export function that looks like this:
+     * export function(any response) {...};
      * Parameter response: The JSON response object sent by the handler of the request. If an error occurs while connecting to the extension, the callback will be called with no arguments and runtime.lastError will be set to the error message.
      */
     export function sendRequest(extensionId: string, request: any): Promise<any>;
     /**
      * Sends a single request to other listeners within the extension. Similar to runtime.connect, but only sends a single request with an optional response. The extension.onRequest event is fired in each page of the extension.
      * @deprecated Deprecated since Chrome 33. Please use runtime.sendMessage.
-     * @param responseCallback If you specify the responseCallback parameter, it should be a function that looks like this:
-     * function(any response) {...};
+     * @param responseCallback If you specify the responseCallback parameter, it should be a export function that looks like this:
+     * export function(any response) {...};
      * Parameter response: The JSON response object sent by the handler of the request. If an error occurs while connecting to the extension, the callback will be called with no arguments and runtime.lastError will be set to the error message.
      */
     export function sendRequest(request: any): Promise<any>;
@@ -1545,12 +1547,12 @@ declare namespace browser.extension {
      * Fired when a request is sent from either an extension process or a content script.
      * @deprecated Deprecated since Chrome 33. Please use runtime.onMessage.
      */
-    var onRequest: OnRequestEvent;
+    export var onRequest: OnRequestEvent;
     /**
      * Fired when a request is sent from another extension.
      * @deprecated Deprecated since Chrome 33. Please use runtime.onMessageExternal.
      */
-    var onRequestExternal: OnRequestEvent;
+    export var onRequestExternal: OnRequestEvent;
 }
 
 ////////////////////
@@ -1559,9 +1561,9 @@ declare namespace browser.extension {
 /**
  * Use the browser.history API to interact with the browser's record of visited pages. You can add, remove, and query for URLs in the browser's history. To override the history page with your own version, see Override Pages. * Permissions:  "history"
  */
-declare namespace browser.history {
+export namespace history {
     /** An object encapsulating one visit to a URL. */
-    interface VisitItem {
+    export interface VisitItem {
         /** The transition type for this visit from its referrer. */
         transition: string;
         /** Optional. When this visit occurred, represented in milliseconds since the epoch. */
@@ -1575,7 +1577,7 @@ declare namespace browser.history {
     }
 
     /** An object encapsulating one result of a history query. */
-    interface HistoryItem {
+    export interface HistoryItem {
         /** Optional. The number of times the user has navigated to this page by typing in the address. */
         typedCount?: number;
         /** Optional. The title of the page when it was last loaded. */
@@ -1590,7 +1592,7 @@ declare namespace browser.history {
         id: string;
     }
 
-    interface HistoryQuery {
+    export interface HistoryQuery {
         /** A free-text query to the history service. Leave empty to retrieve all pages. */
         text: string;
         /** Optional. The maximum number of results to retrieve. Defaults to 100. */
@@ -1601,28 +1603,28 @@ declare namespace browser.history {
         endTime?: number;
     }
 
-    interface Url {
+    export interface Url {
         /** The URL for the operation. It must be in the format as returned from a call to history.search. */
         url: string;
     }
 
-    interface Range {
+    export interface Range {
         /** Items added to history before this date, represented in milliseconds since the epoch. */
         endTime: number;
         /** Items added to history after this date, represented in milliseconds since the epoch. */
         startTime: number;
     }
 
-    interface RemovedResult {
+    export interface RemovedResult {
         /** True if all history was removed. If true, then urls will be empty. */
         allHistory: boolean;
         /** Optional. */
         urls?: string[];
     }
 
-    interface HistoryVisitedEvent extends events.Event<(result: HistoryItem) => void> { }
+    export interface HistoryVisitedEvent extends events.Event<(result: HistoryItem) => void> { }
 
-    interface HistoryVisitRemovedEvent extends events.Event<(removed: RemovedResult) => void> { }
+    export interface HistoryVisitRemovedEvent extends events.Event<(removed: RemovedResult) => void> { }
 
     /**
      * Searches the history for the last visit time of each page matching the query.
@@ -1650,9 +1652,9 @@ declare namespace browser.history {
     export function deleteUrl(details: Url): Promise<void>;
 
     /** Fired when a URL is visited, providing the HistoryItem data for that URL. This event fires before the page has loaded. */
-    var onVisited: HistoryVisitedEvent;
+    export var onVisited: HistoryVisitedEvent;
     /** Fired when one or more URLs are removed from the history service. When all visits have been removed the URL is purged from history. */
-    var onVisitRemoved: HistoryVisitRemovedEvent;
+    export var onVisitRemoved: HistoryVisitRemovedEvent;
 }
 
 ////////////////////
@@ -1661,9 +1663,9 @@ declare namespace browser.history {
 /**
  * Use the browser.i18n infrastructure to implement internationalization across your whole app or extension.
  */
-declare namespace browser.i18n {
+export namespace i18n {
     /** Holds detected ISO language code and its percentage in the input string */
-    interface DetectedLanguage {
+    export interface DetectedLanguage {
         /** An ISO language code such as 'en' or 'fr'.
          * For a complete list of languages supported by this method, see  [kLanguageInfoTable]{@link https://src.chromium.org/viewvc/browser/trunk/src/third_party/cld/languages/internal/languages.cc}.
          * For an unknown language, 'und' will be returned, which means that [percentage] of the text is unknown to CLD */
@@ -1674,7 +1676,7 @@ declare namespace browser.i18n {
     }
 
     /** Holds detected language reliability and array of DetectedLanguage */
-    interface LanguageDetectionResult {
+    export interface LanguageDetectionResult {
         /** CLD detected language reliability */
         isReliable: boolean;
 
@@ -1711,13 +1713,13 @@ declare namespace browser.i18n {
  * Use the browser.identity API to get OAuth2 access tokens.
  * Permissions:  "identity"
  */
-declare namespace browser.identity {
-    interface AccountInfo {
+export namespace identity {
+    export interface AccountInfo {
         /** A unique identifier for the account. This ID will not change for the lifetime of the account. */
         id: string;
     }
 
-    interface TokenDetails {
+    export interface TokenDetails {
         /**
          * Optional.
          * Fetching a token may require the user to sign-in to Chrome, or approve the application's requested scopes. If the interactive flag is true, getAuthToken will prompt the user as necessary. When the flag is false or omitted, getAuthToken will return failure any time a prompt would be required.
@@ -1737,19 +1739,19 @@ declare namespace browser.identity {
         scopes?: string[];
     }
 
-    interface UserInfo {
+    export interface UserInfo {
         /** An email address for the user account signed into the current profile. Empty if the user is not signed in or the identity.email manifest permission is not specified. */
         email: string;
         /** A unique identifier for the account. This ID will not change for the lifetime of the account. Empty if the user is not signed in or (in M41+) the identity.email manifest permission is not specified. */
         id: string;
     }
 
-    interface TokenInformation {
+    export interface TokenInformation {
         /** The specific token that should be removed from the cache. */
         token: string;
     }
 
-    interface WebAuthFlowOptions {
+    export interface WebAuthFlowOptions {
         /** The URL that initiates the auth flow. */
         url: string;
         /**
@@ -1761,7 +1763,7 @@ declare namespace browser.identity {
         interactive?: boolean;
     }
 
-    interface SignInChangeEvent extends events.Event<(account: AccountInfo, signedIn: boolean) => void> { }
+    export interface SignInChangeEvent extends events.Event<(account: AccountInfo, signedIn: boolean) => void> { }
 
     /**
      * Retrieves a list of AccountInfo objects describing the accounts present on the profile.
@@ -1789,7 +1791,7 @@ declare namespace browser.identity {
     export function removeCachedAuthToken(details: TokenInformation): Promise<void>;
     /**
      * Starts an auth flow at the specified URL.
-     * This method enables auth flows with non-Google identity providers by launching a web view and navigating it to the first URL in the provider's auth flow. When the provider redirects to a URL matching the pattern https://<app-id>.chromiumapp.org/*, the window will close, and the final redirect URL will be passed to the callback function.
+     * This method enables auth flows with non-Google identity providers by launching a web view and navigating it to the first URL in the provider's auth flow. When the provider redirects to a URL matching the pattern https://<app-id>.chromiumapp.org/*, the window will close, and the final redirect URL will be passed to the callback export function.
      * For a good user experience it is important interactive auth flows are initiated by UI in your app explaining what the authorization is for. Failing to do this will cause your users to get authorization requests with no context. In particular, do not launch an interactive auth flow when your app is first launched.
      * @param details WebAuth flow options.
      */
@@ -1804,7 +1806,7 @@ declare namespace browser.identity {
     /**
      * Fired when signin state changes for an account on the user's profile.
      */
-    var onSignInChanged: SignInChangeEvent;
+    export var onSignInChanged: SignInChangeEvent;
 }
 
 ////////////////////
@@ -1814,8 +1816,8 @@ declare namespace browser.identity {
  * Use the browser.idle API to detect when the machine's idle state changes.
  * Permissions:  "idle"
  */
-declare namespace browser.idle {
-    interface IdleStateChangedEvent extends events.Event<(newState: string) => void> { }
+export namespace idle {
+    export interface IdleStateChangedEvent extends events.Event<(newState: string) => void> { }
 
     /**
      * Returns "locked" if the system is locked, "idle" if the user has not generated any input for a specified number of seconds, or "active" otherwise.
@@ -1830,7 +1832,7 @@ declare namespace browser.idle {
     export function setDetectionInterval(intervalInSeconds: number): void;
 
     /** Fired when the system changes to an active, idle or locked state. The event fires with "locked" if the screen is locked or the screensaver activates, "idle" if the system is unlocked and the user has not generated any input for a specified number of seconds, and "active" when the user generates input on an idle system. */
-    var onStateChanged: IdleStateChangedEvent;
+    export var onStateChanged: IdleStateChangedEvent;
 }
 
 ////////////////////
@@ -1840,9 +1842,9 @@ declare namespace browser.idle {
  * The browser.management API provides ways to manage the list of extensions/apps that are installed and running. It is particularly useful for extensions that override the built-in New Tab page.
  * Permissions:  "management"
  */
-declare namespace browser.management {
+export namespace management {
     /** Information about an installed extension, app, or theme. */
-    interface ExtensionInfo {
+    export interface ExtensionInfo {
         /**
          * Optional.
          * A reason the item is disabled.
@@ -1925,14 +1927,14 @@ declare namespace browser.management {
     }
 
     /** Information about an icon belonging to an extension, app, or theme. */
-    interface IconInfo {
+    export interface IconInfo {
         /** The URL for this icon image. To display a grayscale version of the icon (to indicate that an extension is disabled, for example), append ?grayscale=true to the URL. */
         url: string;
         /** A number representing the width and height of the icon. Likely values include (but are not limited to) 128, 48, 24, and 16. */
         size: number;
     }
 
-    interface UninstallOptions {
+    export interface UninstallOptions {
         /**
          * Optional.
          * Whether or not a confirm-uninstall dialog should prompt the user. Defaults to false for self uninstalls. If an extension uninstalls another extension, this parameter is ignored and the dialog is always shown.
@@ -1940,13 +1942,13 @@ declare namespace browser.management {
         showConfirmDialog?: boolean;
     }
 
-    interface ManagementDisabledEvent extends events.Event<(info: ExtensionInfo) => void> { }
+    export interface ManagementDisabledEvent extends events.Event<(info: ExtensionInfo) => void> { }
 
-    interface ManagementUninstalledEvent extends events.Event<(id: string) => void> { }
+    export interface ManagementUninstalledEvent extends events.Event<(id: string) => void> { }
 
-    interface ManagementInstalledEvent extends events.Event<(info: ExtensionInfo) => void> { }
+    export interface ManagementInstalledEvent extends events.Event<(info: ExtensionInfo) => void> { }
 
-    interface ManagementEnabledEvent extends events.Event<(info: ExtensionInfo) => void> { }
+    export interface ManagementEnabledEvent extends events.Event<(info: ExtensionInfo) => void> { }
 
     /**
      * Enables or disables an app or extension.
@@ -1969,7 +1971,7 @@ declare namespace browser.management {
      */
     export function getAll(callback?: (result: ExtensionInfo[]) => void): void;
     /**
-     * Returns a list of permission warnings for the given extension manifest string. Note: This function can be used without requesting the 'management' permission in the manifest.
+     * Returns a list of permission warnings for the given extension manifest string. Note: This export function can be used without requesting the 'management' permission in the manifest.
      * @param manifestStr Extension manifest JSON string.
      */
     export function getPermissionWarningsByManifest(manifestStr: string): Promise<string[]>;
@@ -1985,22 +1987,22 @@ declare namespace browser.management {
     export function uninstall(id: string, options?: UninstallOptions): Promise<void>;
     /**
      * Uninstalls a currently installed app or extension.
-     * @deprecated since Chrome 21. The options parameter was added to this function.
+     * @deprecated since Chrome 21. The options parameter was added to this export function.
      * @param id This should be the id from an item of management.ExtensionInfo.
      */
     export function uninstall(id: string): Promise<void>;
     /**
-     * Returns information about the calling extension, app, or theme. Note: This function can be used without requesting the 'management' permission in the manifest.
+     * Returns information about the calling extension, app, or theme. Note: This export function can be used without requesting the 'management' permission in the manifest.
      */
     export function getSelf(): Promise<ExtensionInfo>;
     /**
      * Uninstalls the calling extension.
-     * Note: This function can be used without requesting the 'management' permission in the manifest.
+     * Note: This export function can be used without requesting the 'management' permission in the manifest.
      */
     export function uninstallSelf(options?: UninstallOptions): Promise<void>;
     /**
      * Uninstalls the calling extension.
-     * Note: This function can be used without requesting the 'management' permission in the manifest.
+     * Note: This export function can be used without requesting the 'management' permission in the manifest.
      */
     export function uninstallSelf(callback?: () => void): void;
     /**
@@ -2010,7 +2012,7 @@ declare namespace browser.management {
     /**
      * Set the launch type of an app.
      * @param id This should be the id from an app item of management.ExtensionInfo.
-     * @param launchType The target launch type. Always check and make sure this launch type is in ExtensionInfo.availableLaunchTypes, because the available launch types vary on different platforms and configurations.
+     * @param launchType The target launch type. Always check and make sure this launch type is in ExtensionInfo.availableLaunchTypes, because the available launch types export vary on different platforms and configurations.
      */
     export function setLaunchType(id: string, launchType: string): Promise<void>;
     /**
@@ -2021,13 +2023,13 @@ declare namespace browser.management {
     export function generateAppForLink(url: string, title: string): Promise<ExtensionInfo>;
 
     /** Fired when an app or extension has been disabled. */
-    var onDisabled: ManagementDisabledEvent;
+    export var onDisabled: ManagementDisabledEvent;
     /** Fired when an app or extension has been uninstalled. */
-    var onUninstalled: ManagementUninstalledEvent;
+    export var onUninstalled: ManagementUninstalledEvent;
     /** Fired when an app or extension has been installed. */
-    var onInstalled: ManagementInstalledEvent;
+    export var onInstalled: ManagementInstalledEvent;
     /** Fired when an app or extension has been enabled. */
-    var onEnabled: ManagementEnabledEvent;
+    export var onEnabled: ManagementEnabledEvent;
 }
 
 ////////////////////
@@ -2038,20 +2040,20 @@ declare namespace browser.management {
  * Use the browser.notifications API to create rich notifications using templates and show these notifications to users in the system tray.
  * Permissions:  "notifications"
  */
-declare namespace browser.notifications {
-    interface ButtonOptions {
+export namespace notifications {
+    export interface ButtonOptions {
         title: string;
         iconUrl?: string;
     }
 
-    interface ItemOptions {
+    export interface ItemOptions {
         /** Title of one item of a list notification. */
         title: string;
         /** Additional details about this item. */
         message: string;
     }
 
-    interface NotificationOptions {
+    export interface NotificationOptions {
         /** Optional. Which type of notification to display. Required for notifications.create method. */
         type?: string;
         /**
@@ -2101,15 +2103,15 @@ declare namespace browser.notifications {
         requireInteraction?: boolean;
     }
 
-    interface NotificationClosedEvent extends events.Event<(notificationId: string, byUser: boolean) => void> { }
+    export interface NotificationClosedEvent extends events.Event<(notificationId: string, byUser: boolean) => void> { }
 
-    interface NotificationClickedEvent extends events.Event<(notificationId: string) => void> { }
+    export interface NotificationClickedEvent extends events.Event<(notificationId: string) => void> { }
 
-    interface NotificationButtonClickedEvent extends events.Event<(notificationId: string, buttonIndex: number) => void> { }
+    export interface NotificationButtonClickedEvent extends events.Event<(notificationId: string, buttonIndex: number) => void> { }
 
-    interface NotificationPermissionLevelChangedEvent extends events.Event<(level: string) => void> { }
+    export interface NotificationPermissionLevelChangedEvent extends events.Event<(level: string) => void> { }
 
-    interface NotificationShowSettingsEvent extends events.Event<() => void> { }
+    export interface NotificationShowSettingsEvent extends events.Event<() => void> { }
 
     /** The notification closed, either by the system or by user action. */
     export var onClosed: NotificationClosedEvent;
@@ -2168,27 +2170,27 @@ declare namespace browser.notifications {
  * The omnibox API allows you to register a keyword with Google Chrome's address bar, which is also known as the omnibox.
  * Manifest:  "omnibox": {...}
  */
-declare namespace browser.omnibox {
+export namespace omnibox {
     /** A suggest result. */
-    interface SuggestResult {
+    export interface SuggestResult {
         /** The text that is put into the URL bar, and that is sent to the extension when the user chooses this entry. */
         content: string;
         /** The text that is displayed in the URL dropdown. Can contain XML-style markup for styling. The supported tags are 'url' (for a literal URL), 'match' (for highlighting text that matched what the user's query), and 'dim' (for dim helper text). The styles can be nested, eg. dimmed match. You must escape the five predefined entities to display them as text: stackoverflow.com/a/1091953/89484 */
         description: string;
     }
 
-    interface Suggestion {
+    export interface Suggestion {
         /** The text that is displayed in the URL dropdown. Can contain XML-style markup for styling. The supported tags are 'url' (for a literal URL), 'match' (for highlighting text that matched what the user's query), and 'dim' (for dim helper text). The styles can be nested, eg. dimmed match. */
         description: string;
     }
 
-    interface OmniboxInputEnteredEvent extends events.Event<(text: string) => void> { }
+    export interface OmniboxInputEnteredEvent extends events.Event<(text: string) => void> { }
 
-    interface OmniboxInputChangedEvent extends events.Event<(text: string, suggest: (suggestResults: SuggestResult[]) => void) => void> { }
+    export interface OmniboxInputChangedEvent extends events.Event<(text: string, suggest: (suggestResults: SuggestResult[]) => void) => void> { }
 
-    interface OmniboxInputStartedEvent extends events.Event<() => void> { }
+    export interface OmniboxInputStartedEvent extends events.Event<() => void> { }
 
-    interface OmniboxInputCancelledEvent extends events.Event<() => void> { }
+    export interface OmniboxInputCancelledEvent extends events.Event<() => void> { }
 
     /**
      * Sets the description and styling for the default suggestion. The default suggestion is the text that is displayed in the first suggestion row underneath the URL bar.
@@ -2197,13 +2199,13 @@ declare namespace browser.omnibox {
     export function setDefaultSuggestion(suggestion: Suggestion): void;
 
     /** User has accepted what is typed into the omnibox. */
-    var onInputEntered: OmniboxInputEnteredEvent;
+    export var onInputEntered: OmniboxInputEnteredEvent;
     /** User has changed what is typed into the omnibox. */
-    var onInputChanged: OmniboxInputChangedEvent;
+    export var onInputChanged: OmniboxInputChangedEvent;
     /** User has started a keyword input session by typing the extension's keyword. This is guaranteed to be sent exactly once per input session, and before any onInputChanged events. */
-    var onInputStarted: OmniboxInputStartedEvent;
+    export var onInputStarted: OmniboxInputStartedEvent;
     /** User has ended the keyword input session without accepting the input. */
-    var onInputCancelled: OmniboxInputCancelledEvent;
+    export var onInputCancelled: OmniboxInputCancelledEvent;
 }
 
 ////////////////////
@@ -2213,29 +2215,29 @@ declare namespace browser.omnibox {
  * Use the browser.pageAction API to put icons inside the address bar. Page actions represent actions that can be taken on the current page, but that aren't applicable to all pages.
  * Manifest:  "page_action": {...}
  */
-declare namespace browser.pageAction {
-    interface PageActionClickedEvent extends events.Event<(tab: tabs.Tab) => void> { }
+export namespace pageAction {
+    export interface PageActionClickedEvent extends events.Event<(tab: tabs.Tab) => void> { }
 
-    interface TitleDetails {
+    export interface TitleDetails {
         /** The id of the tab for which you want to modify the page action. */
         tabId: number;
         /** The tooltip string. */
         title: string;
     }
 
-    interface GetDetails {
+    export interface GetDetails {
         /** Specify the tab to get the title from. */
         tabId: number;
     }
 
-    interface PopupDetails {
+    export interface PopupDetails {
         /** The id of the tab for which you want to modify the page action. */
         tabId: number;
         /** The html file to show in a popup. If set to the empty string (''), no popup is shown. */
         popup: string;
     }
 
-    interface IconDetails {
+    export interface IconDetails {
         /** The id of the tab for which you want to modify the page action. */
         tabId: number;
         /**
@@ -2283,7 +2285,7 @@ declare namespace browser.pageAction {
     export function setIcon(details: IconDetails): Promise<void>;
 
     /** Fired when a page action icon is clicked. This event will not fire if the page action has a popup. */
-    var onClicked: PageActionClickedEvent;
+    export var onClicked: PageActionClickedEvent;
 }
 
 ////////////////////
@@ -2292,8 +2294,8 @@ declare namespace browser.pageAction {
 /**
  * Use the browser.permissions API to request declared optional permissions at run time rather than install time, so users understand why the permissions are needed and grant only those that are necessary.
  */
-declare namespace browser.permissions {
-    interface Permissions {
+export namespace permissions {
+    export interface Permissions {
         /**
          * Optional.
          * List of named permissions (does not include hosts or origins). Anything listed here must appear in the optional_permissions list in the manifest.
@@ -2306,14 +2308,14 @@ declare namespace browser.permissions {
         permissions?: string[];
     }
 
-    interface PermissionsRemovedEvent {
+    export interface PermissionsRemovedEvent {
         /**
          * Parameter permissions: The permissions that have been removed.
          */
         addListener(): Promise<Permissions>;
     }
 
-    interface PermissionsAddedEvent {
+    export interface PermissionsAddedEvent {
         /**
          * Parameter permissions: The newly acquired permissions.
          */
@@ -2342,9 +2344,9 @@ declare namespace browser.permissions {
     export function remove(permissions: Permissions): Promise<boolean>;
 
     /** Fired when access to permissions has been removed from the extension. */
-    var onRemoved: PermissionsRemovedEvent;
+    export var onRemoved: PermissionsRemovedEvent;
     /** Fired when the extension acquires new permissions. */
-    var onAdded: PermissionsAddedEvent;
+    export var onAdded: PermissionsAddedEvent;
 }
 
 ////////////////////
@@ -2355,8 +2357,8 @@ declare namespace browser.permissions {
  * Permissions:  "privacy"
  * The Chrome Privacy Whitepaper gives background detail regarding the features which this API can control.
  */
-declare namespace browser.privacy {
-    interface Services {
+export namespace privacy {
+    export interface Services {
         /** since Chrome 20. */
         spellingServiceEnabled: types.ChromeSetting;
         searchSuggestEnabled: types.ChromeSetting;
@@ -2370,13 +2372,13 @@ declare namespace browser.privacy {
         safeBrowsingExtendedReportingEnabled: types.ChromeSetting;
     }
 
-    interface Network {
+    export interface Network {
         networkPredictionEnabled: types.ChromeSetting;
         webRTCMultipleRoutesEnabled: types.ChromeSetting;
         webRTCNonProxiedUdpEnabled: types.ChromeSetting;
     }
 
-    interface Websites {
+    export interface Websites {
         thirdPartyCookiesAllowed: types.ChromeSetting;
         referrersEnabled: types.ChromeSetting;
         hyperlinkAuditingEnabled: types.ChromeSetting;
@@ -2384,11 +2386,11 @@ declare namespace browser.privacy {
     }
 
     /** Settings that enable or disable features that require third-party network services provided by Google and your default search provider. */
-    var services: Services;
+    export var services: Services;
     /** Settings that influence Chrome's handling of network connections in general. */
-    var network: Network;
+    export var network: Network;
     /** Settings that determine what information Chrome makes available to websites. */
-    var websites: Websites;
+    export var websites: Websites;
 }
 
 ////////////////////
@@ -2398,9 +2400,9 @@ declare namespace browser.privacy {
  * Use the browser.proxy API to manage Chrome's proxy settings. This API relies on the ChromeSetting prototype of the type API for getting and setting the proxy configuration.
  * Permissions:  "proxy"
  */
-declare namespace browser.proxy {
+export namespace proxy {
     /** An object holding proxy auto-config information. Exactly one of the fields should be non-empty. */
-    interface PacScript {
+    export interface PacScript {
         /** Optional. URL of the PAC file to be used. */
         url?: string;
         /** Optional. If true, an invalid PAC script will prevent the network stack from falling back to direct connections. Defaults to false. */
@@ -2410,7 +2412,7 @@ declare namespace browser.proxy {
     }
 
     /** An object encapsulating a complete proxy configuration. */
-    interface ProxyConfig {
+    export interface ProxyConfig {
         /** Optional. The proxy rules describing this configuration. Use this for 'fixed_servers' mode. */
         rules?: ProxyRules;
         /** Optional. The proxy auto-config (PAC) script for this configuration. Use this for 'pac_script' mode. */
@@ -2426,7 +2428,7 @@ declare namespace browser.proxy {
     }
 
     /** An object encapsulating a single proxy server's specification. */
-    interface ProxyServer {
+    export interface ProxyServer {
         /** The URI of the proxy server. This must be an ASCII hostname (in Punycode format). IDNA is not supported, yet. */
         host: string;
         /** Optional. The scheme (protocol) of the proxy server itself. Defaults to 'http'. */
@@ -2436,7 +2438,7 @@ declare namespace browser.proxy {
     }
 
     /** An object encapsulating the set of proxy rules for all protocols. Use either 'singleProxy' or (a subset of) 'proxyForHttp', 'proxyForHttps', 'proxyForFtp' and 'fallbackProxy'. */
-    interface ProxyRules {
+    export interface ProxyRules {
         /** Optional. The proxy server to be used for FTP requests. */
         proxyForFtp?: ProxyServer;
         /** Optional. The proxy server to be used for HTTP requests. */
@@ -2451,7 +2453,7 @@ declare namespace browser.proxy {
         bypassList?: string[];
     }
 
-    interface ErrorDetails {
+    export interface ErrorDetails {
         /** Additional details about the error such as a JavaScript runtime error. */
         details: string;
         /** The error description. */
@@ -2460,11 +2462,11 @@ declare namespace browser.proxy {
         fatal: boolean;
     }
 
-    interface ProxyErrorEvent extends events.Event<(details: ErrorDetails) => void> { }
+    export interface ProxyErrorEvent extends events.Event<(details: ErrorDetails) => void> { }
 
-    var settings: types.ChromeSetting;
+    export var settings: types.ChromeSetting;
     /** Notifies about proxy errors. */
-    var onProxyError: ProxyErrorEvent;
+    export var onProxyError: ProxyErrorEvent;
 }
 
 ////////////////////
@@ -2473,22 +2475,22 @@ declare namespace browser.proxy {
 /**
  * Use the browser.runtime API to retrieve the background page, return details about the manifest, and listen for and respond to events in the app or extension lifecycle. You can also use this API to convert the relative path of URLs to fully-qualified URLs.
  */
-declare namespace browser.runtime {
+export namespace runtime {
     /** This will be defined during an API method callback if there was an error */
-    var lastError: LastError | undefined;
+    export var lastError: LastError | undefined;
     /** The ID of the extension/app. */
-    var id: string;
+    export var id: string;
 
-    interface LastError {
+    export interface LastError {
         /** Optional. Details about the error which occurred.  */
         message?: string;
     }
 
-    interface ConnectInfo {
+    export interface ConnectInfo {
         name?: string;
     }
 
-    interface InstalledDetails {
+    export interface InstalledDetails {
         /**
          * The reason that this event is being dispatched.
          * One of: "install", "update", "chrome_update", or "shared_module_update"
@@ -2506,7 +2508,7 @@ declare namespace browser.runtime {
         id?: string;
     }
 
-    interface MessageOptions {
+    export interface MessageOptions {
         /** Whether the TLS channel ID will be passed into onMessageExternal for processes that are listening for the connection event. */
         includeTlsChannelId?: boolean;
     }
@@ -2514,7 +2516,7 @@ declare namespace browser.runtime {
     /**
      * An object containing information about the script context that sent a message or request.
      */
-    interface MessageSender {
+    export interface MessageSender {
         /** The ID of the extension or app that opened the connection, if any. */
         id?: string;
         /** The tabs.Tab which opened the connection, if any. This property will only be present when the connection was opened from a tab (including content scripts), and only if the receiver is an extension, not an app. */
@@ -2536,7 +2538,7 @@ declare namespace browser.runtime {
     /**
      * An object containing information about the current platform.
      */
-    interface PlatformInfo {
+    export interface PlatformInfo {
         /**
          * The operating system browser is running on.
          * One of: "mac", "win", "android", "cros", "linux", or "openbsd"
@@ -2557,7 +2559,7 @@ declare namespace browser.runtime {
     /**
      * An object which allows two way communication with other pages.
      */
-    interface Port {
+    export interface Port {
         postMessage: (message: Object) => void;
         disconnect: () => void;
         /**
@@ -2572,43 +2574,43 @@ declare namespace browser.runtime {
         name: string;
     }
 
-    interface UpdateAvailableDetails {
+    export interface UpdateAvailableDetails {
         /** The version number of the available update. */
         version: string;
     }
 
-    interface UpdateCheckDetails {
+    export interface UpdateCheckDetails {
         /** The version of the available update. */
         version: string;
     }
 
-    interface PortDisconnectEvent extends events.Event<(port: Port) => void> { }
+    export interface PortDisconnectEvent extends events.Event<(port: Port) => void> { }
 
-    interface PortMessageEvent extends events.Event<(message: Object, port: Port) => void> { }
+    export interface PortMessageEvent extends events.Event<(message: Object, port: Port) => void> { }
 
-    interface ExtensionMessageEvent extends events.Event<(message: any, sender: MessageSender, sendResponse: (response: any) => void) => void> { }
+    export interface ExtensionMessageEvent extends events.Event<(message: any, sender: MessageSender, sendResponse: (response: any) => void) => void> { }
 
-    interface ExtensionConnectEvent extends events.Event<(port: Port) => void> { }
+    export interface ExtensionConnectEvent extends events.Event<(port: Port) => void> { }
 
-    interface RuntimeInstalledEvent extends events.Event<(details: InstalledDetails) => void> { }
+    export interface RuntimeInstalledEvent extends events.Event<(details: InstalledDetails) => void> { }
 
-    interface RuntimeEvent extends events.Event<() => void> { }
+    export interface RuntimeEvent extends events.Event<() => void> { }
 
-    interface RuntimeRestartRequiredEvent extends events.Event<(reason: string) => void> { }
+    export interface RuntimeRestartRequiredEvent extends events.Event<(reason: string) => void> { }
 
-    interface RuntimeUpdateAvailableEvent extends events.Event<(details: UpdateAvailableDetails) => void> { }
+    export interface RuntimeUpdateAvailableEvent extends events.Event<(details: UpdateAvailableDetails) => void> { }
 
-    interface ManifestIcons {
+    export interface ManifestIcons {
         [size: number]: string;
     }
 
-    interface ManifestAction {
+    export interface ManifestAction {
         default_icon?: ManifestIcons;
         default_title?: string;
         default_popup?: string;
     }
 
-    interface SearchProvider {
+    export interface SearchProvider {
         name?: string;
         keyword?: string;
         favicon_url?: string;
@@ -2626,7 +2628,7 @@ declare namespace browser.runtime {
         is_default?: boolean;
     }
 
-    interface PageStateUrlDetails {
+    export interface PageStateUrlDetails {
         /** Optional. Matches if the host name of the URL contains a specified string. To test whether a host name component has a prefix 'foo', use hostContains: '.foo'. This matches 'www.foobar.com' and 'foo.com', because an implicit dot is added at the beginning of the host name. Similarly, hostContains can be used to match against component suffix ('foo.') and to exactly match against components ('.foo.'). Suffix- and exact-matching for the last components need to be done separately using hostSuffix, because no implicit dot is added at the end of the host name.  */
         hostContains?: string;
         /** Optional. Matches if the host name of the URL is equal to a specified string.  */
@@ -2670,7 +2672,7 @@ declare namespace browser.runtime {
     }
 
     class PageStateMatcherProperties {
-        /** Optional. Filters URLs for various criteria. See event filtering. All criteria are case sensitive.  */
+        /** Optional. Filters URLs for export various criteria. See event filtering. All criteria are case sensitive.  */
         pageUrl?: PageStateUrlDetails;
         /** Optional. Matches if all of the CSS selectors in the array match displayed elements in a frame with the same origin as the page's main frame. All selectors in this array must be compound selectors to speed up matching. Note that listing hundreds of CSS selectors or CSS selectors that match hundreds of times per page can still slow down web sites.  */
         css?: string[];
@@ -2682,7 +2684,7 @@ declare namespace browser.runtime {
         isBookmarked?: boolean;
     }
 
-    interface Manifest {
+    export interface Manifest {
         // Required
         manifest_version: number;
         name: string;
@@ -2961,38 +2963,38 @@ declare namespace browser.runtime {
     /**
      * Fired when a connection is made from either an extension process or a content script.
      */
-    var onConnect: ExtensionConnectEvent;
+    export var onConnect: ExtensionConnectEvent;
     /**
      * Fired when a connection is made from another extension.
      */
-    var onConnectExternal: ExtensionConnectEvent;
+    export var onConnectExternal: ExtensionConnectEvent;
     /** Sent to the event page just before it is unloaded. This gives the extension opportunity to do some clean up. Note that since the page is unloading, any asynchronous operations started while handling this event are not guaranteed to complete. If more activity for the event page occurs before it gets unloaded the onSuspendCanceled event will be sent and the page won't be unloaded. */
-    var onSuspend: RuntimeEvent;
+    export var onSuspend: RuntimeEvent;
     /**
      * Fired when a profile that has this extension installed first starts up. This event is not fired when an incognito profile is started, even if this extension is operating in 'split' incognito mode.
      */
-    var onStartup: RuntimeEvent;
+    export var onStartup: RuntimeEvent;
     /** Fired when the extension is first installed, when the extension is updated to a new version, and when Chrome is updated to a new version. */
-    var onInstalled: RuntimeInstalledEvent;
+    export var onInstalled: RuntimeInstalledEvent;
     /** Sent after onSuspend to indicate that the app won't be unloaded after all. */
-    var onSuspendCanceled: RuntimeEvent;
+    export var onSuspendCanceled: RuntimeEvent;
     /**
      * Fired when a message is sent from either an extension process or a content script.
      */
-    var onMessage: ExtensionMessageEvent;
+    export var onMessage: ExtensionMessageEvent;
     /**
      * Fired when a message is sent from another extension/app. Cannot be used in a content script.
      */
-    var onMessageExternal: ExtensionMessageEvent;
+    export var onMessageExternal: ExtensionMessageEvent;
     /**
      * Fired when an update is available, but isn't installed immediately because the app is currently running. If you do nothing, the update will be installed the next time the background page gets unloaded, if you want it to be installed sooner you can explicitly call browser.runtime.reload(). If your extension is using a persistent background page, the background page of course never gets unloaded, so unless you call browser.runtime.reload() manually in response to this event the update will not get installed until the next time browser itself restarts. If no handlers are listening for this event, and your extension has a persistent background page, it behaves as if browser.runtime.reload() is called in response to this event.
      */
-    var onUpdateAvailable: RuntimeUpdateAvailableEvent;
+    export var onUpdateAvailable: RuntimeUpdateAvailableEvent;
     /**
      * @deprecated since Chrome 33. Please use browser.runtime.onRestartRequired.
      * Fired when a Chrome update is available, but isn't installed immediately because a browser restart is required.
      */
-    var onBrowserUpdateAvailable: RuntimeEvent;
+    export var onBrowserUpdateAvailable: RuntimeEvent;
 }
 
 ////////////////////
@@ -3002,8 +3004,8 @@ declare namespace browser.runtime {
  * Use the browser.sessions API to query and restore tabs and windows from a browsing session.
  * Permissions:  "sessions"
  */
-declare namespace browser.sessions {
-    interface Filter {
+export namespace sessions {
+    export interface Filter {
         /**
          * Optional.
          * The maximum number of entries to be fetched in the requested list. Omit this parameter to fetch the maximum number of entries (sessions.MAX_SESSION_RESULTS).
@@ -3011,7 +3013,7 @@ declare namespace browser.sessions {
         maxResults?: number;
     }
 
-    interface Session {
+    export interface Session {
         /** The time when the window or tab was closed or modified, represented in milliseconds since the epoch. */
         lastModified: number;
         /**
@@ -3026,14 +3028,14 @@ declare namespace browser.sessions {
         window?: windows.Window;
     }
 
-    interface Device {
+    export interface Device {
         /** The name of the foreign device. */
         deviceName: string;
         /** A list of open window sessions for the foreign device, sorted from most recently to least recently modified session. */
         sessions: Session[];
     }
 
-    interface SessionChangedEvent extends events.Event<() => void> { }
+    export interface SessionChangedEvent extends events.Event<() => void> { }
 
     /** The maximum number of sessions.Session that will be included in a requested list. */
     export var MAX_SESSION_RESULTS: number;
@@ -3072,7 +3074,7 @@ declare namespace browser.sessions {
  * Use the browser.storage API to store, retrieve, and track changes to user data.
  * Permissions:  "storage"
  */
-declare namespace browser.storage {
+export namespace storage {
     // Non-firefox implementations don't accept all these types
     type StorageValue =
         string |
@@ -3096,18 +3098,18 @@ declare namespace browser.storage {
         StorageArray |
         StorageMap |
         StorageSet;
-    // The Index signature makes casting to/from classes or interfaces a pain.
+    // The Index signature makes casting to/from classes or export interfaces a pain.
     // Custom types are OK.
-    interface StorageObject {
+    export interface StorageObject {
         [key: string]: StorageValue;
     }
-    // These have to be interfaces rather than types to avoid a circular
+    // These have to be export interfaces rather than types to avoid a circular
     // definition of StorageValue
-    interface StorageArray extends Array<StorageValue> { }
-    interface StorageMap extends Map<StorageValue, StorageValue> { }
-    interface StorageSet extends Set<StorageValue> { }
+    export interface StorageArray extends Array<StorageValue> { }
+    export interface StorageMap extends Map<StorageValue, StorageValue> { }
+    export interface StorageSet extends Set<StorageValue> { }
 
-    interface StorageArea {
+    export interface StorageArea {
         /**
          * Gets the amount of space (in bytes) being used by one or more items.
          */
@@ -3124,7 +3126,7 @@ declare namespace browser.storage {
         /**
          * Sets multiple items.
          * @param items An object which gives each key/value pair to update storage with. Any other key/value pairs in storage will not be affected.
-         * Primitive values such as numbers will serialize as expected. Values with a typeof "object" and "function" will typically serialize to {}, with the exception of Array (serializes as expected), Date, and Regex (serialize using their String representation).
+         * Primitive values such as numbers will serialize as expected. Values with a typeof "object" and "export function" will typically serialize to {}, with the exception of Array (serializes as expected), Date, and Regex (serialize using their String representation).
          */
         set(items: Object): Promise<void>;
         /**
@@ -3140,29 +3142,29 @@ declare namespace browser.storage {
         /**
          * Gets one or more items from storage.
          */
-        get(keys: string | string[] | null): Promise<StorageObject>;
-        get<T extends StorageObject>(keys: T): Promise<T>;
+        // get(keys: string | string[] | null): Promise<StorageObject>;
+        // get<T extends StorageObject>(keys: T): Promise<T>;
         /**
          * Gets one or more items from storage.
          * @param keys A single key to get, list of keys to get, or a dictionary specifying default values.
          * An empty list or object will return an empty result object. Pass in null to get the entire contents of storage.
          */
-        get(keys: string | string[] | Object | null, callback: (items: { [key: string]: any }) => void): void;
+        get(keys: string | string[] | Object | null): Promise<{ [key: string]: any }>;
     }
 
-    interface StorageChange {
+    export interface StorageChange {
         /** Optional. The new value of the item, if there is a new value. */
         newValue?: any;
         /** Optional. The old value of the item, if there was an old value. */
         oldValue?: any;
     }
 
-    interface LocalStorageArea extends StorageArea {
+    export interface LocalStorageArea extends StorageArea {
         /** The maximum amount (in bytes) of data that can be stored in local storage, as measured by the JSON stringification of every value plus every key's length. This value will be ignored if the extension has the unlimitedStorage permission. Updates that would cause this limit to be exceeded fail immediately and set runtime.lastError. */
         QUOTA_BYTES: number;
     }
 
-    interface SyncStorageArea extends StorageArea {
+    export interface SyncStorageArea extends StorageArea {
         /** @deprecated since Chrome 40. The storage.sync API no longer has a sustained write operation quota. */
         MAX_SUSTAINED_WRITE_OPERATIONS_PER_MINUTE: number;
         /** The maximum total amount (in bytes) of data that can be stored in sync storage, as measured by the JSON stringification of every value plus every key's length. Updates that would cause this limit to be exceeded fail immediately and set runtime.lastError. */
@@ -3183,20 +3185,20 @@ declare namespace browser.storage {
         MAX_WRITE_OPERATIONS_PER_MINUTE: number;
     }
 
-    interface StorageChangedEvent extends events.Event<(changes: { [key: string]: StorageChange }, areaName: string) => void> { }
+    export interface StorageChangedEvent extends events.Event<(changes: { [key: string]: StorageChange }, areaName: string) => void> { }
 
     /** Items in the local storage area are local to each machine. */
-    var local: LocalStorageArea;
+    export var local: LocalStorageArea;
     /** Items in the sync storage area are synced using Chrome Sync. */
-    var sync: SyncStorageArea;
+    export var sync: SyncStorageArea;
 
     /**
      * Items in the managed storage area are set by the domain administrator, and are read-only for the extension; trying to modify this namespace results in an error.
      */
-    var managed: StorageArea;
+    export var managed: StorageArea;
 
     /** Fired when one or more items change. */
-    var onChanged: StorageChangedEvent;
+    export var onChanged: StorageChangedEvent;
 }
 
 ////////////////////
@@ -3206,11 +3208,11 @@ declare namespace browser.storage {
  * Use the tabs API to interact with the browser's tab system. You can use this API to create, modify, and rearrange tabs in the browser.
  * Permissions: The majority of the tabs API can be used without declaring any permission. However, the "tabs" permission is required in order to populate the url, title, and favIconUrl properties of Tab.
  */
-declare namespace browser.tabs {
+export namespace tabs {
     /**
      * Tab muted state and the reason for the last state change.
      */
-    interface MutedInfo {
+    export interface MutedInfo {
         /** Whether the tab is prevented from playing sound (but hasn't necessarily recently produced sound). Equivalent to whether the muted audio indicator is showing. */
         muted: boolean;
         /**
@@ -3228,7 +3230,7 @@ declare namespace browser.tabs {
         extensionId?: string;
     }
 
-    interface Tab {
+    export interface Tab {
         /**
          * Optional.
          * Either loading or complete.
@@ -3309,7 +3311,7 @@ declare namespace browser.tabs {
     /**
      * Defines how zoom changes in a tab are handled and at what scope.
      */
-    interface ZoomSettings {
+    export interface ZoomSettings {
         /**
          * Optional.
          * Defines how zoom changes are handled, i.e. which entity is responsible for the actual scaling of the page; defaults to "automatic".
@@ -3332,7 +3334,7 @@ declare namespace browser.tabs {
         defaultZoomFactor?: number;
     }
 
-    interface InjectDetails {
+    export interface InjectDetails {
         /**
          * Optional.
          * If allFrames is true, implies that the JavaScript or CSS should be injected into all frames of current page. By default, it's false and is only injected into the top frame.
@@ -3362,7 +3364,7 @@ declare namespace browser.tabs {
         matchAboutBlank?: boolean;
     }
 
-    interface CreateProperties {
+    export interface CreateProperties {
         /** Optional. The position the tab should take in the window. The provided value will be clamped to between zero and the number of tabs in the window. */
         index?: number;
         /**
@@ -3393,14 +3395,14 @@ declare namespace browser.tabs {
         selected?: boolean;
     }
 
-    interface MoveProperties {
+    export interface MoveProperties {
         /** The position to move the window to. -1 will place the tab at the end of the window. */
         index: number;
         /** Optional. Defaults to the window the tab is currently in. */
         windowId?: number;
     }
 
-    interface UpdateProperties {
+    export interface UpdateProperties {
         /**
          * Optional. Whether the tab should be pinned.
          */
@@ -3430,7 +3432,7 @@ declare namespace browser.tabs {
         muted?: boolean;
     }
 
-    interface CaptureVisibleTabOptions {
+    export interface CaptureVisibleTabOptions {
         /**
          * Optional.
          * When format is "jpeg", controls the quality of the resulting image. This value is ignored for PNG images. As quality is decreased, the resulting image will have more visual artifacts, and the number of bytes needed to store it will decrease.
@@ -3443,12 +3445,12 @@ declare namespace browser.tabs {
         format?: string;
     }
 
-    interface ReloadProperties {
+    export interface ReloadProperties {
         /** Optional. Whether using any local cache. Default is false. */
         bypassCache?: boolean;
     }
 
-    interface ConnectInfo {
+    export interface ConnectInfo {
         /** Optional. Will be passed into onConnect for content scripts that are listening for the connection event. */
         name?: string;
         /**
@@ -3457,19 +3459,19 @@ declare namespace browser.tabs {
         frameId?: number;
     }
 
-    interface MessageSendOptions {
+    export interface MessageSendOptions {
         /** Optional. Send a message to a specific frame identified by frameId instead of all frames in the tab. */
         frameId?: number;
     }
 
-    interface HighlightInfo {
+    export interface HighlightInfo {
         /** One or more tab indices to highlight. */
         tabs: number | number[];
         /** Optional. The window that contains the tabs. */
         windowId?: number;
     }
 
-    interface QueryInfo {
+    export interface QueryInfo {
         /**
          * Optional. Whether the tabs have completed loading.
          * One of: "loading", or "complete"
@@ -3514,12 +3516,12 @@ declare namespace browser.tabs {
         muted?: boolean;
     }
 
-    interface TabHighlightInfo {
+    export interface TabHighlightInfo {
         windowId: number;
         tabIds: number[];
     }
 
-    interface TabRemoveInfo {
+    export interface TabRemoveInfo {
         /**
          * The window whose tab is closed.
          */
@@ -3528,12 +3530,12 @@ declare namespace browser.tabs {
         isWindowClosing: boolean;
     }
 
-    interface TabAttachInfo {
+    export interface TabAttachInfo {
         newPosition: number;
         newWindowId: number;
     }
 
-    interface TabChangeInfo {
+    export interface TabChangeInfo {
         /** Optional. The status of the tab. Can be either loading or complete. */
         status?: string;
         /**
@@ -3560,57 +3562,57 @@ declare namespace browser.tabs {
         title?: string;
     }
 
-    interface TabMoveInfo {
+    export interface TabMoveInfo {
         toIndex: number;
         windowId: number;
         fromIndex: number;
     }
 
-    interface TabDetachInfo {
+    export interface TabDetachInfo {
         oldWindowId: number;
         oldPosition: number;
     }
 
-    interface TabActiveInfo {
+    export interface TabActiveInfo {
         /** The ID of the tab that has become active. */
         tabId: number;
         /** The ID of the window the active tab changed inside of. */
         windowId: number;
     }
 
-    interface TabWindowInfo {
+    export interface TabWindowInfo {
         /** The ID of the window of where the tab is located. */
         windowId: number;
     }
 
-    interface ZoomChangeInfo {
+    export interface ZoomChangeInfo {
         tabId: number;
         oldZoomFactor: number;
         newZoomFactor: number;
         zoomSettings: ZoomSettings;
     }
 
-    interface TabHighlightedEvent extends events.Event<(highlightInfo: HighlightInfo) => void> { }
+    export interface TabHighlightedEvent extends events.Event<(highlightInfo: HighlightInfo) => void> { }
 
-    interface TabRemovedEvent extends events.Event<(tabId: number, removeInfo: TabRemoveInfo) => void> { }
+    export interface TabRemovedEvent extends events.Event<(tabId: number, removeInfo: TabRemoveInfo) => void> { }
 
-    interface TabUpdatedEvent extends events.Event<(tabId: number, changeInfo: TabChangeInfo, tab: Tab) => void> { }
+    export interface TabUpdatedEvent extends events.Event<(tabId: number, changeInfo: TabChangeInfo, tab: Tab) => void> { }
 
-    interface TabAttachedEvent extends events.Event<(tabId: number, attachInfo: TabAttachInfo) => void> { }
+    export interface TabAttachedEvent extends events.Event<(tabId: number, attachInfo: TabAttachInfo) => void> { }
 
-    interface TabMovedEvent extends events.Event<(tabId: number, moveInfo: TabMoveInfo) => void> { }
+    export interface TabMovedEvent extends events.Event<(tabId: number, moveInfo: TabMoveInfo) => void> { }
 
-    interface TabDetachedEvent extends events.Event<(tabId: number, detachInfo: TabDetachInfo) => void> { }
+    export interface TabDetachedEvent extends events.Event<(tabId: number, detachInfo: TabDetachInfo) => void> { }
 
-    interface TabCreatedEvent extends events.Event<(tab: Tab) => void> { }
+    export interface TabCreatedEvent extends events.Event<(tab: Tab) => void> { }
 
-    interface TabActivatedEvent extends events.Event<(activeInfo: TabActiveInfo) => void> { }
+    export interface TabActivatedEvent extends events.Event<(activeInfo: TabActiveInfo) => void> { }
 
-    interface TabReplacedEvent extends events.Event<(addedTabId: number, removedTabId: number) => void> { }
+    export interface TabReplacedEvent extends events.Event<(addedTabId: number, removedTabId: number) => void> { }
 
-    interface TabSelectedEvent extends events.Event<(tabId: number, selectInfo: TabWindowInfo) => void> { }
+    export interface TabSelectedEvent extends events.Event<(tabId: number, selectInfo: TabWindowInfo) => void> { }
 
-    interface TabZoomChangeEvent extends events.Event<(ZoomChangeInfo: ZoomChangeInfo) => void> { }
+    export interface TabZoomChangeEvent extends events.Event<(ZoomChangeInfo: ZoomChangeInfo) => void> { }
 
     /**
      * Injects JavaScript code into a page. For details, see the programmatic injection section of the content scripts doc.
@@ -3733,7 +3735,7 @@ declare namespace browser.tabs {
      */
     export function sendRequest(tabId: number, request: any): Promise<any>;
     /** Connects to the content script(s) in the specified tab. The runtime.onConnect event is fired in each content script running in the specified tab for the current extension. */
-    export function connect(tabId: number, connectInfo?: ConnectInfo): browser.runtime.Port;
+    export function connect(tabId: number, connectInfo?: ConnectInfo): runtime.Port;
     /**
      * Injects CSS into a page. For details, see the programmatic injection section of the content scripts doc.
      * @param details Details of the script or CSS to inject. Either the code or the file property must be set, but both may not be set at the same time.
@@ -3808,53 +3810,53 @@ declare namespace browser.tabs {
     /**
      * Fired when the highlighted or selected tabs in a window changes.
      */
-    var onHighlighted: TabHighlightedEvent;
+    export var onHighlighted: TabHighlightedEvent;
     /** Fired when a tab is closed. */
-    var onRemoved: TabRemovedEvent;
+    export var onRemoved: TabRemovedEvent;
     /** Fired when a tab is updated. */
-    var onUpdated: TabUpdatedEvent;
+    export var onUpdated: TabUpdatedEvent;
     /** Fired when a tab is attached to a window, for example because it was moved between windows. */
-    var onAttached: TabAttachedEvent;
+    export var onAttached: TabAttachedEvent;
     /**
      * Fired when a tab is moved within a window. Only one move event is fired, representing the tab the user directly moved. Move events are not fired for the other tabs that must move in response. This event is not fired when a tab is moved between windows. For that, see tabs.onDetached.
      */
-    var onMoved: TabMovedEvent;
+    export var onMoved: TabMovedEvent;
     /** Fired when a tab is detached from a window, for example because it is being moved between windows. */
-    var onDetached: TabDetachedEvent;
+    export var onDetached: TabDetachedEvent;
     /** Fired when a tab is created. Note that the tab's URL may not be set at the time this event fired, but you can listen to onUpdated events to be notified when a URL is set. */
-    var onCreated: TabCreatedEvent;
+    export var onCreated: TabCreatedEvent;
     /**
      * Fires when the active tab in a window changes. Note that the tab's URL may not be set at the time this event fired, but you can listen to onUpdated events to be notified when a URL is set.
      */
-    var onActivated: TabActivatedEvent;
+    export var onActivated: TabActivatedEvent;
     /**
      * Fired when a tab is replaced with another tab due to prerendering or instant.
      */
-    var onReplaced: TabReplacedEvent;
+    export var onReplaced: TabReplacedEvent;
     /**
      * @deprecated since Chrome 33. Please use tabs.onActivated.
      * Fires when the selected tab in a window changes.
      */
-    var onSelectionChanged: TabSelectedEvent;
+    export var onSelectionChanged: TabSelectedEvent;
     /**
      * @deprecated since Chrome 33. Please use tabs.onActivated.
      * Fires when the selected tab in a window changes. Note that the tab's URL may not be set at the time this event fired, but you can listen to tabs.onUpdated events to be notified when a URL is set.
      */
-    var onActiveChanged: TabSelectedEvent;
+    export var onActiveChanged: TabSelectedEvent;
     /**
      * @deprecated since Chrome 33. Please use tabs.onHighlighted.
      * Fired when the highlighted or selected tabs in a window changes.
      */
-    var onHighlightChanged: TabHighlightedEvent;
+    export var onHighlightChanged: TabHighlightedEvent;
     /**
      * Fired when a tab is zoomed.
      */
-    var onZoomChange: TabZoomChangeEvent;
+    export var onZoomChange: TabZoomChangeEvent;
 
     /**
      * An ID which represents the absence of a browser tab.
      */
-    var TAB_ID_NONE: -1;
+    export var TAB_ID_NONE: -1;
 }
 
 ////////////////////
@@ -3863,8 +3865,8 @@ declare namespace browser.tabs {
 /**
  * The types API contains type declarations for Chrome.
  */
-declare namespace browser.types {
-    interface ChromeSettingClearDetails {
+export namespace types {
+    export interface ChromeSettingClearDetails {
         /**
          * Optional.
          * The scope of the ChromeSetting. One of
@@ -3876,7 +3878,7 @@ declare namespace browser.types {
         scope?: string;
     }
 
-    interface ChromeSettingSetDetails extends ChromeSettingClearDetails {
+    export interface ChromeSettingSetDetails extends ChromeSettingClearDetails {
         /**
          * The value of the setting.
          * Note that every setting has a specific value type, which is described together with the setting. An extension should not set a value of a different type.
@@ -3893,7 +3895,7 @@ declare namespace browser.types {
         scope?: string;
     }
 
-    interface ChromeSettingGetDetails {
+    export interface ChromeSettingGetDetails {
         /** Optional. Whether to return the value that applies to the incognito session (default false). */
         incognito?: boolean;
     }
@@ -3903,7 +3905,7 @@ declare namespace browser.types {
      */
     type DetailsCallback = (details: ChromeSettingGetResultDetails) => void;
 
-    interface ChromeSettingGetResultDetails {
+    export interface ChromeSettingGetResultDetails {
         /**
          * One of
          * • not_controllable: cannot be controlled by any extension
@@ -3922,10 +3924,10 @@ declare namespace browser.types {
         incognitoSpecific?: boolean;
     }
 
-    interface ChromeSettingChangedEvent extends events.Event<DetailsCallback> { }
+    export interface ChromeSettingChangedEvent extends events.Event<DetailsCallback> { }
 
-    /** An interface that allows access to a Chrome browser setting. See accessibilityFeatures for an example. */
-    interface ChromeSetting {
+    /** An export interface that allows access to a Chrome browser setting. See accessibilityFeatures for an example. */
+    export interface ChromeSetting {
         /**
          * Sets the value of a setting.
          * @param details Which setting to change.
@@ -3953,8 +3955,8 @@ declare namespace browser.types {
  * Use the browser.webNavigation API to receive notifications about the status of navigation requests in-flight.
  * Permissions:  "webNavigation"
  */
-declare namespace browser.webNavigation {
-    interface GetFrameDetails {
+export namespace webNavigation {
+    export interface GetFrameDetails {
         /**
          * The ID of the process runs the renderer for this tab.
          * @deprecated since Chrome 49. Frames are now uniquely identified by their tab ID and frame ID; the process ID is no longer needed and therefore ignored.
@@ -3966,7 +3968,7 @@ declare namespace browser.webNavigation {
         frameId: number;
     }
 
-    interface GetFrameResultDetails {
+    export interface GetFrameResultDetails {
         /** The URL currently associated with this frame, if the frame identified by the frameId existed at one point in the given tab. The fact that an URL is associated with a given frameId does not imply that the corresponding frame still exists. */
         url: string;
         /** True if the last navigation in this frame was interrupted by an error, i.e. the onErrorOccurred event fired. */
@@ -3975,35 +3977,35 @@ declare namespace browser.webNavigation {
         parentFrameId: number;
     }
 
-    interface GetAllFrameDetails {
+    export interface GetAllFrameDetails {
         /** The ID of the tab. */
         tabId: number;
     }
 
-    interface GetAllFrameResultDetails extends GetFrameResultDetails {
+    export interface GetAllFrameResultDetails extends GetFrameResultDetails {
         /** The ID of the process runs the renderer for this tab. */
         processId: number;
         /** The ID of the frame. 0 indicates that this is the main frame; a positive value indicates the ID of a subframe. */
         frameId: number;
     }
 
-    interface WebNavigationCallbackDetails {
+    export interface WebNavigationCallbackDetails {
         /** The ID of the tab in which the navigation is about to occur. */
         tabId: number;
         /** The time when the browser was about to start the navigation, in milliseconds since the epoch. */
         timeStamp: number;
     }
 
-    interface WebNavigationUrlCallbackDetails extends WebNavigationCallbackDetails {
+    export interface WebNavigationUrlCallbackDetails extends WebNavigationCallbackDetails {
         url: string;
     }
 
-    interface WebNavigationReplacementCallbackDetails extends WebNavigationCallbackDetails {
+    export interface WebNavigationReplacementCallbackDetails extends WebNavigationCallbackDetails {
         /** The ID of the tab that was replaced. */
         replacedTabId: number;
     }
 
-    interface WebNavigationFramedCallbackDetails extends WebNavigationUrlCallbackDetails {
+    export interface WebNavigationFramedCallbackDetails extends WebNavigationUrlCallbackDetails {
         /** 0 indicates the navigation happens in the tab content window; a positive value indicates navigation in a subframe. Frame IDs are unique for a given tab and process. */
         frameId: number;
         /**
@@ -4012,12 +4014,12 @@ declare namespace browser.webNavigation {
         processId: number;
     }
 
-    interface WebNavigationFramedErrorCallbackDetails extends WebNavigationFramedCallbackDetails {
+    export interface WebNavigationFramedErrorCallbackDetails extends WebNavigationFramedCallbackDetails {
         /** The error description. */
         error: string;
     }
 
-    interface WebNavigationSourceCallbackDetails extends WebNavigationUrlCallbackDetails {
+    export interface WebNavigationSourceCallbackDetails extends WebNavigationUrlCallbackDetails {
         /** The ID of the tab in which the navigation is triggered. */
         sourceTabId: number;
         /**
@@ -4028,14 +4030,14 @@ declare namespace browser.webNavigation {
         sourceFrameId: number;
     }
 
-    interface WebNavigationParentedCallbackDetails extends WebNavigationFramedCallbackDetails {
+    export interface WebNavigationParentedCallbackDetails extends WebNavigationFramedCallbackDetails {
         /**
          * ID of frame that wraps the frame. Set to -1 of no parent frame exists.
          */
         parentFrameId: number;
     }
 
-    interface WebNavigationTransitionCallbackDetails extends WebNavigationFramedCallbackDetails {
+    export interface WebNavigationTransitionCallbackDetails extends WebNavigationFramedCallbackDetails {
         /**
          * Cause of the navigation.
          * One of: "link", "typed", "auto_bookmark", "auto_subframe", "manual_subframe", "generated", "start_page", "form_submit", "reload", "keyword", or "keyword_generated"
@@ -4048,26 +4050,26 @@ declare namespace browser.webNavigation {
         transitionQualifiers: string[];
     }
 
-    interface WebNavigationEventFilter {
+    export interface WebNavigationEventFilter {
         /** Conditions that the URL being navigated to must satisfy. The 'schemes' and 'ports' fields of UrlFilter are ignored for this event. */
         url: events.UrlFilter[];
     }
 
-    interface WebNavigationEvent<T extends WebNavigationCallbackDetails> extends events.Event<(details: T) => void> {
+    export interface WebNavigationEvent<T extends WebNavigationCallbackDetails> extends events.Event<(details: T) => void> {
         addListener(callback: (details: T) => void, filters?: WebNavigationEventFilter): void;
     }
 
-    interface WebNavigationFramedEvent extends WebNavigationEvent<WebNavigationFramedCallbackDetails> { }
+    export interface WebNavigationFramedEvent extends WebNavigationEvent<WebNavigationFramedCallbackDetails> { }
 
-    interface WebNavigationFramedErrorEvent extends WebNavigationEvent<WebNavigationFramedErrorCallbackDetails> { }
+    export interface WebNavigationFramedErrorEvent extends WebNavigationEvent<WebNavigationFramedErrorCallbackDetails> { }
 
-    interface WebNavigationSourceEvent extends WebNavigationEvent<WebNavigationSourceCallbackDetails> { }
+    export interface WebNavigationSourceEvent extends WebNavigationEvent<WebNavigationSourceCallbackDetails> { }
 
-    interface WebNavigationParentedEvent extends WebNavigationEvent<WebNavigationParentedCallbackDetails> { }
+    export interface WebNavigationParentedEvent extends WebNavigationEvent<WebNavigationParentedCallbackDetails> { }
 
-    interface WebNavigationTransitionalEvent extends WebNavigationEvent<WebNavigationTransitionCallbackDetails> { }
+    export interface WebNavigationTransitionalEvent extends WebNavigationEvent<WebNavigationTransitionCallbackDetails> { }
 
-    interface WebNavigationReplacementEvent extends WebNavigationEvent<WebNavigationReplacementCallbackDetails> { }
+    export interface WebNavigationReplacementEvent extends WebNavigationEvent<WebNavigationReplacementCallbackDetails> { }
 
     /**
      * Retrieves information about the given frame. A frame refers to an <iframe> or a <frame> of a web page and is identified by a tab ID and a frame ID.
@@ -4085,27 +4087,27 @@ declare namespace browser.webNavigation {
     export function getAllFrames(details: GetAllFrameDetails, callback: (details: GetAllFrameResultDetails[] | null) => void): void;
 
     /** Fired when the reference fragment of a frame was updated. All future events for that frame will use the updated URL. */
-    var onReferenceFragmentUpdated: WebNavigationTransitionalEvent;
+    export var onReferenceFragmentUpdated: WebNavigationTransitionalEvent;
     /** Fired when a document, including the resources it refers to, is completely loaded and initialized. */
-    var onCompleted: WebNavigationFramedEvent;
+    export var onCompleted: WebNavigationFramedEvent;
     /**
      * Fired when the frame's history was updated to a new URL. All future events for that frame will use the updated URL.
      */
-    var onHistoryStateUpdated: WebNavigationTransitionalEvent;
+    export var onHistoryStateUpdated: WebNavigationTransitionalEvent;
     /** Fired when a new window, or a new tab in an existing window, is created to host a navigation. */
-    var onCreatedNavigationTarget: WebNavigationSourceEvent;
+    export var onCreatedNavigationTarget: WebNavigationSourceEvent;
     /**
      * Fired when the contents of the tab is replaced by a different (usually previously pre-rendered) tab.
      */
-    var onTabReplaced: WebNavigationReplacementEvent;
+    export var onTabReplaced: WebNavigationReplacementEvent;
     /** Fired when a navigation is about to occur. */
-    var onBeforeNavigate: WebNavigationParentedEvent;
+    export var onBeforeNavigate: WebNavigationParentedEvent;
     /** Fired when a navigation is committed. The document (and the resources it refers to, such as images and subframes) might still be downloading, but at least part of the document has been received from the server and the browser has decided to switch to the new document. */
-    var onCommitted: WebNavigationTransitionalEvent;
+    export var onCommitted: WebNavigationTransitionalEvent;
     /** Fired when the page's DOM is fully constructed, but the referenced resources may not finish loading. */
-    var onDOMContentLoaded: WebNavigationFramedEvent;
+    export var onDOMContentLoaded: WebNavigationFramedEvent;
     /** Fired when an error occurs and the navigation is aborted. This can happen if either a network error occurred, or the user aborted the navigation. */
-    var onErrorOccurred: WebNavigationFramedErrorEvent;
+    export var onErrorOccurred: WebNavigationFramedErrorEvent;
 }
 
 ////////////////////
@@ -4115,21 +4117,21 @@ declare namespace browser.webNavigation {
  * Use the browser.webRequest API to observe and analyze traffic and to intercept, block, or modify requests in-flight.
  * Permissions:  "webRequest", host permissions
  */
-declare namespace browser.webRequest {
-    interface AuthCredentials {
+export namespace webRequest {
+    export interface AuthCredentials {
         username: string;
         password: string;
     }
 
     /** An HTTP Header, represented as an object containing a key and either a value or a binaryValue. */
-    interface HttpHeader {
+    export interface HttpHeader {
         name: string;
         value?: string;
         binaryValue?: ArrayBuffer;
     }
 
     /** Returns value for event handlers that have the 'blocking' extraInfoSpec applied. Allows the event handler to modify network requests. */
-    interface BlockingResponse {
+    export interface BlockingResponse {
         /** Optional. If true, the request is cancelled. Used in onBeforeRequest, this prevents the request from being sent. */
         cancel?: boolean;
         /**
@@ -4152,7 +4154,7 @@ declare namespace browser.webRequest {
     }
 
     /** An object describing filters to apply to webRequest events. */
-    interface RequestFilter {
+    export interface RequestFilter {
         /** Optional. */
         tabId?: number;
         /**
@@ -4170,14 +4172,14 @@ declare namespace browser.webRequest {
     /**
      * Contains data uploaded in a URL request.
      */
-    interface UploadData {
+    export interface UploadData {
         /** Optional. An ArrayBuffer with a copy of the data. */
         bytes?: ArrayBuffer;
         /** Optional. A string with the file's path and name. */
         file?: string;
     }
 
-    interface WebRequestBody {
+    export interface WebRequestBody {
         /** Optional. Errors when obtaining request body data. */
         error?: string;
         /**
@@ -4192,12 +4194,12 @@ declare namespace browser.webRequest {
         raw?: UploadData[];
     }
 
-    interface WebAuthChallenger {
+    export interface WebAuthChallenger {
         host: string;
         port: number;
     }
 
-    interface ResourceRequest {
+    export interface ResourceRequest {
         url: string;
         /** The ID of the request. Request IDs are unique within a browser session. As a result, they could be used to relate different events of the same request. */
         requestId: string;
@@ -4216,27 +4218,27 @@ declare namespace browser.webRequest {
         timeStamp: number;
     }
 
-    interface WebRequestDetails extends ResourceRequest {
+    export interface WebRequestDetails extends ResourceRequest {
         /** Standard HTTP method. */
         method: string;
     }
 
-    interface WebRequestHeadersDetails extends WebRequestDetails {
+    export interface WebRequestHeadersDetails extends WebRequestDetails {
         /** Optional. The HTTP request headers that are going to be sent out with this request. */
         requestHeaders?: HttpHeader[];
     }
 
-    interface WebRequestBodyDetails extends WebRequestDetails {
+    export interface WebRequestBodyDetails extends WebRequestDetails {
         /**
          * Contains the HTTP request body data. Only provided if extraInfoSpec contains 'requestBody'.
          */
         requestBody: WebRequestBody;
     }
 
-    interface WebRequestFullDetails extends WebRequestHeadersDetails, WebRequestBodyDetails {
+    export interface WebRequestFullDetails extends WebRequestHeadersDetails, WebRequestBodyDetails {
     }
 
-    interface WebResponseDetails extends ResourceRequest {
+    export interface WebResponseDetails extends ResourceRequest {
         /** HTTP status line of the response or the 'HTTP/0.9 200 OK' string for HTTP/0.9 responses (i.e., responses that lack a status line). */
         statusLine: string;
         /**
@@ -4245,13 +4247,13 @@ declare namespace browser.webRequest {
         statusCode: number;
     }
 
-    interface WebResponseHeadersDetails extends WebResponseDetails {
+    export interface WebResponseHeadersDetails extends WebResponseDetails {
         /** Optional. The HTTP response headers that have been received with this response. */
         responseHeaders?: HttpHeader[];
         method: string; /** standard HTTP method i.e. GET, POST, PUT, etc. */
     }
 
-    interface WebResponseCacheDetails extends WebResponseHeadersDetails {
+    export interface WebResponseCacheDetails extends WebResponseHeadersDetails {
         /**
          * Optional.
          * The server IP address that the request was actually sent to. Note that it may be a literal IPv6 address.
@@ -4261,12 +4263,12 @@ declare namespace browser.webRequest {
         fromCache: boolean;
     }
 
-    interface WebRedirectionResponseDetails extends WebResponseCacheDetails {
+    export interface WebRedirectionResponseDetails extends WebResponseCacheDetails {
         /** The new URL. */
         redirectUrl: string;
     }
 
-    interface WebAuthenticationChallengeDetails extends WebResponseHeadersDetails {
+    export interface WebAuthenticationChallengeDetails extends WebResponseHeadersDetails {
         /** The authentication scheme, e.g. Basic or Digest. */
         scheme: string;
         /** The authentication realm provided by the server, if there is one. */
@@ -4277,61 +4279,61 @@ declare namespace browser.webRequest {
         isProxy: boolean;
     }
 
-    interface WebResponseErrorDetails extends WebResponseCacheDetails {
+    export interface WebResponseErrorDetails extends WebResponseCacheDetails {
         /** The error description. This string is not guaranteed to remain backwards compatible between releases. You must not parse and act based upon its content. */
         error: string;
     }
 
-    interface WebRequestBodyEvent extends events.Event<(details: WebRequestBodyDetails) => void> {
+    export interface WebRequestBodyEvent extends events.Event<(details: WebRequestBodyDetails) => void> {
         addListener(callback: (details: WebRequestBodyDetails) => void, filter?: RequestFilter, opt_extraInfoSpec?: string[]): void;
     }
 
-    interface WebRequestHeadersEvent extends events.Event<(details: WebRequestHeadersDetails) => void> {
+    export interface WebRequestHeadersEvent extends events.Event<(details: WebRequestHeadersDetails) => void> {
         addListener(callback: (details: WebRequestHeadersDetails) => void, filter?: RequestFilter, opt_extraInfoSpec?: string[]): void;
     }
 
-    interface _WebResponseHeadersEvent<T extends WebResponseHeadersDetails> extends events.Event<(details: T) => void> {
+    export interface _WebResponseHeadersEvent<T extends WebResponseHeadersDetails> extends events.Event<(details: T) => void> {
         addListener(callback: (details: T) => void, filter?: RequestFilter, opt_extraInfoSpec?: string[]): void;
     }
 
-    interface WebResponseHeadersEvent extends _WebResponseHeadersEvent<WebResponseHeadersDetails> { }
+    export interface WebResponseHeadersEvent extends _WebResponseHeadersEvent<WebResponseHeadersDetails> { }
 
-    interface WebResponseCacheEvent extends _WebResponseHeadersEvent<WebResponseCacheDetails> { }
+    export interface WebResponseCacheEvent extends _WebResponseHeadersEvent<WebResponseCacheDetails> { }
 
-    interface WebRedirectionResponseEvent extends _WebResponseHeadersEvent<WebRedirectionResponseDetails> { }
+    export interface WebRedirectionResponseEvent extends _WebResponseHeadersEvent<WebRedirectionResponseDetails> { }
 
-    interface WebAuthenticationChallengeEvent extends events.Event<(details: WebAuthenticationChallengeDetails, callback?: (response: BlockingResponse) => void) => void> {
+    export interface WebAuthenticationChallengeEvent extends events.Event<(details: WebAuthenticationChallengeDetails, callback?: (response: BlockingResponse) => void) => void> {
         addListener(callback: (details: WebAuthenticationChallengeDetails, callback?: (response: BlockingResponse) => void) => void, filter?: RequestFilter, opt_extraInfoSpec?: string[]): void;
     }
 
-    interface WebResponseErrorEvent extends _WebResponseHeadersEvent<WebResponseErrorDetails> { }
+    export interface WebResponseErrorEvent extends _WebResponseHeadersEvent<WebResponseErrorDetails> { }
 
     /**
-     * The maximum number of times that handlerBehaviorChanged can be called per 10 minute sustained interval. handlerBehaviorChanged is an expensive function call that shouldn't be called often.
+     * The maximum number of times that handlerBehaviorChanged can be called per 10 minute sustained interval. handlerBehaviorChanged is an expensive export function call that shouldn't be called often.
      */
-    var MAX_HANDLER_BEHAVIOR_CHANGED_CALLS_PER_10_MINUTES: number;
+    export var MAX_HANDLER_BEHAVIOR_CHANGED_CALLS_PER_10_MINUTES: number;
 
-    /** Needs to be called when the behavior of the webRequest handlers has changed to prevent incorrect handling due to caching. This function call is expensive. Don't call it often. */
+    /** Needs to be called when the behavior of the webRequest handlers has changed to prevent incorrect handling due to caching. This export function call is expensive. Don't call it often. */
     export function handlerBehaviorChanged(callback?: Function): void;
 
     /** Fired when a request is about to occur. */
-    var onBeforeRequest: WebRequestBodyEvent;
+    export var onBeforeRequest: WebRequestBodyEvent;
     /** Fired before sending an HTTP request, once the request headers are available. This may occur after a TCP connection is made to the server, but before any HTTP data is sent. */
-    var onBeforeSendHeaders: WebRequestHeadersEvent;
+    export var onBeforeSendHeaders: WebRequestHeadersEvent;
     /** Fired just before a request is going to be sent to the server (modifications of previous onBeforeSendHeaders callbacks are visible by the time onSendHeaders is fired). */
-    var onSendHeaders: WebRequestHeadersEvent;
+    export var onSendHeaders: WebRequestHeadersEvent;
     /** Fired when HTTP response headers of a request have been received. */
-    var onHeadersReceived: WebResponseHeadersEvent;
+    export var onHeadersReceived: WebResponseHeadersEvent;
     /** Fired when an authentication failure is received. The listener has three options: it can provide authentication credentials, it can cancel the request and display the error page, or it can take no action on the challenge. If bad user credentials are provided, this may be called multiple times for the same request. */
-    var onAuthRequired: WebAuthenticationChallengeEvent;
+    export var onAuthRequired: WebAuthenticationChallengeEvent;
     /** Fired when the first byte of the response body is received. For HTTP requests, this means that the status line and response headers are available. */
-    var onResponseStarted: WebResponseCacheEvent;
+    export var onResponseStarted: WebResponseCacheEvent;
     /** Fired when a server-initiated redirect is about to occur. */
-    var onBeforeRedirect: WebRedirectionResponseEvent;
+    export var onBeforeRedirect: WebRedirectionResponseEvent;
     /** Fired when a request is completed. */
-    var onCompleted: WebResponseCacheEvent;
+    export var onCompleted: WebResponseCacheEvent;
     /** Fired when an error occurs. */
-    var onErrorOccurred: WebResponseErrorEvent;
+    export var onErrorOccurred: WebResponseErrorEvent;
 }
 
 ////////////////////
@@ -4341,8 +4343,8 @@ declare namespace browser.webRequest {
  * Use the windows API to interact with browser windows. You can use this API to create, modify, and rearrange windows in the browser.
  * Permissions: The windows API can be used without declaring any permission. However, the "tabs" permission is required in order to populate the url, title, and favIconUrl properties of Tab objects.
  */
-declare namespace browser.windows {
-    interface Window {
+export namespace windows {
+    export interface Window {
         /** Array of tabs.Tab objects representing the current tabs in the window. */
         tabs?: tabs.Tab[];
         /** Optional. The offset of the window from the top edge of the screen in pixels. Under some circumstances a Window may not be assigned top property, for example when querying closed windows from the sessions API. */
@@ -4379,7 +4381,7 @@ declare namespace browser.windows {
         sessionId?: string;
     }
 
-    interface GetInfo {
+    export interface GetInfo {
         /**
          * Optional.
          * If true, the windows.Window object will have a tabs property that contains a list of the tabs.Tab objects. The Tab objects only contain the url, title and favIconUrl properties if the extension's manifest file includes the "tabs" permission.
@@ -4392,7 +4394,7 @@ declare namespace browser.windows {
         windowTypes?: string[];
     }
 
-    interface CreateData {
+    export interface CreateData {
         /**
          * Optional. The id of the tab for which you want to adopt to the new window.
          */
@@ -4440,7 +4442,7 @@ declare namespace browser.windows {
         state?: string;
     }
 
-    interface UpdateInfo {
+    export interface UpdateInfo {
         /** Optional. The offset from the top edge of the screen to move the window to in pixels. This value is ignored for panels. */
         top?: number;
         /**
@@ -4464,7 +4466,7 @@ declare namespace browser.windows {
         left?: number;
     }
 
-    interface WindowEventFilter {
+    export interface WindowEventFilter {
         /**
          * Conditions that the window's type being created must satisfy. By default it will satisfy ['app', 'normal', 'panel', 'popup'], with 'app' and 'panel' window types limited to the extension's own windows.
          * Each one of: "normal", "popup", "panel", "app", or "devtools"
@@ -4472,18 +4474,18 @@ declare namespace browser.windows {
         windowTypes: string[];
     }
 
-    interface WindowIdEvent extends events.Event<(windowId: number, filters?: WindowEventFilter) => void> { }
+    export interface WindowIdEvent extends events.Event<(windowId: number, filters?: WindowEventFilter) => void> { }
 
-    interface WindowReferenceEvent extends events.Event<(window: Window, filters?: WindowEventFilter) => void> { }
+    export interface WindowReferenceEvent extends events.Event<(window: Window, filters?: WindowEventFilter) => void> { }
 
     /**
      * The windowId value that represents the current window.
      */
-    var WINDOW_ID_CURRENT: number;
+    export var WINDOW_ID_CURRENT: number;
     /**
      * The windowId value that represents the absence of a browser browser window.
      */
-    var WINDOW_ID_NONE: number;
+    export var WINDOW_ID_NONE: number;
 
     /** Gets details about a window. */
     export function get(windowId: number, callback: (window: windows.Window) => void): void;
@@ -4529,12 +4531,14 @@ declare namespace browser.windows {
     export function getLastFocused(getInfo: GetInfo, callback: (window: windows.Window) => void): void;
 
     /** Fired when a window is removed (closed). */
-    var onRemoved: WindowIdEvent;
+    export var onRemoved: WindowIdEvent;
     /** Fired when a window is created. */
-    var onCreated: WindowReferenceEvent;
+    export var onCreated: WindowReferenceEvent;
     /**
      * Fired when the currently focused window changes. Will be windows.WINDOW_ID_NONE if all browser windows have lost focus.
      * Note: On some Linux window managers, WINDOW_ID_NONE will always be sent immediately preceding a switch from one browser window to another.
      */
-    var onFocusChanged: WindowIdEvent;
+    export var onFocusChanged: WindowIdEvent;
+}
+
 }

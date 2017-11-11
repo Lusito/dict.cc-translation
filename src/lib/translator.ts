@@ -6,6 +6,7 @@
 
 // This file is used to run translations as the user configured it
 
+import * as browser from 'webextension-polyfill';
 import { settings } from "./settings";
 import * as request from "./request";
 import { synPopupVisualizer } from "../visualizers/synPopupVisualizer";
