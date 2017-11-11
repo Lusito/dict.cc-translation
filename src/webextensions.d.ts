@@ -172,11 +172,6 @@ declare module 'webextension-polyfill' {
             url?: string;
         }
 
-        /** @deprecated since Chrome 38. Bookmark write operations are no longer limited by Chrome. */
-        export var MAX_WRITE_OPERATIONS_PER_HOUR: number;
-        /** @deprecated since Chrome 38. Bookmark write operations are no longer limited by Chrome. */
-        export var MAX_SUSTAINED_WRITE_OPERATIONS_PER_MINUTE: number;
-
         /**
          * Searches for BookmarkTreeNodes matching the given query. Queries specified with an object produce BookmarkTreeNodes matching all specified properties.
          * @param query A string of words and quoted phrases that are matched against bookmark URLs and titles.
@@ -829,12 +824,6 @@ declare module 'webextension-polyfill' {
             ignoreCache?: boolean;
             /** Optional. If specified, the script will be injected into every frame of the inspected page immediately upon load, before any of the frame's scripts. The script will not be injected after subsequent reloads—for example, if the user presses Ctrl+R.  */
             injectedScript?: string;
-            /**
-             * Optional.
-             * If specified, this script evaluates into a export function that accepts three string arguments: the source to preprocess, the URL of the source, and a export function name if the source is an DOM event handler. The preprocessorerScript export function should return a string to be compiled by Chrome in place of the input source. In the case that the source is a DOM event handler, the returned source must compile to a single JS export function.
-            * @deprecated Deprecated since Chrome 41. Please avoid using this parameter, it will be removed soon.
-            */
-            preprocessorScript?: string;
         }
 
         export interface EvaluationExceptionInfo {
@@ -1416,33 +1405,6 @@ declare module 'webextension-polyfill' {
          * Parameter isAllowedAccess: True if the extension has access to Incognito mode, false otherwise.
          */
         export function isAllowedIncognitoAccess(): Promise<boolean>;
-        /**
-         * Sends a single request to other listeners within the extension. Similar to runtime.connect, but only sends a single request with an optional response. The extension.onRequest event is fired in each page of the extension.
-         * @deprecated Deprecated since Chrome 33. Please use runtime.sendMessage.
-         * @param extensionId The extension ID of the extension you want to connect to. If omitted, default is your own extension.
-         */
-        export function sendRequest(extensionId: string, request: any): Promise<any>;
-        /**
-         * Sends a single request to other listeners within the extension. Similar to runtime.connect, but only sends a single request with an optional response. The extension.onRequest event is fired in each page of the extension.
-         * @deprecated Deprecated since Chrome 33. Please use runtime.sendMessage.
-         */
-        export function sendRequest(request: any): Promise<any>;
-        /**
-         * Returns an array of the JavaScript 'window' objects for each of the tabs running inside the current extension. If windowId is specified, returns only the 'window' objects of tabs attached to the specified window.
-         * @deprecated Deprecated since Chrome 33. Please use extension.getViews {type: "tab"}.
-         */
-        export function getExtensionTabs(windowId?: number): Window[];
-
-        /**
-         * Fired when a request is sent from either an extension process or a content script.
-         * @deprecated Deprecated since Chrome 33. Please use runtime.onMessage.
-         */
-        export var onRequest: OnRequestEvent;
-        /**
-         * Fired when a request is sent from another extension.
-         * @deprecated Deprecated since Chrome 33. Please use runtime.onMessageExternal.
-         */
-        export var onRequestExternal: OnRequestEvent;
     }
 
     ////////////////////
@@ -1800,11 +1762,6 @@ declare module 'webextension-polyfill' {
              */
             shortName: string;
             /**
-             * True if this is an app.
-             * @deprecated since Chrome 33. Please use management.ExtensionInfo.type.
-             */
-            isApp: boolean;
-            /**
              * Optional.
              * The app launch type (only present for apps).
              */
@@ -1875,12 +1832,6 @@ declare module 'webextension-polyfill' {
          * @param id This should be the id from an item of management.ExtensionInfo.
          */
         export function uninstall(id: string, options?: UninstallOptions): Promise<void>;
-        /**
-         * Uninstalls a currently installed app or extension.
-         * @deprecated since Chrome 21. The options parameter was added to this export function.
-         * @param id This should be the id from an item of management.ExtensionInfo.
-         */
-        export function uninstall(id: string): Promise<void>;
         /**
          * Returns information about the calling extension, app, or theme. Note: This export function can be used without requesting the 'management' permission in the manifest.
          */
@@ -2130,11 +2081,6 @@ declare module 'webextension-polyfill' {
         export interface IconDetails {
             /** The id of the tab for which you want to modify the page action. */
             tabId: number;
-            /**
-             * Optional.
-             * @deprecated This argument is ignored.
-             */
-            iconIndex?: number;
             /**
              * Optional.
              * Either an ImageData object or a dictionary {size -> ImageData} representing icon to be set. If the icon is specified as a dictionary, the actual image to be used is chosen depending on screen's pixel density. If the number of image pixels that fit into one screen space unit equals scale, then image with size scale * 19 will be selected. Initially only scales 1 and 2 will be supported. At least one image must be specified. Note that 'details.imageData = foo' is equivalent to 'details.imageData = {'19': foo}'
@@ -2867,11 +2813,6 @@ declare module 'webextension-polyfill' {
          * Fired when an update is available, but isn't installed immediately because the app is currently running. If you do nothing, the update will be installed the next time the background page gets unloaded, if you want it to be installed sooner you can explicitly call browser.runtime.reload(). If your extension is using a persistent background page, the background page of course never gets unloaded, so unless you call browser.runtime.reload() manually in response to this event the update will not get installed until the next time browser itself restarts. If no handlers are listening for this event, and your extension has a persistent background page, it behaves as if browser.runtime.reload() is called in response to this event.
          */
         export var onUpdateAvailable: RuntimeUpdateAvailableEvent;
-        /**
-         * @deprecated since Chrome 33. Please use browser.runtime.onRestartRequired.
-         * Fired when a Chrome update is available, but isn't installed immediately because a browser restart is required.
-         */
-        export var onBrowserUpdateAvailable: RuntimeEvent;
     }
 
     ////////////////////
@@ -3042,8 +2983,6 @@ declare module 'webextension-polyfill' {
         }
 
         export interface SyncStorageArea extends StorageArea {
-            /** @deprecated since Chrome 40. The storage.sync API no longer has a sustained write operation quota. */
-            MAX_SUSTAINED_WRITE_OPERATIONS_PER_MINUTE: number;
             /** The maximum total amount (in bytes) of data that can be stored in sync storage, as measured by the JSON stringification of every value plus every key's length. Updates that would cause this limit to be exceeded fail immediately and set runtime.lastError. */
             QUOTA_BYTES: number;
             /** The maximum size (in bytes) of each individual item in sync storage, as measured by the JSON stringification of its value plus its key length. Updates containing items larger than this limit will fail immediately and set runtime.lastError. */
@@ -3157,11 +3096,6 @@ declare module 'webextension-polyfill' {
             /** Whether the tab is in an incognito window. */
             incognito: boolean;
             /**
-             * Whether the tab is selected.
-             * @deprecated since Chrome 33. Please use tabs.Tab.highlighted.
-             */
-            selected: boolean;
-            /**
              * Optional.
              * Whether the tab has produced sound over the past couple of seconds (but it might not be heard if also muted). Equivalent to whether the speaker audio indicator is showing.
              */
@@ -3265,11 +3199,6 @@ declare module 'webextension-polyfill' {
              * Whether the tab should become the active tab in the window. Does not affect whether the window is focused (see windows.update). Defaults to true.
              */
             active?: boolean;
-            /**
-             * Optional. Whether the tab should become the selected tab in the window. Defaults to true
-             * @deprecated since Chrome 33. Please use active.
-             */
-            selected?: boolean;
         }
 
         export interface MoveProperties {
@@ -3298,11 +3227,6 @@ declare module 'webextension-polyfill' {
              * Optional. Whether the tab should be active. Does not affect whether the window is focused (see windows.update).
              */
             active?: boolean;
-            /**
-             * Optional. Whether the tab should be selected.
-             * @deprecated since Chrome 33. Please use highlighted.
-             */
-            selected?: boolean;
             /**
              * Optional. Whether the tab should be muted.
              */
@@ -3504,30 +3428,8 @@ declare module 'webextension-polyfill' {
         export function executeScript(tabId: number, details: InjectDetails): Promise<any[]>;
         /** Retrieves details about the specified tab. */
         export function get(tabId: number, ): Promise<Tab>;
-        /**
-         * Gets details about all tabs in the specified window.
-         * @deprecated since Chrome 33. Please use tabs.query {windowId: windowId}.
-         */
-        export function getAllInWindow(): Promise<Tab>;
-        /**
-         * Gets details about all tabs in the specified window.
-         * @deprecated since Chrome 33. Please use tabs.query {windowId: windowId}.
-         * @param windowId Optional. Defaults to the current window.
-         */
-        export function getAllInWindow(windowId: number, ): Promise<Tab>;
         /** Gets the tab that this script call is being made from. May be undefined if called from a non-tab context (for example: a background page or popup view). */
         export function getCurrent(): Promise<Tab>;
-        /**
-         * Gets the tab that is selected in the specified window.
-         * @deprecated since Chrome 33. Please use tabs.query {active: true}.
-         */
-        export function getSelected(): Promise<Tab>;
-        /**
-         * Gets the tab that is selected in the specified window.
-         * @deprecated since Chrome 33. Please use tabs.query {active: true}.
-         * @param windowId Optional. Defaults to the current window.
-         */
-        export function getSelected(windowId: number, ): Promise<Tab>;
         /**
          * Creates a new tab.
          */
@@ -3711,21 +3613,6 @@ declare module 'webextension-polyfill' {
          */
         export var onReplaced: TabReplacedEvent;
         /**
-         * @deprecated since Chrome 33. Please use tabs.onActivated.
-         * Fires when the selected tab in a window changes.
-         */
-        export var onSelectionChanged: TabSelectedEvent;
-        /**
-         * @deprecated since Chrome 33. Please use tabs.onActivated.
-         * Fires when the selected tab in a window changes. Note that the tab's URL may not be set at the time this event fired, but you can listen to tabs.onUpdated events to be notified when a URL is set.
-         */
-        export var onActiveChanged: TabSelectedEvent;
-        /**
-         * @deprecated since Chrome 33. Please use tabs.onHighlighted.
-         * Fired when the highlighted or selected tabs in a window changes.
-         */
-        export var onHighlightChanged: TabHighlightedEvent;
-        /**
          * Fired when a tab is zoomed.
          */
         export var onZoomChange: TabZoomChangeEvent;
@@ -3834,11 +3721,6 @@ declare module 'webextension-polyfill' {
      */
     export namespace webNavigation {
         export interface GetFrameDetails {
-            /**
-             * The ID of the process runs the renderer for this tab.
-             * @deprecated since Chrome 49. Frames are now uniquely identified by their tab ID and frame ID; the process ID is no longer needed and therefore ignored.
-             */
-            processId?: number;
             /** The ID of the tab in which the frame is. */
             tabId: number;
             /** The ID of the frame in the given tab. */
