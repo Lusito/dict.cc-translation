@@ -1,5 +1,7 @@
 /// <reference path="events.d.ts"/>
+/// <reference path="tabs.d.ts"/>
 
+// todo: check mdn compatibility
 declare module 'webextension-polyfill' {
     ////////////////////
     // Browser Action

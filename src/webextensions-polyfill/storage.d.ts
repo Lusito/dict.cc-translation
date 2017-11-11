@@ -1,3 +1,4 @@
+// todo: check mdn compatibility
 declare module 'webextension-polyfill' {
     ////////////////////
     // Storage
@@ -50,7 +51,7 @@ declare module 'webextension-polyfill' {
              * Gets the amount of space (in bytes) being used by one or more items.
              * @param keys A single key or list of keys to get the total usage for. An empty list will return 0. Pass in null to get the total usage of all of storage.
              */
-            getBytesInUse(keys: string | string[] | null, ): Promise<number>;
+            getBytesInUse(keys: string | string[] | null): Promise<number>;
             /**
              * Removes all items from storage.
              */

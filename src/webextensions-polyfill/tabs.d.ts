@@ -1,5 +1,6 @@
 /// <reference path="runtime.d.ts"/>
 
+// todo: check mdn compatibility
 declare module 'webextension-polyfill' {
     ////////////////////
     // Tabs
@@ -411,7 +412,7 @@ declare module 'webextension-polyfill' {
          */
         export function executeScript(tabId: number, details: InjectDetails): Promise<any[]>;
         /** Retrieves details about the specified tab. */
-        export function get(tabId: number, ): Promise<Tab>;
+        export function get(tabId: number): Promise<Tab>;
         /** Gets the tab that this script call is being made from. May be undefined if called from a non-tab context (for example: a background page or popup view). */
         export function getCurrent(): Promise<Tab>;
         /**
@@ -455,18 +456,18 @@ declare module 'webextension-polyfill' {
          * Captures the visible area of the currently active tab in the specified window. You must have <all_urls> permission to use this method.
          * @param windowId Optional. The target window. Defaults to the current window.
          */
-        export function captureVisibleTab(windowId: number, ): Promise<string>;
+        export function captureVisibleTab(windowId: number): Promise<string>;
         /**
          * Captures the visible area of the currently active tab in the specified window. You must have <all_urls> permission to use this method.
          * @param options Optional. Details about the format and quality of an image.
          */
-        export function captureVisibleTab(options: CaptureVisibleTabOptions, ): Promise<string>;
+        export function captureVisibleTab(options: CaptureVisibleTabOptions): Promise<string>;
         /**
          * Captures the visible area of the currently active tab in the specified window. You must have <all_urls> permission to use this method.
          * @param windowId Optional. The target window. Defaults to the current window.
          * @param options Optional. Details about the format and quality of an image.
          */
-        export function captureVisibleTab(windowId: number, options: CaptureVisibleTabOptions, ): Promise<string>;
+        export function captureVisibleTab(windowId: number, options: CaptureVisibleTabOptions): Promise<string>;
         /**
          * Reload a tab.
          * @param tabId The ID of the tab to reload; defaults to the selected tab of the current window.
@@ -526,7 +527,7 @@ declare module 'webextension-polyfill' {
          * Detects the primary language of the content in a tab.
          * @param tabId Optional. Defaults to the active tab of the current window.
          */
-        export function detectLanguage(tabId: number, ): Promise<string>;
+        export function detectLanguage(tabId: number): Promise<string>;
         /**
          * Zooms a specified tab.
          * @param zoomFactor The new zoom factor. Use a value of 0 here to set the tab to its current default zoom factor. Values greater than zero specify a (possibly non-default) zoom factor for the tab.
@@ -546,7 +547,7 @@ declare module 'webextension-polyfill' {
          * Gets the current zoom factor of a specified tab.
          * @param tabId Optional. The ID of the tab to get the current zoom factor from; defaults to the active tab of the current window.
          */
-        export function getZoom(tabId: number, ): Promise<number>;
+        export function getZoom(tabId: number): Promise<number>;
         /**
          * Sets the zoom settings for a specified tab, which define how zoom changes are handled. These settings are reset to defaults upon navigating the tab.
          * @param zoomSettings Defines how zoom changes are handled and at what scope.
@@ -568,7 +569,7 @@ declare module 'webextension-polyfill' {
          * @param tabId Optional. The ID of the tab to get the current zoom settings from; defaults to the active tab of the current window.
          * Paramater zoomSettings: The tab's current zoom settings.
          */
-        export function getZoomSettings(tabId: number, ): Promise<ZoomSettings>;
+        export function getZoomSettings(tabId: number): Promise<ZoomSettings>;
 
         /**
          * Fired when the highlighted or selected tabs in a window changes.

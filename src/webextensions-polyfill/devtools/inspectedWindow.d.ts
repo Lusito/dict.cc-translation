@@ -14,6 +14,15 @@ declare module 'webextension-polyfill' {
             injectedScript?: string;
         }
 
+        export interface EvaluationOptions {
+            /** The URL of the frame in which to evaluate the expression. If this is omitted, the expression is evaluated in the main frame of the window. */
+            frameURL?: string;
+            /** If true, evaluate the expression in the context of any content scripts that this extension has attached to the page. If you set this option, then you must have actually attached some content scripts to the page, or a Devtools error will be thrown. */
+            useContentScriptContext?: boolean;
+            /** Evaluate the expression in the context of a content script attached by a different extension, whose origin matches the value given here. This overrides useContentScriptContext. */
+            contextSecurityOrigin?: string;
+        }
+
         export interface EvaluationExceptionInfo {
             /** Set if the error occurred on the DevTools side before the expression is evaluated. */
             isError: boolean;
@@ -30,7 +39,7 @@ declare module 'webextension-polyfill' {
         }
 
         /** The ID of the tab being inspected. This ID may be used with tabs.* API. */
-        export var tabId: number; //***this */
+        export var tabId: number;
 
         /** Reloads the inspected page. */
         export function reload(reloadOptions: ReloadOptions): void;
@@ -40,6 +49,6 @@ declare module 'webextension-polyfill' {
          * Parameter result: The result of evaluation.
          * Parameter exceptionInfo: An object providing details if an exception occurred while evaluating the expression.
          */
-        export function eval(expression: string): Promise<[Object, EvaluationExceptionInfo]>;
+        export function eval(expression: string, options: EvaluationOptions): Promise<[Object, EvaluationExceptionInfo]>;
     }
 }

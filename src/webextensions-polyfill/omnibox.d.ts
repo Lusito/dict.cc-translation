@@ -7,6 +7,8 @@ declare module 'webextension-polyfill' {
      * Manifest:  "omnibox": {...}
      */
     export namespace omnibox {
+        export type OnInputEnteredDisposition = "currentTab" | "newForegroundTab" | "newBackgroundTab";
+
         /** A suggest result. */
         export interface SuggestResult {
             /** The text that is put into the URL bar, and that is sent to the extension when the user chooses this entry. */
@@ -20,7 +22,7 @@ declare module 'webextension-polyfill' {
             description: string;
         }
 
-        export interface OmniboxInputEnteredEvent extends events.Event<(text: string) => void> { }
+        export interface OmniboxInputEnteredEvent extends events.Event<(text: string, disposition: OnInputEnteredDisposition) => void> { }
 
         export interface OmniboxInputChangedEvent extends events.Event<(text: string, suggest: (suggestResults: SuggestResult[]) => void) => void> { }
 

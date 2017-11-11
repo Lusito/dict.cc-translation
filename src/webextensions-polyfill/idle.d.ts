@@ -7,14 +7,15 @@ declare module 'webextension-polyfill' {
      * Permissions:  "idle"
      */
     export namespace idle {
-        export interface IdleStateChangedEvent extends events.Event<(newState: string) => void> { }
+        export type IdleState = "active" | "idle" | "locked";
+        export interface IdleStateChangedEvent extends events.Event<(newState: IdleState) => void> { }
 
         /**
          * Returns "locked" if the system is locked, "idle" if the user has not generated any input for a specified number of seconds, or "active" otherwise.
          * @param detectionIntervalInSeconds The system is considered idle if detectionIntervalInSeconds seconds have elapsed since the last user input detected.
          * Since Chrome 25.
          */
-        export function queryState(detectionIntervalInSeconds: number, ): Promise<string>;
+        export function queryState(detectionIntervalInSeconds: number): Promise<IdleState>;
         /**
          * Sets the interval, in seconds, used to determine when the system is in an idle state for onStateChanged events. The default interval is 60 seconds.
          * @param intervalInSeconds Threshold, in seconds, used to determine when the system is in an idle state.

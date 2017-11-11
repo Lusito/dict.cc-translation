@@ -1,3 +1,4 @@
+// todo: check mdn compatibility
 declare module 'webextension-polyfill' {
     ////////////////////
     // Sessions

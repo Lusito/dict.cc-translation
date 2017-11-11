@@ -1,9 +1,10 @@
+// todo: check mdn compatibility
 declare module 'webextension-polyfill' {
     ////////////////////
     // Proxy
     ////////////////////
     /**
-     * Use the browser.proxy API to manage Chrome's proxy settings. This API relies on the ChromeSetting prototype of the type API for getting and setting the proxy configuration.
+     * Use the browser.proxy API to manage Chrome's proxy settings. This API relies on the BrowserSetting prototype of the type API for getting and setting the proxy configuration.
      * Permissions:  "proxy"
      */
     export namespace proxy {
@@ -70,7 +71,7 @@ declare module 'webextension-polyfill' {
 
         export interface ProxyErrorEvent extends events.Event<(details: ErrorDetails) => void> { }
 
-        export var settings: types.ChromeSetting;
+        export var settings: types.BrowserSetting;
         /** Notifies about proxy errors. */
         export var onProxyError: ProxyErrorEvent;
     }

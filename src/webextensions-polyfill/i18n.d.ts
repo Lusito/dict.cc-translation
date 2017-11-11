@@ -6,6 +6,8 @@ declare module 'webextension-polyfill' {
      * Use the browser.i18n infrastructure to implement internationalization across your whole app or extension.
      */
     export namespace i18n {
+        export type LanguageCode = string;
+
         /** Holds detected ISO language code and its percentage in the input string */
         export interface DetectedLanguage {
             /** An ISO language code such as 'en' or 'fr'.
@@ -30,7 +32,7 @@ declare module 'webextension-polyfill' {
          * Gets the accept-languages of the browser. This is different from the locale used by the browser; to get the locale, use i18n.getUILanguage.
          * Parameter languages: Array of the accept languages of the browser, such as en-US,en,zh-CN
          */
-        export function getAcceptLanguages(): Promise<string[]>;
+        export function getAcceptLanguages(): Promise<LanguageCode[]>;
         /**
          * Gets the localized string for the specified message. If the message is missing, this method returns an empty string (''). If the format of the getMessage() call is wrong — for example, messageName is not a string or the substitutions array has more than 9 elements — this method returns undefined.
          * @param messageName The name of the message, as specified in the messages.json file.
@@ -40,12 +42,11 @@ declare module 'webextension-polyfill' {
         /**
          * Gets the browser UI language of the browser. This is different from i18n.getAcceptLanguages which returns the preferred user languages.
          */
-        export function getUILanguage(): string;
+        export function getUILanguage(): LanguageCode;
 
         /** Detects the language of the provided text using CLD.
          * @param text User input string to be translated.
          */
         export function detectLanguage(text: string): Promise<LanguageDetectionResult>;
     }
-
 }

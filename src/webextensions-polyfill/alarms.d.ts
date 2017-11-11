@@ -57,18 +57,10 @@ declare module 'webextension-polyfill' {
          */
         export function clear(name?: string): Promise<boolean>;
         /**
-         * Clears the alarm without a name.
-         */
-        export function clear(): Promise<boolean>;
-        /**
-         * Retrieves details about the specified alarm.
-         */
-        export function get(): Promise<Alarm>;
-        /**
          * Retrieves details about the specified alarm.
          * @param name The name of the alarm to get. Defaults to the empty string.
          */
-        export function get(name: string, ): Promise<Alarm>;
+        export function get(name?: string): Promise<Alarm>;
 
         /** Fired when an alarm has elapsed. Useful for event pages. */
         export var onAlarm: AlarmEvent;

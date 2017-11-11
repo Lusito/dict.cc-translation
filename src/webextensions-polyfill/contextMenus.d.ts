@@ -1,5 +1,6 @@
 /// <reference path="tabs.d.ts"/>
 
+// todo: check mdn compatibility
 declare module 'webextension-polyfill' {
     ////////////////////
     // Context Menus

@@ -1,3 +1,4 @@
+// todo: check mdn compatibility
 declare module 'webextension-polyfill' {
     ////////////////////
     // Dev Tools - Downloads
@@ -207,12 +208,12 @@ declare module 'webextension-polyfill' {
          * Retrieve an icon for the specified download. For new downloads, file icons are available after the onCreated event has been received. The image returned by this export function while a download is in progress may be different from the image returned after the download is complete. Icon retrieval is done by querying the underlying operating system or toolkit depending on the platform. The icon that is returned will therefore depend on a number of factors including state of the download, platform, registered file types and visual theme. If a file icon cannot be determined, runtime.lastError will contain an error message.
          * @param downloadId The identifier for the download.
          */
-        export function getFileIcon(downloadId: number, ): Promise<string>;
+        export function getFileIcon(downloadId: number): Promise<string>;
         /**
          * Retrieve an icon for the specified download. For new downloads, file icons are available after the onCreated event has been received. The image returned by this export function while a download is in progress may be different from the image returned after the download is complete. Icon retrieval is done by querying the underlying operating system or toolkit depending on the platform. The icon that is returned will therefore depend on a number of factors including state of the download, platform, registered file types and visual theme. If a file icon cannot be determined, runtime.lastError will contain an error message.
          * @param downloadId The identifier for the download.
          */
-        export function getFileIcon(downloadId: number, options: GetFileIconOptions, ): Promise<string>;
+        export function getFileIcon(downloadId: number, options: GetFileIconOptions): Promise<string>;
         /**
          * Resume a paused download. If the request was successful the download is in progress and unpaused. Otherwise runtime.lastError contains an error message. The request will fail if the download is not active.
          * @param downloadId The id of the download to resume.

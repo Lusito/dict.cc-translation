@@ -1,5 +1,6 @@
 /// <reference path="runtime.d.ts"/>
 
+// todo: check mdn compatibility
 declare module 'webextension-polyfill' {
     ////////////////////
     // Extension
