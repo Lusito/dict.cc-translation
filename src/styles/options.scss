@@ -1,3 +1,10 @@
+/**
+ * License: zlib/libpng
+ * @author Santo Pfingsten
+ * @see https://github.com/Lusito/dict.cc-translation
+ */
+
+@import "shared";
 html,
 body {
     margin: 0;
@@ -10,37 +17,45 @@ body {
     display: flex;
     flex-direction: column;
 }
+
 body {
     max-width: 700px;
     background: #F0F0F0;
     padding: 0;
     box-sizing: border-box;
 }
+
 #wrapper {
     padding: 10px;
 }
-body.firefox > #wrapper {
+
+body.firefox>#wrapper {
     border: 1px solid #C1C1C1;
 }
+
 body:not(.firefox) {
     min-width: 700px;
 }
 
-label >input:disabled+span {
+label>input:disabled+span {
     color: gray;
 }
+
 input[type=checkbox],
 input[type=radio] {
     margin-right: 3px;
 }
-label > input[type=checkbox],
-label > input[type=radio] {
+
+label>input[type=checkbox],
+label>input[type=radio] {
     vertical-align: middle;
 }
-label > input[type=checkbox] + span,
-label > input[type=radio] + span {
+
+label>input[type=checkbox]+span,
+label>input[type=radio]+span {
     vertical-align: middle;
 }
+
 #title {
     position: absolute;
     top: 12px;
@@ -48,6 +63,7 @@ label > input[type=radio] + span {
     font-weight: bold;
     font-size: 15px;
 }
+
 #pages {
     flex-grow: 1;
     border: 1px solid #A7A7A7;
@@ -56,71 +72,89 @@ label > input[type=radio] + span {
     min-height: 280px;
     background: white;
 }
-#pages > div {
+
+#pages>div {
     height: 100%;
     overflow: auto;
 }
 
-#pages > div:not(:last-child) {
+#pages>div:not(:last-child) {
     display: flex;
     flex-direction: row;
 }
-#pages > div:not(.active) {
+
+#pages>div:not(.active) {
     display: none;
 }
-#pages > div > div:first-child {
+
+#pages>div>div:first-child {
     margin-right: 10px;
 }
-#pages > div > div {
+
+#pages>div>div {
     width: 50%;
     flex-grow: 1;
     box-sizing: border-box;
     position: relative;
 }
-#pages > div > div > *:not(:first-child) {
+
+#pages>div>div>*:not(:first-child) {
     margin-top: 5px;
 }
+
 #buttons {
     flex-shrink: 0;
     text-align: right;
 }
-#buttons > #restore_defaults {
+
+#buttons>#restore_defaults {
     float: left;
 }
+
 #manual {
     color: #990000;
 }
+
 #refresh {
     color: #009900;
 }
+
 fieldset {
     border: 1px solid #A7A7A7;
     box-sizing: border-box;
 }
-th, td {
+
+th,
+td {
     text-align: left;
 }
+
 button.full {
     display: block;
     width: 100%;
     margin-bottom: 5px;
 }
+
 button.half1,
 button.half2 {
     width: calc(50% - 20px);
     margin-bottom: 5px;
 }
+
 button.half2 {
     float: right;
 }
+
 table {
     width: 100%;
     border-collapse: collapse;
 }
+
 table button,
 table select {
     width: 100%;
 }
+
 #translationsTable {
     border: 1px solid #A7A7A7;
     cursor: default;
@@ -133,25 +167,31 @@ table select {
     user-select: none;
     -moz-user-select: none;
 }
+
 #translationsTableHead th:last-child {
     text-align: right;
     padding-right: 20px;
 }
+
 #translationsTable td:last-child {
     text-align: left;
 }
+
 #translationsTableHead {
     margin: 3px 1px 2px 1px;
     user-select: none;
     -moz-user-select: none;
 }
+
 #translationsTable tr.active {
     background: highlight;
 }
+
 #translationsTableHead th,
 #translation_list td {
     padding-left: 5px;
 }
+
 .dialogOverlay {
     position: absolute;
     left: 0;
@@ -159,8 +199,9 @@ table select {
     top: 0;
     bottom: 0;
     z-index: 10000;
-    background: rgba(0,0,0,0.25);
+    background: rgba(0, 0, 0, 0.25);
 }
+
 .dialog {
     position: absolute;
     left: 20px;
@@ -168,37 +209,45 @@ table select {
     top: 20px;
     border: 1px solid #A7A7A7;
     background: #FFFFE1;
-    box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.59);
+    box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.59);
     padding: 10px;
 }
-.dialog.prompt > div > input {
+
+.dialog.prompt>div>input {
     width: 100%;
 }
-.dialog > h2,
+
+.dialog>h2,
 .dialogButtons {
     text-align: center;
 }
-.dialog > h2 {
+
+.dialog>h2 {
     margin: 0 0 10px 0;
 }
+
 .dialogButtons {
     margin-top: 10px;
 }
+
 #loadingIndicator {
     display: none;
     height: 22px;
 }
+
 #loadingIndicator,
 #language_config_table button {
     box-sizing: border-box;
 }
+
 .warning {
     border: 2px solid #E88E00;
     border-radius: 4px;
     margin-top: 2px;
     padding: 3px;
 }
-.warning > span:first-child {
+
+.warning>span:first-child {
     color: #E88E00;
     font-weight: bold;
 }
@@ -242,12 +291,15 @@ table select {
 #tabs>div:nth-child(1) {
     z-index: 3;
 }
+
 #tabs>div:nth-child(2) {
     z-index: 2;
 }
+
 #tabs>div:nth-child(3) {
     z-index: 1;
 }
+
 #tabs>div.active {
     z-index: 40;
     padding-bottom: 1px;

@@ -40,4 +40,4 @@ I've received suggestions on how to improve the add-on, which can't be done with
 Until support for this has been added in the form of a RESTful API, there is little I can do.
 
 ## License
-The code of this add-on has been released under the [LGPL V3 License](https://github.com/Lusito/dict.cc-translation/blob/master/LICENSE)
+The code of this add-on has been released under the [zlib/libpng License](https://github.com/Lusito/dict.cc-translation/blob/master/LICENSE)

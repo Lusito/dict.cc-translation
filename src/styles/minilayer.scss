@@ -1,14 +1,21 @@
+/**
+ * License: zlib/libpng
+ * @author Santo Pfingsten
+ * @see https://github.com/Lusito/dict.cc-translation
+ */
+
 html,
 body {
     margin: 0;
     padding: 0;
 }
+
 body:not(.measuring),
 body:not(.measuring) * {
     overflow: hidden;
 }
 
-body > div {
+body>div {
     display: flex;
     flex-direction: row;
 }
@@ -30,11 +37,14 @@ a {
     text-decoration: none;
     cursor: pointer;
 }
+
 a:hover {
     text-decoration: underline;
     cursor: pointer;
 }
-a, a:hover {
+
+a,
+a:hover {
     color: #666;
 }
 

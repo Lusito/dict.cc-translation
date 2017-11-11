@@ -1,6 +1,5 @@
 {
     "manifest_version": 2,
-
     "name": "__MSG_extensionName__",
     "description": "__MSG_extensionDescription__",
     "author": "Santo Pfingsten",
@@ -29,37 +28,23 @@
             "96": "icons/icon96.png",
             "128": "icons/icon128.png"
         },
-        "default_popup": "popup/popup.html",
+        "default_popup": "templates/popup.html",
         "default_title": "__MSG_actionTitle__"
     },
     "background": {
         "scripts": [
-            "lib/browser.js",
-            "lib/constants.js",
-            "lib/messageUtil.js",
-            "lib/settings.js",
-            "lib/popup.js",
-            "lib/request.js",
-            "visualizers/inpageVisualizer.js",
-            "visualizers/pocketPopupVisualizer.js",
-            "visualizers/synPopupVisualizer.js",
-            "visualizers/tabVisualizer.js",
-            "lib/translator.js",
-            "scripts/background.js",
-            "scripts/contextmenu.js"
+            "dist/background.js"
         ]
     },
     "content_scripts": [
         {
             "all_frames": true,
             "js": [
-                "lib/browser.js",
-                "lib/constants.js",
-                "lib/htmlUtils.js",
-                "lib/messageUtil.js",
-                "scripts/content.js"
+                "dist/content.js"
             ],
-            "matches": ["*://*/*"]
+            "matches": [
+                "*://*/*"
+            ]
         }
     ],
     "commands": {
@@ -70,7 +55,7 @@
         }
     },
     "options_ui": {
-        "page": "options/options.html"
+        "page": "templates/options.html"
     },
     "permissions": [
         "http://www.dict.cc/",
@@ -86,8 +71,7 @@
         "tabs"
     ],
     "web_accessible_resources": [
-        "minilayer/minilayer.html",
-        "minilayer/minilayer.css",
+        "dist/minilayer.css",
         "icons/icon16.png"
     ]
 }

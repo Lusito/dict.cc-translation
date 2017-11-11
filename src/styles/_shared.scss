@@ -1,3 +1,9 @@
+/**
+ * License: zlib/libpng
+ * @author Santo Pfingsten
+ * @see https://github.com/Lusito/dict.cc-translation
+ */
+
 button,
 input[type='button'],
 input[type='submit'],
@@ -13,6 +19,7 @@ input[type='radio'] {
     outline: none;
     text-shadow: 0 1px 0 rgb(240, 240, 240);
 }
+
 button:hover,
 input[type='button']:hover,
 input[type='submit']:hover,
@@ -23,6 +30,7 @@ input[type='radio']:hover {
     color: black;
     border-color: rgba(0, 0, 0, 0.298039);
 }
+
 button,
 input[type='button'],
 input[type='submit'],
@@ -30,6 +38,7 @@ select {
     padding: 2px 8px;
     height: 26px;
 }
+
 input[type="number"],
 input[type="password"],
 input[type="search"],
@@ -49,6 +58,7 @@ textarea {
     padding: 3px 3px 4px;
     outline: none;
 }
+
 input[type="number"],
 input[type="password"],
 input[type="search"],
@@ -57,6 +67,7 @@ input[type="url"],
 input:not([type]) {
     height: 26px;
 }
+
 input[type='checkbox'],
 input[type='radio'] {
     position: relative;
@@ -65,9 +76,11 @@ input[type='radio'] {
     width: 15px;
     margin-top: 2px;
 }
+
 input[type='radio'] {
     border-radius: 100%;
 }
+
 input[type='radio']:checked::before {
     background-color: #666;
     border-radius: 100%;
@@ -75,6 +88,7 @@ input[type='radio']:checked::before {
     display: block;
     position: absolute;
 }
+
 button:focus,
 input:focus,
 textarea:focus,
@@ -89,6 +103,7 @@ input[type='button'],
 input[type='submit'] {
     position: relative;
 }
+
 button:after,
 input[type='button']:after,
 input[type='submit']:after {
@@ -99,10 +114,10 @@ input[type='submit']:after {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(45deg, #1e5799 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%);
+    background-image: linear-gradient(45deg, #1e5799 0%, #2989d8 50%, #207cca 51%, #7db9e8 100%);
     background-repeat: no-repeat;
     background-position: 50%;
-    transform: scale(1,1);
+    transform: scale(1, 1);
     opacity: 0;
     transition: transform .25s, opacity 1s;
     pointer-events: none;
@@ -112,7 +127,7 @@ button:active:after,
 input[type='button']:active:after,
 input[type='submit']:active:after {
     transition: 0s;
-    transform: scale(0,0);
+    transform: scale(0, 0);
     opacity: .3;
 }
 
@@ -120,15 +135,12 @@ select {
     padding: 2px 24px 2px 8px;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image:
-        url(downarrow.svg),
-        linear-gradient(#EDEDED, #EDEDED 38%, #DEDEDE);
+    background-image: url(../icons/downarrow.svg), linear-gradient(#EDEDED, #EDEDED 38%, #DEDEDE);
     background-position: calc(100% - -1px) -1px, left top;
     background-size: 27px 27px, 100% 100%;
     background-repeat: no-repeat;
 }
+
 select:hover {
-    background-image:
-        url(downarrow.svg),
-        linear-gradient(#F4F4F4, #F4F4F4 38%, #EDEDED);
+    background-image: url(../icons/downarrow.svg), linear-gradient(#F4F4F4, #F4F4F4 38%, #EDEDED);
 }
