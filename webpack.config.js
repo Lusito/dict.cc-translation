@@ -1,7 +1,7 @@
 module.exports = {
     entry: {
         background: "./src/background/background.ts",
-        content: "./src/content.ts",
+        content: "./src/content/content.ts",
         options: "./src/options/options.ts",
         popup: "./src/popup.ts"
     },

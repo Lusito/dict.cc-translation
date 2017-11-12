@@ -1,10 +1,10 @@
-import { MouseEventCallback, createButton, translateChildren, on } from "../lib/htmlUtils";
-
 /**
  * License: zlib/libpng
  * @author Santo Pfingsten
  * @see https://github.com/Lusito/dict.cc-translation
  */
+
+ import { MouseEventCallback, createButton, translateChildren, on } from "../lib/htmlUtils";
 
 export function createDialog(className: string, titleL10nKey: string, buttons: { [s: string]: MouseEventCallback }) {
     let overlay = document.createElement('div');
