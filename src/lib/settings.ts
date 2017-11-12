@@ -52,6 +52,27 @@ class Settings {
         browser.storage.onChanged.addListener(this.load.bind(this));
     }
 
+    private load() {
+        this.storage.get(null).then((map) => {
+            this.map = map;
+            if (this.readyCallbacks) {
+                for (let callback of this.readyCallbacks)
+                    callback();
+                this.readyCallbacks = null;
+            }
+            if (typeof (messageUtil) !== 'undefined') {
+                let allSettings = this.getAll();
+                messageUtil.sendToAllTabs('settingsChanged', allSettings);
+                messageUtil.send('settingsChanged', allSettings); // to other background scripts
+                messageUtil.sendSelf('settingsChanged', allSettings); // since the above does not fire on the same process
+            }
+        });
+    }
+
+    public save() {
+        this.storage.set(this.map);
+    }
+
     public onReady(callback: Callback) {
         if (this.readyCallbacks)
             this.readyCallbacks.push(callback);
@@ -85,25 +106,34 @@ class Settings {
         this.map[key] = value;
     }
 
-    public save() {
-        this.storage.set(this.map);
+    //some convenience functions:
+
+    public getProtocol() {
+        return this.get('translation.useHttps') ? 'https://' : 'http://';
     }
 
-    private load() {
-        this.storage.get(null).then((map) => {
-            this.map = map;
-            if (this.readyCallbacks) {
-                for (let callback of this.readyCallbacks)
-                    callback();
-                this.readyCallbacks = null;
-            }
-            if (typeof (messageUtil) !== 'undefined') {
-                let allSettings = this.getAll();
-                messageUtil.sendToAllTabs('settingsChanged', allSettings);
-                messageUtil.send('settingsChanged', allSettings); // to other background scripts
-                messageUtil.sendSelf('settingsChanged', allSettings); // since the above does not fire on the same process
-            }
-        });
+    public getOpenMethod(isQuick: boolean) {
+        return this.get(isQuick ? 'quick.method' : 'context.method');
+    }
+
+    public getMultiWindow(isQuick: boolean) {
+        return this.get(isQuick ? 'quick.multiWindow' : 'context.multiWindow');
+    }
+
+    public createParams(text: string, languagePair: string) {
+        let params = '?lp=' + languagePair;
+        if (text)
+            params += '&s=' + encodeURIComponent(text);
+        return params;
+    }
+
+    public getFirstLanguagePair() {
+        let translations = this.get('translation.list');
+        if (!translations.length)
+            return null;
+
+        return translations[0].k;
     }
 }
 export const settings = new Settings();
+

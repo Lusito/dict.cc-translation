@@ -18,15 +18,14 @@ let callbacks: CallbacksMap | null = null;
 
 function init() {
     let callbacks: CallbacksMap = {};
-    browser.runtime.onMessage.addListener(
-        function (request, sender, sendResponse) {
-            if (callbacks) {
-                let callback = callbacks[request.action];
-                if (callback) {
-                    return callback(request.params, sender, sendResponse);
-                }
+    browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        if (callbacks) {
+            let callback = callbacks[request.action];
+            if (callback) {
+                return callback(request.params, sender, sendResponse);
             }
-        });
+        }
+    });
     return callbacks;
 }
 
@@ -55,7 +54,7 @@ export function sendToAllTabs(name: string, params: any) {
             action: name,
             params: params
         };
-        browser.tabs.query({}).then(function (tabs) {
+        browser.tabs.query({}).then((tabs) => {
             for (let tab of tabs) {
                 let id = tab.id;
                 if (id)

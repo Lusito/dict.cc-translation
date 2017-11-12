@@ -98,15 +98,13 @@ export function createDialog(className: string, titleL10nKey: string, buttons: {
         domNode: dialog,
         contentNode: contentNode,
         buttonNodes: buttonNodes,
-        close: function () {
-            document.body.removeChild(overlay);
-        }
+        close: () => document.body.removeChild(overlay)
     };
 }
 
 export function alert(titleL10nKey: string, contentL10nKey: string, content?: string, callback?: () => void) {
     let dialog = createDialog('alert', titleL10nKey, {
-        'alert_ok': function () {
+        'alert_ok': () => {
             dialog.close();
             if (callback)
                 callback();
@@ -122,11 +120,11 @@ export function alert(titleL10nKey: string, contentL10nKey: string, content?: st
 
 export function confirm(titleL10nKey: string, contentL10nKey: string | null, content: string | null, callback: (value: boolean) => void) {
     let dialog = createDialog('confirm', titleL10nKey, {
-        'confirm_ok': function () {
+        'confirm_ok': () => {
             dialog.close();
             callback(true);
         },
-        'confirm_cancel': function () {
+        'confirm_cancel': () => {
             dialog.close();
             callback(false);
         }
@@ -143,11 +141,11 @@ export function prompt(titleL10nKey: string, value: string, callback: (value: st
     let input = document.createElement('input');
     input.value = value;
     let dialog = createDialog('prompt', titleL10nKey, {
-        'prompt_ok': function () {
+        'prompt_ok': () => {
             dialog.close();
             callback(input.value);
         },
-        'prompt_cancel': function () {
+        'prompt_cancel': () => {
             dialog.close();
             callback(null);
         }
@@ -155,7 +153,7 @@ export function prompt(titleL10nKey: string, value: string, callback: (value: st
     dialog.contentNode.appendChild(input);
     input.focus();
     input.addEventListener('keydown', (e) => { })
-    on(input, 'keydown', function (e) {
+    on(input, 'keydown', (e) => {
         if (e.keyCode === 13) {
             dialog.close();
             callback(input.value);

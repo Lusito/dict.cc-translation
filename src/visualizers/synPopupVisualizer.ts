@@ -5,10 +5,10 @@
  */
 
 import { VisualizerConfig } from "../lib/translator";
-import * as popup from "../lib/popup";
+import { openPopup } from "../lib/windowHelper";
 
 // Shows a bigger popup window using syn.dict.cc
 export function synPopupVisualizer(config: VisualizerConfig) {
     let url = config.protocol + 'syn.dict.cc/' + config.params;
-    popup.open(url, config.incognito || false, 770, 600);
+    openPopup(url, config.incognito || false, 770, 600);
 }

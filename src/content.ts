@@ -201,7 +201,7 @@ function onMouseDown(e: MouseEvent) {
         lastActionTime = currentTime;
         if (text) {
             if (config.method === TranslationMethod.INPAGE || action === 'menu') {
-                miniLayer = new MiniLayer(e.clientX, e.clientY, function () {
+                miniLayer = new MiniLayer(e.clientX, e.clientY, () => {
                     if (!miniLayer)
                         return;
                     if (action === 'menu')
@@ -302,9 +302,7 @@ function createPanelOverlay() {
     on(overlay, 'mousedown', destroyPanels);
     tdoc.body.appendChild(overlay);
     // enable pointer-events later, since otherwise context-menu will be opened on the new panel
-    setTimeout(function () {
-        applyForcedStyles(overlay, { 'pointer-events': 'auto' });
-    }, 500);
+    setTimeout(() => applyForcedStyles(overlay, { 'pointer-events': 'auto' }), 500);
     return overlay;
 }
 
@@ -341,7 +339,7 @@ class MiniLayer {
         this.idoc = this.iframe.contentDocument || this.iframe.contentWindow.document;
         this.ibody = this.idoc.body;
         addLink(this.idoc, "dist/minilayer.css");
-        on(this.idoc, 'keydown', function (e) {
+        on(this.idoc, 'keydown', (e) => {
             if (e.keyCode === 27)
                 destroyPanels();
         });
@@ -410,9 +408,8 @@ class MiniLayer {
         let link = createElement(this.idoc, null, "a", {
             textContent: translation.v
         });
-        on(link, "click", function () {
-            if (miniLayer)
-                miniLayer.translateQuick(text, translation.k);
+        on(link, "click", () => {
+            this.translateQuick(text, translation.k);
         });
         return link;
     }
@@ -422,7 +419,7 @@ class MiniLayer {
             textContent: def.label,
             style: def.style
         });
-        on(link, "click", function () {
+        on(link, "click", () => {
             destroyPanels();
             messageUtil.send('showTranslationResult', {
                 href: def.href
@@ -469,8 +466,7 @@ class MiniLayer {
     }
 
     public translateQuick(text: string, languagePair?: string | null) {
-        if (miniLayer)
-            miniLayer.showLoading();
+        this.showLoading();
         messageUtil.send('requestQuickTranslation', {
             text: text,
             languagePair: languagePair,
@@ -492,7 +488,7 @@ function destroyPanels() {
 
 function showMiniLayer(cfg: VisualizerConfig) {
     destroyPanels();
-    miniLayer = new MiniLayer(cfg.x || 0, cfg.y || 0, function () {
+    miniLayer = new MiniLayer(cfg.x || 0, cfg.y || 0, () => {
         if (miniLayer && cfg.text)
             miniLayer.translateQuick(cfg.text, cfg.languagePair);
     });
@@ -523,7 +519,7 @@ function onSettingsChanged(settings: SettingsSignature) {
     };
 }
 
-messageUtil.receive('contentStartup', function (settings) {
+messageUtil.receive('contentStartup', (settings) => {
     window.addEventListener("click", preventMouseEventAfterAction, true);
     window.addEventListener("contextmenu", preventMouseEventAfterAction, true);
     window.addEventListener("mousedown", onMouseDown, true);

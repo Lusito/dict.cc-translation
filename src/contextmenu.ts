@@ -25,7 +25,7 @@ export function initContextMenu() {
     let lastCursorY = 0;
     const menuContexts = ["editable", "frame", "page", "link", "selection"];
 
-    messageUtil.receive('setWordUnderCursor', function (data: WordUnderCursor) {
+    messageUtil.receive('setWordUnderCursor', (data: WordUnderCursor) => {
         wordUnderCursor = data.text.trim();
         lastCursorX = data.x;
         lastCursorY = data.y;
@@ -75,7 +75,7 @@ export function initContextMenu() {
         return browser.contextMenus.create({
             title: title || translation.v,
             contexts: menuContexts,
-            onclick: function (info, tab) {
+            onclick: (info, tab) => {
                 translator.run({
                     text: info.selectionText || wordUnderCursor || '',
                     languagePair: translation.k,
@@ -112,17 +112,13 @@ export function initContextMenu() {
             createSeparator();
         }
 
-        createEntry(browser.i18n.getMessage("options_label"), function () {
-            browser.runtime.openOptionsPage();
-        });
+        createEntry(browser.i18n.getMessage("options_label"), () => browser.runtime.openOptionsPage());
 
         if (isFirefox) {
             browser.contextMenus.create({
                 title: browser.i18n.getMessage("options_label"),
                 contexts: ["browser_action"],
-                onclick: function () {
-                    browser.runtime.openOptionsPage();
-                }
+                onclick: () => browser.runtime.openOptionsPage()
             });
         }
     }

@@ -53,42 +53,15 @@ export interface DCCResult {
     error?: string;
 }
 
-export function getProtocol() {
-    return settings.get('translation.useHttps') ? 'https://' : 'http://';
-}
-
-export function getOpenMethod(isQuick: boolean) {
-    return settings.get(isQuick ? 'quick.method' : 'context.method');
-}
-
-export function getMultiWindow(isQuick: boolean) {
-    return settings.get(isQuick ? 'quick.multiWindow' : 'context.multiWindow');
-}
-
-export function createParams(text: string, languagePair: string) {
-    let params = '?lp=' + languagePair;
-    if (text)
-        params += '&s=' + encodeURIComponent(text);
-    return params;
-}
-
-export function getFirstLanguagePair() {
-    let translations = settings.get('translation.list');
-    if (!translations.length)
-        return null;
-
-    return translations[0].k;
-}
-
 export function runDCC(text: string, languagePair: string | null, callback: (result: DCCResult) => void) {
     if (!languagePair)
-        languagePair = getFirstLanguagePair();
+        languagePair = settings.getFirstLanguagePair();
     if (!languagePair)
         return;
-    let params = createParams(text, languagePair);
-    let url = getProtocol() + 'www.dict.cc/dcc-gadget.php' + params;
+    let params = settings.createParams(text, languagePair);
+    let url = settings.getProtocol() + 'www.dict.cc/dcc-gadget.php' + params;
 
-    request.getHTML(url, function (doc: Document | null) {
+    request.getHTML(url, (doc: Document | null) => {
         if (!doc) {
             callback({
                 error: browser.i18n.getMessage("resultFailed")
@@ -117,7 +90,7 @@ export function runDCC(text: string, languagePair: string | null, callback: (res
                 error: browser.i18n.getMessage("resultFailed")
             });
         }
-    }, function () {
+    }, () => {
         callback({
             error: browser.i18n.getMessage("resultFailed")
         });
@@ -125,7 +98,7 @@ export function runDCC(text: string, languagePair: string | null, callback: (res
 }
 
 export function run(config: RunConfig, isQuick: boolean, tab: browser.tabs.Tab) {
-    let lp = config.languagePair || getFirstLanguagePair();
+    let lp = config.languagePair || settings.getFirstLanguagePair();
     if (!lp)
         return;
     let finalConfig = {
@@ -134,12 +107,12 @@ export function run(config: RunConfig, isQuick: boolean, tab: browser.tabs.Tab) 
         x: config.x || 0,
         y: config.y || 0,
         url: config.url,
-        params: createParams(config.text, lp),
-        protocol: getProtocol(),
-        multiWindow: getMultiWindow(isQuick),
+        params: settings.createParams(config.text, lp),
+        protocol: settings.getProtocol(),
+        multiWindow: settings.getMultiWindow(isQuick),
         tab: tab,
         incognito: tab.incognito
     };
-    let method = getOpenMethod(isQuick);
+    let method = settings.getOpenMethod(isQuick);
     visualizers[method](finalConfig);
 }

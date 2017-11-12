@@ -21,7 +21,7 @@ export function tabVisualizer(config: VisualizerConfig) {
         tabConfig.url = config.protocol + 'www.dict.cc/' + config.params;
     if (config.multiWindow || !lastTab) {
         lastTab = null;
-        browser.tabs.create(tabConfig).then(function (tab) {
+        browser.tabs.create(tabConfig).then((tab) => {
             lastTab = tab.id || null;
         });
     } else {
@@ -29,7 +29,7 @@ export function tabVisualizer(config: VisualizerConfig) {
     }
 }
 
-browser.tabs.onRemoved.addListener(function (tabId) {
+browser.tabs.onRemoved.addListener((tabId) => {
     if (tabId === lastTab)
         lastTab = null;
 });

@@ -6,15 +6,15 @@
 
 import * as messageUtil from "./lib/messageUtil";
 import * as translator from "./lib/translator";
-import * as popup from "./lib/popup";
+import { openPopup } from "./lib/windowHelper";
 import { settings } from "./lib/settings";
 import { VisualizerConfig } from "./lib/translator";
 import { tabVisualizer } from "./visualizers/tabVisualizer";
 import { initContextMenu } from "./contextmenu";
 
-messageUtil.receive('requestQuickTranslation', function (data, sender) {
+messageUtil.receive('requestQuickTranslation', (data, sender) => {
     if (data.dcc) {
-        translator.runDCC(data.text, data.languagePair, function (response: any) {
+        translator.runDCC(data.text, data.languagePair, (response: any) => {
             messageUtil.sendToTab(sender.tab, 'showMiniLayerResult', response);
         });
         return true;
@@ -24,28 +24,28 @@ messageUtil.receive('requestQuickTranslation', function (data, sender) {
     }
 });
 
-messageUtil.receive('showPopup', function (data, sender) {
+messageUtil.receive('showPopup', (data, sender) => {
     let incognito = sender.tab && sender.tab.incognito;
-    popup.open(data.url, incognito, data.width, data.height);
+    openPopup(data.url, incognito, data.width, data.height);
 });
 
-messageUtil.receive('contentScriptLoaded', function (data, sender) {
+messageUtil.receive('contentScriptLoaded', (data, sender) => {
     messageUtil.sendToTab(sender.tab, 'contentStartup', settings.getAll());
 });
 
-messageUtil.receive('showTranslationResult', function (data, sender) {
+messageUtil.receive('showTranslationResult', (data, sender) => {
     let index = data.href.indexOf('?');
     let config: VisualizerConfig = {
         multiWindow: settings.get('quick.multiWindow')
     };
     if (index >= 0) {
         if (!config.languagePair) {
-            config.languagePair = translator.getFirstLanguagePair();
+            config.languagePair = settings.getFirstLanguagePair();
             if (!config.languagePair)
                 return;
         }
         config.params = data.href.substr(index);
-        config.protocol = translator.getProtocol();
+        config.protocol = settings.getProtocol();
         config.tab = sender.tab;
         config.incognito = sender.tab && sender.tab.incognito;
 

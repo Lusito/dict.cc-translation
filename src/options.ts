@@ -64,7 +64,7 @@ function initializeTabs() {
     let pages = document.querySelectorAll('#pages > div');
 
     function linkTab(tab: HTMLElement) {
-        on(tab, 'click', function () {
+        on(tab, 'click', () => {
             for (let i = 0; i < tabs.length; i++) {
                 let className = tabs[i] === tab ? 'active' : '';
                 tabs[i].className = className;
@@ -132,14 +132,14 @@ function addTranslationRow(label: string, languagePair: string) {
     cell1.textContent = languagePair;
     row.appendChild(cell1);
 
-    on(row, 'click', function () {
+    on(row, 'click', () => {
         let actives = document.querySelectorAll('#translation_list .active');
         for (let i = 0; i < actives.length; i++)
             actives[i].className = '';
         selectedTranslationRow = row;
         row.className = 'active';
     });
-    on(row, 'dblclick', function () {
+    on(row, 'dblclick', () => {
         startLabelEdit(row);
     });
 }
@@ -155,7 +155,7 @@ function translationsFromJSON(list: TranslationEntry[]) {
 function setLanguageList(list: TranslationEntry[]) {
     list.push({ k: 'DE', v: 'German' });
     list.push({ k: 'EN', v: 'English' });
-    list.sort(function (a, b) {
+    list.sort((a, b) => {
         if (a.v < b.v)
             return -1;
         else if (a.v > b.v)
@@ -302,7 +302,7 @@ function initializeDisabledConnections() {
     }
 }
 
-let updateWarnings = function () { };
+let updateWarnings = () => { };
 
 function initializeWarningConnections() {
     let quick_ctrl = input.quick_ctrl;
@@ -310,7 +310,7 @@ function initializeWarningConnections() {
     let quick_alt = input.quick_alt;
     let quick_right = input.quick_right;
 
-    updateWarnings = function () {
+    updateWarnings = () => {
         let warnShift = quick_shift.checked && quick_right.checked && !quick_ctrl.checked && !quick_alt.checked;
         let warnAlt = quick_alt.checked && !quick_ctrl.checked && !quick_shift.checked;
         warnings.quickShift.style.display = warnShift ? 'block' : 'none';
@@ -325,14 +325,14 @@ function initializeWarningConnections() {
 
 function startLabelEdit(row: HTMLTableRowElement) {
     let cell = row.children[0] as HTMLTableCellElement;
-    prompt('enterLabel', cell.textContent || '', function (value) {
+    prompt('enterLabel', cell.textContent || '', (value) => {
         if (value)
             cell.textContent = value;
     });
 }
 
 function initializeTranslationButtons() {
-    on(byId('moveUp') as HTMLElement, 'click', function () {
+    on(byId('moveUp') as HTMLElement, 'click', () => {
         if (selectedTranslationRow) {
             let prev = selectedTranslationRow.previousElementSibling;
             if (prev) {
@@ -341,7 +341,7 @@ function initializeTranslationButtons() {
             }
         }
     });
-    on(byId('moveDown') as HTMLElement, 'click', function () {
+    on(byId('moveDown') as HTMLElement, 'click', () => {
         if (selectedTranslationRow) {
             let next = selectedTranslationRow.nextElementSibling;
             if (next) {
@@ -350,16 +350,16 @@ function initializeTranslationButtons() {
             }
         }
     });
-    on(byId('editLabel') as HTMLElement, 'click', function () {
+    on(byId('editLabel') as HTMLElement, 'click', () => {
         let row = selectedTranslationRow;
         if (row)
             startLabelEdit(row);
     });
-    on(byId('remove') as HTMLElement, 'click', function () {
+    on(byId('remove') as HTMLElement, 'click', () => {
         let row = selectedTranslationRow;
         if (row) {
             let label = row.children[0].textContent;
-            confirm('confirm_delete', null, label, function (result) {
+            confirm('confirm_delete', null, label, (result) => {
                 if (result && row) {
                     selectedTranslationRow = (row.nextElementSibling || row.previousElementSibling) as HTMLTableRowElement;
                     if (selectedTranslationRow)
@@ -369,27 +369,27 @@ function initializeTranslationButtons() {
             });
         }
     });
-    on(byId('clear') as HTMLElement, 'click', function () {
-        confirm('confirm_delete', 'confirm_removeAll', null, function (result) {
+    on(byId('clear') as HTMLElement, 'click', () => {
+        confirm('confirm_delete', 'confirm_removeAll', null, (result) => {
             if (result)
                 translationList.innerHTML = '';
         });
     });
-    on(byId('manual') as HTMLElement, 'click', function () {
-        prompt('enterLanguagePair', "de-en", function (languagePair) {
+    on(byId('manual') as HTMLElement, 'click', () => {
+        prompt('enterLanguagePair', "de-en", (languagePair) => {
             if (languagePair) {
-                prompt('enterLabel', "DE=>EN", function (label) {
+                prompt('enterLabel', "DE=>EN", (label) => {
                     if (label)
                         addTranslationRow(label, languagePair);
                 });
             }
         });
     });
-    on(byId('refresh') as HTMLElement, 'click', function () {
+    on(byId('refresh') as HTMLElement, 'click', () => {
         setLanguageLoading(true);
         requestLanguageUpdate();
     });
-    on(byId('add') as HTMLElement, 'click', function () {
+    on(byId('add') as HTMLElement, 'click', () => {
         let first = firstLanguage.value;
         let second = secondLanguage.value;
         let dir = languageDirection.value;
@@ -406,7 +406,7 @@ function initializeTranslationButtons() {
             languagePair = second.toLowerCase() + '-' + first.toLowerCase();
             label = second.toUpperCase() + '->' + first.toUpperCase();
         }
-        prompt('enterLabel', label, function (value) {
+        prompt('enterLabel', label, (value) => {
             if (value)
                 addTranslationRow(value, languagePair);
         });
@@ -432,7 +432,7 @@ function requestLanguageUpdate() {
     let protocol = input.translation_useHttps.checked ? 'https://' : 'http://';
     let url = protocol + 'contribute.dict.cc/?action=buildup';
     let hrefPrefix = protocol + 'contribute.dict.cc/?action=buildup&targetlang=';
-    request.getHTML(url, function (doc: Document | null) {
+    request.getHTML(url, (doc: Document | null) => {
         if (!doc) {
             onLanguageListUpdate(null);
             return;
@@ -447,14 +447,14 @@ function requestLanguageUpdate() {
             }
         }
         onLanguageListUpdate(list);
-    }, function () {
+    }, () => {
         onLanguageListUpdate(null);
     });
 }
 
 const saveButton = byId('save') as HTMLElement;
-on(byId('restore_defaults') as HTMLElement, 'click', function () {
-    confirm('confirm_restore_defaults', "confirm_restore_defaults_content", null, function (result) {
+on(byId('restore_defaults') as HTMLElement, 'click', () => {
+    confirm('confirm_restore_defaults', "confirm_restore_defaults_content", null, (result) => {
         if (result) {
             settings.restoreDefaults();
             saveButton.focus();
@@ -462,7 +462,7 @@ on(byId('restore_defaults') as HTMLElement, 'click', function () {
     });
 });
 
-on(saveButton, 'click', function () {
+on(saveButton, 'click', () => {
     if (!input.quick_enabled.checked || input.quick_ctrl.checked
         || input.quick_shift.checked || input.quick_alt.checked) {
         storePreferences();
@@ -473,7 +473,7 @@ on(saveButton, 'click', function () {
     }
 });
 
-on(byId('cancel') as HTMLElement, 'click', function () {
+on(byId('cancel') as HTMLElement, 'click', () => {
     if (isFirefox) {
         loadPreferences();
         updateDisabledElements();
@@ -496,10 +496,10 @@ saveButton.focus();
 if (isFirefox)
     document.body.className += "firefox";
 
-settings.onReady(function () {
+settings.onReady(() => {
     loadPreferences();
     updateDisabledElements();
-    messageUtil.receive('settingsChanged', function () {
+    messageUtil.receive('settingsChanged', () => {
         loadPreferences();
         updateDisabledElements();
     });

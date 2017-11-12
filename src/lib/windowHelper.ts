@@ -9,7 +9,7 @@
 import * as browser from 'webextension-polyfill';
 export let cache: { [s: string]: number } = {};
 
-export function open(url: string, incognito: boolean, width: number, height: number) {
+export function openPopup(url: string, incognito: boolean, width: number, height: number) {
     let config: browser.windows.CreateData = {
         width: width,
         height: height
@@ -23,13 +23,11 @@ export function open(url: string, incognito: boolean, width: number, height: num
         if (navigator.userAgent.toLowerCase().indexOf("firefox") < 0) {
             config.type = "popup";
         }
-        browser.windows.create(config).then(function (window) {
-            cache[cacheKey] = window.id;
-        });
+        browser.windows.create(config).then((window) => cache[cacheKey] = window.id);
     } else {
         config.focused = true;
         browser.windows.update(popupId, config);
-        browser.tabs.query({ windowId: popupId }).then(function (tabs) {
+        browser.tabs.query({ windowId: popupId }).then((tabs) => {
             if (tabs.length > 0) {
                 let id = tabs[0].id;
                 if (id)
@@ -39,7 +37,7 @@ export function open(url: string, incognito: boolean, width: number, height: num
     }
 }
 
-browser.windows.onRemoved.addListener(function (windowId) {
+browser.windows.onRemoved.addListener((windowId) => {
     for (let key in cache) {
         if (cache[key] === windowId) {
             delete cache[key];

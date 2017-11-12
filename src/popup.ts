@@ -26,22 +26,11 @@ type Definition = {
     descriptions: Description[]
 };
 
-settings.onReady(function () {
+settings.onReady(() => {
     let lp = byId('lp') as HTMLInputElement; // dropdown language pair
     let search = byId('search') as HTMLInputElement; // text input
     let go = byId('go') as HTMLButtonElement; // go button
     let result: null | HTMLElement = null;
-
-    function getProtocol() {
-        return settings.get('translation.useHttps') ? 'https://' : 'http://';
-    }
-
-    function createParams(text: string, languagePair: string) {
-        let params = '?lp=' + languagePair;
-        if (text)
-            params += '&s=' + encodeURIComponent(text);
-        return params;
-    }
 
     function parseDescriptionNodes(parent: HTMLElement) {
         let result: DefinitionNode[] = [];
@@ -86,7 +75,7 @@ settings.onReady(function () {
     }
 
     function parseDefinitions(dl: HTMLDListElement, languagePair: string) {
-        let urlPrefix = getProtocol() + 'www.dict.cc';
+        let urlPrefix = settings.getProtocol() + 'www.dict.cc';
         let urlSuffix = '&lp=' + languagePair;
 
         let rows = dl.querySelectorAll("dt,dd");
@@ -173,14 +162,14 @@ settings.onReady(function () {
         let word = search.value.trim();
         if (word !== '') {
             let languagePair = lp.value;
-            let url = getProtocol() + 'pocket.dict.cc/' + createParams(word, languagePair);
+            let url = settings.getProtocol() + 'pocket.dict.cc/' + settings.createParams(word, languagePair);
 
 
             if (result === null)
                 result = createElement(document, document.body, 'div', { id: 'result' });
 
             result.textContent = browser.i18n.getMessage("loading");
-            request.getHTML(url, function (doc: Document | null) {
+            request.getHTML(url, (doc: Document | null) => {
                 if (!result || !doc)
                     return;
                 let definitionLists = parseDefinitionLists(doc, languagePair);
@@ -193,7 +182,7 @@ settings.onReady(function () {
                         generateResult(destination, def);
                     }
                 }
-            }, function () {
+            }, () => {
                 if (result)
                     result.textContent = browser.i18n.getMessage("resultFailed");
             });
@@ -212,10 +201,9 @@ settings.onReady(function () {
     }
 
     // on enter or click, run search
-    on(search, 'keydown', function (e) {
-        if (e.keyCode === 13) {
+    on(search, 'keydown', (e) => {
+        if (e.keyCode === 13)
             runSearch();
-        }
     });
     on(go, 'click', runSearch);
 
