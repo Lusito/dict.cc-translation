@@ -37,6 +37,9 @@ body:not(.firefox) {
     min-width: 700px;
 }
 
+label {
+    margin-right: 2px;
+}
 label>input:disabled+span {
     color: gray;
 }
@@ -65,6 +68,7 @@ label>input[type=radio]+span {
 }
 
 #pages {
+    clear: both;
     flex-grow: 1;
     border: 1px solid #A7A7A7;
     padding: 10px;
@@ -122,20 +126,27 @@ td {
     text-align: left;
 }
 
+button.full,
+button.half1,
+button.half2 {
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 button.full {
     display: block;
     width: 100%;
-    margin-bottom: 5px;
+    margin-right: 0;
 }
 
 button.half1,
 button.half2 {
     width: calc(50% - 20px);
-    margin-bottom: 5px;
 }
 
 button.half2 {
     float: right;
+    margin-right: 0;
 }
 
 table {
@@ -230,8 +241,7 @@ table {
 }
 
 .warning {
-    border: 2px solid #E88E00;
-    border-radius: 4px;
+    border: 1px solid #E88E00;
     margin-top: 2px;
     padding: 3px;
     >span:first-child {
@@ -244,49 +254,91 @@ table {
     height: 28px;
     padding: 0 0 0 0;
     overflow: visible;
+    display: flex;
+    flex-direction: row;
     >div {
-        position: relative;
-        width: 160px;
-        height: 28px;
+        height: 29px;
+        box-sizing: border-box;
         overflow: hidden;
-        float: left;
-        margin: 0 -22px 0 0;
+        text-overflow: ellipsis;
         cursor: pointer;
         user-select: none;
         -moz-user-select: none;
-    }
-    >div:nth-child(1) {
-        z-index: 3;
-    }
-    >div:nth-child(2) {
-        z-index: 2;
-    }
-    >div:nth-child(3) {
-        z-index: 1;
+        background: lightgray;
+        border: 1px solid #A7A7A7;
+        outline: 1px solid transparent;
+        padding: 7px 12px;
     }
     >div.active {
-        z-index: 40;
-        padding-bottom: 1px;
-    }
-    >div.active .tab-box {
         background: white;
+        border-bottom: none;
+    }
+    >div:not(:last-child) {
+        border-right: 0;
     }
 }
 
-.tab-box {
-    height: 33px;
-    background: lightgray;
-    border-radius: 4px;
-    border: 1px solid #A7A7A7;
-    outline: 1px solid transparent;
-    margin: 0 10px 0;
-    -webkit-transform: perspective(100px) rotateX(20deg);
-    -moz-transform: perspective(100px) rotateX(20deg);
-    transform: perspective(100px) rotateX(20deg);
-}
 
-.tab-label {
-    position: absolute;
-    top: 7px;
-    left: 23px;
+input[type=radio],
+input[type=checkbox] {
+    display: none;
+}
+input[type=radio]+span:before,
+input[type=checkbox]+span:before {
+    display: inline-block;
+    content: "\02713";
+    background-color: white;
+    margin-right: 4px;
+    text-align: center;
+    line-height: 17px;
+    font-weight: bold;
+    transition: color 0.2s, background-color 0.2s, border 0.2s;
+    box-sizing: border-box;
+}
+input[type=checkbox]+span:before {
+    width: 17px;
+    height: 17px;
+    border-radius: 4px;
+    color: rgba(255, 255, 255, 0);
+    box-shadow: 0 0 1px 1px gray;
+    margin-left: 2px;
+}
+input[type=radio]+span:before {
+    width: 15px;
+    height: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 1px 1px gray;
+    border: 3px solid white;
+    color: transparent;
+    position: relative;
+    top: 4px;
+}
+input[type=checkbox]:disabled+span:before {
+    background: gray;
+}
+input[type=checkbox]:hover+span:before,
+input[type=radio]:hover+span:before {
+    box-shadow: 0 0 1px 2px #5095ea;
+}
+input[type=checkbox]:disabled+span:before,
+input[type=radio]:disabled+span:before {
+    box-shadow: none;
+}
+input[type=radio]:disabled+span:before {
+    border-color: gray;
+}
+input[type=radio]:disabled:not(:checked)+span:before {
+    background-color: gray;
+}
+input[type=radio]:checked+span:before {
+    background-color: #5095ea;
+}
+input[type=radio]:disabled:checked+span:before {
+    background-color: white;
+}
+input[type=checkbox]:disabled:checked+span:before {
+    color: white;
+}
+input[type=checkbox]:checked+span:before {
+    color: #5095ea;
 }

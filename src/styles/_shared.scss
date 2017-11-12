@@ -7,12 +7,9 @@
 button,
 input[type='button'],
 input[type='submit'],
-select,
-input[type='checkbox'],
-input[type='radio'] {
-    background-image: linear-gradient(#EDEDED, #EDEDED 38%, #DEDEDE);
+select {
+    background-color: #EDEDED;
     border: 1px solid rgba(0, 0, 0, 0.25);
-    border-radius: 2px;
     color: #444;
     font: inherit;
     margin: 0 3px 0 0px;
@@ -23,10 +20,8 @@ input[type='radio'] {
 button:hover,
 input[type='button']:hover,
 input[type='submit']:hover,
-select:hover,
-input[type='checkbox']:hover,
-input[type='radio']:hover {
-    background-image: linear-gradient(#F4F4F4, #F4F4F4 38%, #EDEDED);
+select:hover {
+    background-color: #F4F4F4;
     color: black;
     border-color: rgba(0, 0, 0, 0.298039);
 }
@@ -52,7 +47,6 @@ textarea {
     border-style: solid;
     border-color: rgb(191, 191, 191);
     border-image: initial;
-    border-radius: 2px;
     font: inherit;
     margin: 0px;
     padding: 3px 3px 4px;
@@ -135,12 +129,14 @@ select {
     padding: 2px 24px 2px 8px;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url(../icons/downarrow.svg), linear-gradient(#EDEDED, #EDEDED 38%, #DEDEDE);
+    background-color: #EDEDED;
+    background-image: url(../icons/downarrow.svg);
     background-position: calc(100% - -1px) -1px, left top;
     background-size: 27px 27px, 100% 100%;
     background-repeat: no-repeat;
 }
 
 select:hover {
-    background-image: url(../icons/downarrow.svg), linear-gradient(#F4F4F4, #F4F4F4 38%, #EDEDED);
+    background-color: #F4F4F4;
+    background-image: url(../icons/downarrow.svg);
 }
