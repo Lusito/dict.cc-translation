@@ -4,8 +4,8 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
-import { VisualizerConfig } from "../lib/translator";
-import { sendToTab } from "../lib/messageUtil";
+import { VisualizerConfig } from "../translatorShared";
+import { sendToTab } from "../../lib/messageUtil";
 
 // Shows a mini translation layer above the current website.
 export function inpageVisualizer(config: VisualizerConfig) {

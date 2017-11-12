@@ -4,8 +4,8 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
-import { VisualizerConfig } from "../lib/translator";
-import { openPopup } from "../lib/windowHelper";
+import { VisualizerConfig } from "../translatorShared";
+import { openPopup } from "../../lib/windowHelper";
 
 // Shows a small popup window using pocket.dict.cc
 export function pocketPopupVisualizer(config: VisualizerConfig) {

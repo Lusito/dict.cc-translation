@@ -4,11 +4,11 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
-import * as messageUtil from "./lib/messageUtil";
-import * as translator from "./lib/translator";
-import { openPopup } from "./lib/windowHelper";
-import { settings } from "./lib/settings";
-import { VisualizerConfig } from "./lib/translator";
+import * as messageUtil from "../lib/messageUtil";
+import * as translator from "./translator";
+import { openPopup } from "../lib/windowHelper";
+import { settings } from "../lib/settings";
+import { VisualizerConfig } from "./translatorShared";
 import { tabVisualizer } from "./visualizers/tabVisualizer";
 import { initContextMenu } from "./contextmenu";
 

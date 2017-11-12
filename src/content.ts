@@ -10,7 +10,7 @@
 import * as browser from 'webextension-polyfill';
 import * as messageUtil from "./lib/messageUtil";
 import { createElement, addLink, on, removeAllChildren } from "./lib/htmlUtils";
-import { DCCResult, DCCResultLink, VisualizerConfig } from "./lib/translator";
+import { DCCResult, DCCResultLink, VisualizerConfig } from "./background/translatorShared";
 import { SettingsSignature, TranslationEntry, TranslationMethod } from "./lib/settingsSignature";
 
 interface Config {

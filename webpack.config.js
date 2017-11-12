@@ -1,6 +1,6 @@
 module.exports = {
     entry: {
-        background: "./src/background.ts",
+        background: "./src/background/background.ts",
         content: "./src/content.ts",
         options: "./src/options.ts",
         popup: "./src/popup.ts"

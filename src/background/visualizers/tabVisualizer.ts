@@ -5,8 +5,8 @@
  */
 
 import * as browser from 'webextension-polyfill';
-import { VisualizerConfig } from "../lib/translator";
-import { isFirefox, browserInfo } from "../lib/browserInfo";
+import { VisualizerConfig } from "../translatorShared";
+import { isFirefox, browserInfo } from "../../lib/browserInfo";
 
 let lastTab: number | null = null;
 

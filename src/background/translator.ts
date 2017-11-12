@@ -7,12 +7,13 @@
 // This file is used to run translations as the user configured it
 
 import * as browser from 'webextension-polyfill';
-import { settings } from "./settings";
-import * as request from "./request";
-import { synPopupVisualizer } from "../visualizers/synPopupVisualizer";
-import { pocketPopupVisualizer } from "../visualizers/pocketPopupVisualizer";
-import { tabVisualizer } from "../visualizers/tabVisualizer";
-import { inpageVisualizer } from "../visualizers/inpageVisualizer";
+import { settings } from "../lib/settings";
+import * as request from "../lib/request";
+import { synPopupVisualizer } from "./visualizers/synPopupVisualizer";
+import { pocketPopupVisualizer } from "./visualizers/pocketPopupVisualizer";
+import { tabVisualizer } from "./visualizers/tabVisualizer";
+import { inpageVisualizer } from "./visualizers/inpageVisualizer";
+import { DCCResultLink, RunConfig, DCCResult } from './translatorShared';
 
 export let visualizers = [
     synPopupVisualizer,
@@ -20,38 +21,6 @@ export let visualizers = [
     tabVisualizer,
     inpageVisualizer
 ];
-
-export interface RunConfig {
-    languagePair?: string;
-    text: string;
-    x: number;
-    y: number;
-    url?: string;
-}
-
-export interface VisualizerConfig {
-    languagePair?: string | null;
-    text?: string;
-    url?: string;
-    x?: number;
-    y?: number;
-    params?: string;
-    protocol?: string;
-    multiWindow?: boolean;
-    tab?: browser.tabs.Tab;
-    incognito?: boolean;
-}
-
-export interface DCCResultLink {
-    href: string;
-    label: string;
-    style: string;
-}
-
-export interface DCCResult {
-    links?: DCCResultLink[];
-    error?: string;
-}
 
 export function runDCC(text: string, languagePair: string | null, callback: (result: DCCResult) => void) {
     if (!languagePair)
