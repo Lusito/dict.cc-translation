@@ -26,13 +26,36 @@ type Definition = {
     descriptions: Description[]
 };
 
-settings.onReady(() => {
-    let lp = byId('lp') as HTMLInputElement; // dropdown language pair
-    let search = byId('search') as HTMLInputElement; // text input
-    let go = byId('go') as HTMLButtonElement; // go button
-    let result: null | HTMLElement = null;
+class Popup {
+    private lp = byId('lp') as HTMLInputElement; // dropdown language pair
+    private search = byId('search') as HTMLInputElement; // text input
+    private go = byId('go') as HTMLButtonElement; // go button
+    private result: null | HTMLElement = null;
 
-    function parseDescriptionNodes(parent: HTMLElement) {
+    public constructor() {
+        // Translate text and create dropdown items
+        this.search.placeholder = browser.i18n.getMessage("popup_placeholder");
+        this.go.textContent = browser.i18n.getMessage("popup_button");
+        let translations = settings.get('translation.list');
+        for (let translation of translations) {
+            createElement(document, this.lp, 'option', {
+                textContent: translation.v,
+                value: translation.k
+            });
+        }
+
+        // on enter or click, run search
+        on(this.search, 'keydown', (e) => {
+            if (e.keyCode === 13)
+                this.runSearch();
+        });
+        on(this.go, 'click', this.runSearch.bind(this));
+        
+        // workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=1338909
+        setTimeout(() => this.search.focus(), 100);
+    }
+
+    private parseDescriptionNodes(parent: HTMLElement) {
         let result: DefinitionNode[] = [];
         let nodes = parent.childNodes;
         for (let i = 0; i < nodes.length; i++) {
@@ -51,7 +74,7 @@ settings.onReady(() => {
         return result;
     }
 
-    function getSafeHref(a: HTMLAnchorElement, urlPrefix: string, urlSuffix: string) {
+    private getSafeHref(a: HTMLAnchorElement, urlPrefix: string, urlSuffix: string) {
         let href = a.getAttribute('href') || '';
         if (href.indexOf('/?') === 0) {
             href = urlPrefix + href + urlSuffix;
@@ -63,18 +86,18 @@ settings.onReady(() => {
         return href;
     }
 
-    function parseDefinitionLists(doc: Document, languagePair: string) {
+    private parseDefinitionLists(doc: Document, languagePair: string) {
         let lists = [];
         let dls = doc.querySelectorAll("dl");
         for (let i = 0; i < dls.length; i++) {
-            let definitions = parseDefinitions(dls[i], languagePair);
+            let definitions = this.parseDefinitions(dls[i], languagePair);
             if (definitions.length > 0)
                 lists.push(definitions);
         }
         return lists;
     }
 
-    function parseDefinitions(dl: HTMLDListElement, languagePair: string) {
+    private parseDefinitions(dl: HTMLDListElement, languagePair: string) {
         let urlPrefix = settings.getProtocol() + 'www.dict.cc';
         let urlSuffix = '&lp=' + languagePair;
 
@@ -88,13 +111,13 @@ settings.onReady(() => {
                 if (a) {
                     definition = {
                         textContent: a.textContent || '',
-                        href: getSafeHref(a, urlPrefix, urlSuffix),
+                        href: this.getSafeHref(a, urlPrefix, urlSuffix),
                         descriptions: []
                     };
                     definitions.push(definition);
                 } else {
                     definition = {
-                        nodes: parseDescriptionNodes(row as HTMLElement),
+                        nodes: this.parseDescriptionNodes(row as HTMLElement),
                         descriptions: []
                     };
                     definitions.push(definition);
@@ -104,8 +127,8 @@ settings.onReady(() => {
                 for (let j = 0; j < links.length; j++) {
                     let a: HTMLAnchorElement = links[j];
                     definition.descriptions.push({
-                        href: getSafeHref(a, urlPrefix, urlSuffix),
-                        nodes: parseDescriptionNodes(a)
+                        href: this.getSafeHref(a, urlPrefix, urlSuffix),
+                        nodes: this.parseDescriptionNodes(a)
                     });
                 }
             }
@@ -113,7 +136,7 @@ settings.onReady(() => {
         return definitions;
     }
 
-    function generateResult(result: HTMLElement, definitions: Definition[]) {
+    private generateResult(result: HTMLElement, definitions: Definition[]) {
         for (let def of definitions) {
             let dt = createElement(document, result, 'dt');
             let dd = createElement(document, result, 'dd');
@@ -158,55 +181,36 @@ settings.onReady(() => {
 
     // Makes a request to search pocket.dict.cc with the configured parameters.
     // Parses the resulting HTML and generates content for the popup html
-    function runSearch() {
-        let word = search.value.trim();
+    private runSearch() {
+        let word = this.search.value.trim();
         if (word !== '') {
-            let languagePair = lp.value;
+            let languagePair = this.lp.value;
             let url = settings.getProtocol() + 'pocket.dict.cc/' + settings.createParams(word, languagePair);
 
 
-            if (result === null)
-                result = createElement(document, document.body, 'div', { id: 'result' });
+            if (this.result === null)
+                this.result = createElement(document, document.body, 'div', { id: 'result' });
 
-            result.textContent = browser.i18n.getMessage("loading");
+            this.result.textContent = browser.i18n.getMessage("loading");
             request.getHTML(url, (doc: Document | null) => {
-                if (!result || !doc)
+                if (!this.result || !doc)
                     return;
-                let definitionLists = parseDefinitionLists(doc, languagePair);
+                let definitionLists = this.parseDefinitionLists(doc, languagePair);
                 if (!definitionLists.length) {
-                    result.textContent = browser.i18n.getMessage("resultFailed");
+                    this.result.textContent = browser.i18n.getMessage("resultFailed");
                 } else {
-                    result.innerHTML = '';
+                    this.result.innerHTML = '';
                     for (let def of definitionLists) {
-                        let destination = createElement(document, result, 'dl');
-                        generateResult(destination, def);
+                        let destination = createElement(document, this.result, 'dl');
+                        this.generateResult(destination, def);
                     }
                 }
             }, () => {
-                if (result)
-                    result.textContent = browser.i18n.getMessage("resultFailed");
+                if (this.result)
+                    this.result.textContent = browser.i18n.getMessage("resultFailed");
             });
         }
     }
+}
 
-    // Translate text and create dropdown items
-    search.placeholder = browser.i18n.getMessage("popup_placeholder");
-    go.textContent = browser.i18n.getMessage("popup_button");
-    let translations = settings.get('translation.list');
-    for (let translation of translations) {
-        createElement(document, lp, 'option', {
-            textContent: translation.v,
-            value: translation.k
-        });
-    }
-
-    // on enter or click, run search
-    on(search, 'keydown', (e) => {
-        if (e.keyCode === 13)
-            runSearch();
-    });
-    on(go, 'click', runSearch);
-
-    // workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=1338909
-    setTimeout(() => search.focus(), 100);
-});
+settings.onReady(() => new Popup());

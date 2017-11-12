@@ -4,12 +4,13 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
-import { byId, on, translateChildren, prompt, alert, confirm } from "./lib/htmlUtils";
-import * as request from "./lib/request";
-import * as messageUtil from "./lib/messageUtil";
-import { settings } from "./lib/settings";
-import { isFirefox } from "./lib/browserInfo";
-import { TranslationEntry } from "./lib/settingsSignature";
+import { byId, on, translateChildren } from "../lib/htmlUtils";
+import * as dialogs from "./dialogs";
+import * as request from "../lib/request";
+import * as messageUtil from "../lib/messageUtil";
+import { settings } from "../lib/settings";
+import { isFirefox } from "../lib/browserInfo";
+import { TranslationEntry } from "../lib/settingsSignature";
 
 let selectedTranslationRow: HTMLTableRowElement | null = null;
 
@@ -325,7 +326,7 @@ function initializeWarningConnections() {
 
 function startLabelEdit(row: HTMLTableRowElement) {
     let cell = row.children[0] as HTMLTableCellElement;
-    prompt('enterLabel', cell.textContent || '', (value) => {
+    dialogs.prompt('enterLabel', cell.textContent || '', (value) => {
         if (value)
             cell.textContent = value;
     });
@@ -359,7 +360,7 @@ function initializeTranslationButtons() {
         let row = selectedTranslationRow;
         if (row) {
             let label = row.children[0].textContent;
-            confirm('confirm_delete', null, label, (result) => {
+            dialogs.confirm('confirm_delete', null, label, (result) => {
                 if (result && row) {
                     selectedTranslationRow = (row.nextElementSibling || row.previousElementSibling) as HTMLTableRowElement;
                     if (selectedTranslationRow)
@@ -370,15 +371,15 @@ function initializeTranslationButtons() {
         }
     });
     on(byId('clear') as HTMLElement, 'click', () => {
-        confirm('confirm_delete', 'confirm_removeAll', null, (result) => {
+        dialogs.confirm('confirm_delete', 'confirm_removeAll', null, (result) => {
             if (result)
                 translationList.innerHTML = '';
         });
     });
     on(byId('manual') as HTMLElement, 'click', () => {
-        prompt('enterLanguagePair', "de-en", (languagePair) => {
+        dialogs.prompt('enterLanguagePair', "de-en", (languagePair) => {
             if (languagePair) {
-                prompt('enterLabel', "DE=>EN", (label) => {
+                dialogs.prompt('enterLabel', "DE=>EN", (label) => {
                     if (label)
                         addTranslationRow(label, languagePair);
                 });
@@ -406,7 +407,7 @@ function initializeTranslationButtons() {
             languagePair = second.toLowerCase() + '-' + first.toLowerCase();
             label = second.toUpperCase() + '->' + first.toUpperCase();
         }
-        prompt('enterLabel', label, (value) => {
+        dialogs.prompt('enterLabel', label, (value) => {
             if (value)
                 addTranslationRow(value, languagePair);
         });
@@ -425,7 +426,7 @@ function onLanguageListUpdate(languages: null | TranslationEntry[]) {
     if (languages && languages.length > 0)
         setLanguageList(languages);
     else
-        alert('alert_title_error', 'refreshFailed');
+        dialogs.alert('alert_title_error', 'refreshFailed');
 }
 
 function requestLanguageUpdate() {
@@ -454,7 +455,7 @@ function requestLanguageUpdate() {
 
 const saveButton = byId('save') as HTMLElement;
 on(byId('restore_defaults') as HTMLElement, 'click', () => {
-    confirm('confirm_restore_defaults', "confirm_restore_defaults_content", null, (result) => {
+    dialogs.confirm('confirm_restore_defaults', "confirm_restore_defaults_content", null, (result) => {
         if (result) {
             settings.restoreDefaults();
             saveButton.focus();
@@ -469,7 +470,7 @@ on(saveButton, 'click', () => {
         if (!isFirefox)
             window.close();
     } else {
-        alert('alert_title_error', 'noQuickKeys');
+        dialogs.alert('alert_title_error', 'noQuickKeys');
     }
 });
 
