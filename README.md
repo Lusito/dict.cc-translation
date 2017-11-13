@@ -24,7 +24,7 @@ Version 4 has been heavily rewritten to work with the new SDK and support multi-
 - Rocker gestures are now supported out of the box.
 - There's an option to use https for secure requests (enabled by default)
 
-##About Dict.cc
+## About Dict.cc
 Dict.cc is a nice dictionary with mostly German English translations, but other languages are also available and growing. Dict.cc shows quite a lot of different possible results, instead of just one, so you have a better chance of finding the correct one.
 
 ## Help
