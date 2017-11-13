@@ -60,9 +60,10 @@ class Popup {
         let nodes = parent.childNodes;
         for (let i = 0; i < nodes.length; i++) {
             let node = nodes[i];
-            if ((node as HTMLElement).tagName) {
+            let tagName = (node as HTMLElement).tagName;
+            if (tagName) {
                 result.push({
-                    tagName: (node as HTMLElement).tagName,
+                    tagName: tagName,
                     textContent: node.textContent || ''
                 });
             } else if (node.nodeType === 3) {
@@ -136,16 +137,26 @@ class Popup {
         return definitions;
     }
 
+    private onFailedKWClick(e:MouseEvent) {
+        let href = (e.currentTarget as HTMLAnchorElement).href;
+        this.runSearchFor(href.replace('www.dict.cc', 'pocket.dict.cc'));
+        e.stopImmediatePropagation();
+        e.preventDefault();
+    }
+
     private generateResult(result: HTMLElement, definitions: Definition[]) {
+        let onFailedKWClick = this.onFailedKWClick.bind(this);
         for (let def of definitions) {
             let dt = createElement(document, result, 'dt');
             let dd = createElement(document, result, 'dd');
             if (def.href) {
-                createElement(document, dt, 'a', {
+                let a = createElement(document, dt, 'a', {
                     href: def.href,
                     textContent: def.textContent || '?',
                     target: '_blank'
                 });
+                if(def.href.indexOf('&failed_kw=') > 0)
+                    a.onclick = onFailedKWClick;
             } else if (def.nodes) {
                 for (let k = 0; k < def.nodes.length; k++) {
                     let node = def.nodes[k];
@@ -153,9 +164,6 @@ class Popup {
                         createElement(document, dt, node.tagName, { textContent: node.textContent });
                     } else {
                         dt.appendChild(document.createTextNode(node.textContent));
-                    }
-                    if ((k + 1) < def.descriptions.length) {
-                        createElement(document, dd, 'br');
                     }
                 }
             }
@@ -165,6 +173,8 @@ class Popup {
                     href: desc.href,
                     target: '_blank'
                 });
+                if(desc.href.indexOf('&failed_kw=') > 0)
+                    a.onclick = onFailedKWClick;
                 for (let node of desc.nodes) {
                     if (node.tagName) {
                         createElement(document, a, node.tagName, { textContent: node.textContent });
@@ -184,32 +194,34 @@ class Popup {
     private runSearch() {
         let word = this.search.value.trim();
         if (word !== '') {
-            let languagePair = this.lp.value;
-            let url = settings.getProtocol() + 'pocket.dict.cc/' + settings.createParams(word, languagePair);
-
-
-            if (this.result === null)
-                this.result = createElement(document, document.body, 'div', { id: 'result' });
-
-            this.result.textContent = browser.i18n.getMessage("loading");
-            request.getHTML(url, (doc: Document | null) => {
-                if (!this.result || !doc)
-                    return;
-                let definitionLists = this.parseDefinitionLists(doc, languagePair);
-                if (!definitionLists.length) {
-                    this.result.textContent = browser.i18n.getMessage("resultFailed");
-                } else {
-                    this.result.innerHTML = '';
-                    for (let def of definitionLists) {
-                        let destination = createElement(document, this.result, 'dl');
-                        this.generateResult(destination, def);
-                    }
-                }
-            }, () => {
-                if (this.result)
-                    this.result.textContent = browser.i18n.getMessage("resultFailed");
-            });
+            let url = settings.getProtocol() + 'pocket.dict.cc/' + settings.createParams(word, this.lp.value);
+            this.runSearchFor(url);
         }
+    }
+
+    private runSearchFor(url: string) {
+        if (this.result === null)
+            this.result = createElement(document, document.body, 'div', { id: 'result' });
+        this.result.textContent = browser.i18n.getMessage("loading");
+        request.getHTML(url, (doc: Document | null) => {
+            if (!this.result || !doc)
+                return;
+            let languagePair = this.lp.value;
+            let definitionLists = this.parseDefinitionLists(doc, languagePair);
+            if (!definitionLists.length) {
+                this.result.textContent = browser.i18n.getMessage("resultFailed");
+            }
+            else {
+                this.result.innerHTML = '';
+                for (let def of definitionLists) {
+                    let destination = createElement(document, this.result, 'dl');
+                    this.generateResult(destination, def);
+                }
+            }
+        }, () => {
+            if (this.result)
+                this.result.textContent = browser.i18n.getMessage("resultFailed");
+        });
     }
 }
 
