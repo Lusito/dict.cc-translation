@@ -9,8 +9,8 @@
 import * as browser from 'webextension-polyfill';
 
 //fixme: types
-export type Callback = (params: any, sender?: any, sendResponse?: any) => any;
-// export type Callback = (params: any, sender?: browser.runtime.MessageSender, sendResponse?: (response:any)=>void) => any;
+export type Callback = (params: any, sender?: any) => any;
+// export type Callback = (params: any, sender?: browser.runtime.MessageSender) => any;
 
 type CallbacksMap = { [s: string]: Callback };
 
@@ -22,7 +22,7 @@ function init() {
         if (callbacks) {
             let callback = callbacks[request.action];
             if (callback) {
-                return callback(request.params, sender, sendResponse);
+                return callback(request.params, sender);
             }
         }
     });

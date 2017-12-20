@@ -1,6 +1,6 @@
 # Dict.cc Translation Web-Extension
 
-[Install on Firefox](https://addons.mozilla.org/de/firefox/addon/dictcc-translation/)
+[Install on Firefox](https://addons.mozilla.org/firefox/addon/dictcc-translation/)
 
 ## About the add-on
 The add-on uses [Dict.cc](https://www.dict.cc/) to translate words and phrases in any website, epub or pdf.
@@ -30,7 +30,7 @@ Dict.cc is a nice dictionary with mostly German English translations, but other 
 ## Help
 If you have problems, questions or other feedback, please [create an issue](https://github.com/Lusito/dict.cc-translation/issues) here on Github.
 
-If you like it, please [write a review](https://addons.mozilla.org/de/firefox/addon/dictcc-translation/).
+If you like it, please [write a review](https://addons.mozilla.org/firefox/addon/dictcc-translation/).
 
 I've received suggestions on how to improve the add-on, which can't be done without changes on dict.cc (The website):
 

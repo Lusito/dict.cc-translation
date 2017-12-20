@@ -495,7 +495,7 @@ else
 saveButton.focus();
 
 if (isFirefox)
-    document.body.className += "firefox";
+    document.body.className += " firefox";
 
 settings.onReady(() => {
     loadPreferences();
