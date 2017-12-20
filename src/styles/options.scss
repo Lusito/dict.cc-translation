@@ -1,0 +1,344 @@
+/**
+ * License: zlib/libpng
+ * @author Santo Pfingsten
+ * @see https://github.com/Lusito/dict.cc-translation
+ */
+
+@import "shared";
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: #FBFBFB;
+    font-family: "Open Sans", sans-serif;
+    width: 100%;
+    /*min-width: 700px;*/
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    max-width: 700px;
+    background: #F0F0F0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#wrapper {
+    padding: 10px;
+}
+
+body.firefox>#wrapper {
+    border: 1px solid #C1C1C1;
+}
+
+body:not(.firefox) {
+    min-width: 700px;
+}
+
+label {
+    margin-right: 2px;
+}
+label>input:disabled+span {
+    color: gray;
+}
+
+input[type=checkbox],
+input[type=radio] {
+    margin-right: 3px;
+}
+
+label>input[type=checkbox],
+label>input[type=radio] {
+    vertical-align: middle;
+}
+
+label>input[type=checkbox]+span,
+label>input[type=radio]+span {
+    vertical-align: middle;
+}
+
+#title {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#pages {
+    clear: both;
+    flex-grow: 1;
+    border: 1px solid #A7A7A7;
+    padding: 10px;
+    margin: 0 0 10px 0;
+    min-height: 280px;
+    background: white;
+    >div {
+        height: 100%;
+        overflow: auto;
+        >div:first-child {
+            margin-right: 10px;
+        }
+        >div {
+            width: 50%;
+            flex-grow: 1;
+            box-sizing: border-box;
+            position: relative;
+        }
+        >div>*:not(:first-child) {
+            margin-top: 5px;
+        }
+    }
+    >div:not(:last-child) {
+        display: flex;
+        flex-direction: row;
+    }
+    >div:not(.active) {
+        display: none;
+    }
+}
+
+#buttons {
+    flex-shrink: 0;
+    text-align: right;
+    >#restore_defaults {
+        float: left;
+    }
+}
+
+#manual {
+    color: #990000;
+}
+
+#refresh {
+    color: #009900;
+}
+
+fieldset {
+    border: 1px solid #A7A7A7;
+    box-sizing: border-box;
+}
+
+th,
+td {
+    text-align: left;
+}
+
+button.full,
+button.half1,
+button.half2 {
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+button.full {
+    display: block;
+    width: 100%;
+    margin-right: 0;
+}
+
+button.half1,
+button.half2 {
+    width: calc(50% - 20px);
+}
+
+button.half2 {
+    float: right;
+    margin-right: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    button,
+    select {
+        width: 100%;
+    }
+}
+
+#translationsTable {
+    border: 1px solid #A7A7A7;
+    cursor: default;
+    overflow-y: scroll;
+    position: absolute;
+    top: 42px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    user-select: none;
+    -moz-user-select: none;
+    td:last-child {
+        text-align: left;
+    }
+    tr.active {
+        background: highlight;
+    }
+}
+
+#translationsTableHead {
+    margin: 3px 1px 2px 1px;
+    user-select: none;
+    -moz-user-select: none;
+    th:last-child {
+        text-align: right;
+        padding-right: 20px;
+    }
+}
+
+#translationsTableHead th,
+#translation_list td {
+    padding-left: 5px;
+}
+
+.dialogOverlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.dialog {
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    top: 20px;
+    border: 1px solid #A7A7A7;
+    background: #FFFFE1;
+    box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.59);
+    padding: 10px;
+}
+
+.dialog.prompt>div>input {
+    width: 100%;
+}
+
+.dialog>h2,
+.dialogButtons {
+    text-align: center;
+}
+
+.dialog>h2 {
+    margin: 0 0 10px 0;
+}
+
+.dialogButtons {
+    margin-top: 10px;
+}
+
+#loadingIndicator {
+    display: none;
+    height: 22px;
+}
+
+#loadingIndicator,
+#language_config_table button {
+    box-sizing: border-box;
+}
+
+.warning {
+    border: 1px solid #E88E00;
+    margin-top: 2px;
+    padding: 3px;
+    >span:first-child {
+        color: #E88E00;
+        font-weight: bold;
+    }
+}
+
+#tabs {
+    height: 28px;
+    padding: 0 0 0 0;
+    overflow: visible;
+    display: flex;
+    flex-direction: row;
+    >div {
+        height: 29px;
+        box-sizing: border-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+        user-select: none;
+        -moz-user-select: none;
+        background: lightgray;
+        border: 1px solid #A7A7A7;
+        outline: 1px solid transparent;
+        padding: 7px 12px;
+    }
+    >div.active {
+        background: white;
+        border-bottom: none;
+    }
+    >div:not(:last-child) {
+        border-right: 0;
+    }
+}
+
+
+input[type=radio],
+input[type=checkbox] {
+    display: none;
+}
+input[type=radio]+span:before,
+input[type=checkbox]+span:before {
+    display: inline-block;
+    content: "\02713";
+    background-color: white;
+    margin-right: 4px;
+    text-align: center;
+    line-height: 17px;
+    font-weight: bold;
+    transition: color 0.2s, background-color 0.2s, border 0.2s;
+    box-sizing: border-box;
+}
+input[type=checkbox]+span:before {
+    width: 17px;
+    height: 17px;
+    border-radius: 4px;
+    color: rgba(255, 255, 255, 0);
+    box-shadow: 0 0 1px 1px gray;
+    margin-left: 2px;
+}
+input[type=radio]+span:before {
+    width: 15px;
+    height: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 1px 1px gray;
+    border: 3px solid white;
+    color: transparent;
+    position: relative;
+    top: 4px;
+}
+input[type=checkbox]:disabled+span:before {
+    background: gray;
+}
+input[type=checkbox]:hover+span:before,
+input[type=radio]:hover+span:before {
+    box-shadow: 0 0 1px 2px #5095ea;
+}
+input[type=checkbox]:disabled+span:before,
+input[type=radio]:disabled+span:before {
+    box-shadow: none;
+}
+input[type=radio]:disabled+span:before {
+    border-color: gray;
+}
+input[type=radio]:disabled:not(:checked)+span:before {
+    background-color: gray;
+}
+input[type=radio]:checked+span:before {
+    background-color: #5095ea;
+}
+input[type=radio]:disabled:checked+span:before {
+    background-color: white;
+}
+input[type=checkbox]:disabled:checked+span:before {
+    color: white;
+}
+input[type=checkbox]:checked+span:before {
+    color: #5095ea;
+}

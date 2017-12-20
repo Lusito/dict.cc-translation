@@ -1,0 +1,71 @@
+/**
+ * License: zlib/libpng
+ * @author Santo Pfingsten
+ * @see https://github.com/Lusito/dict.cc-translation
+ */
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body:not(.measuring),
+body:not(.measuring) * {
+    overflow: hidden;
+}
+
+body>div {
+    display: flex;
+    flex-direction: row;
+}
+
+body {
+    padding: 5px;
+    white-space: nowrap;
+    color: #000;
+    font: 13px Arial;
+    background: #F0F0F0;
+}
+
+#logo {
+    min-height: 16px;
+    min-width: 16px;
+    outline: none;
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+a,
+a:hover {
+    color: #666;
+}
+
+#result {
+    line-height: 16px;
+    vertical-align: top;
+    padding: 0 4px;
+}
+
+#extra {
+    display: none;
+    border-top: 1px dotted #C8C8C8;
+    margin: 0;
+}
+
+body.menu #extra {
+    display: block;
+    padding: 2px 0 2px 10px;
+}
+
+body.menu #result {
+    font-weight: bold;
+}

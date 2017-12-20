@@ -1,0 +1,84 @@
+/**
+ * License: zlib/libpng
+ * @author Santo Pfingsten
+ * @see https://github.com/Lusito/dict.cc-translation
+ */
+
+@import "shared";
+html,
+body {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    padding: 5px;
+    min-width: 400px;
+    font-family: arial, helvetica, sans-serif;
+    font-size: 11pt;
+    background: white;
+}
+
+#form {
+    display: flex;
+    flex-direction: row;
+    >input {
+        flex-grow: 1;
+    }
+    >* {
+        margin-right: 5px;
+    }
+    >*:last-child {
+        margin-right: 0;
+    }
+}
+
+#result {
+    display: flex;
+    flex-direction: row;
+}
+
+dl {
+    flex-grow: 1;
+    max-height: 400px;
+    max-width: 400px;
+    overflow: auto;
+    margin: 5px 0 0 0;
+    padding: 5px;
+    border: 1px solid #bfbfbf;
+    border-radius: 2px;
+}
+
+dl:not(:first-child) {
+    margin-left: 6px;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+dt {
+    font-weight: bold;
+    font-size: 10pt;
+}
+
+dt:not(:first-child) {
+    margin-top: 13px;
+}
+
+dd {
+    margin-left: 20px;
+    line-height: 18px
+}
+
+var {
+    color: #36c;
+    font-style: normal;
+}
+
+kbd {
+    color: #039;
+    font-family: serif, arial, helvetica, sans-serif;
+    font-size: 10pt;
+}

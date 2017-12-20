@@ -1,6 +1,6 @@
 # Dict.cc Translation Web-Extension
 
-[Install on Firefox](https://addons.mozilla.org/de/firefox/addon/dictcc-translation/)
+[Install on Firefox](https://addons.mozilla.org/firefox/addon/dictcc-translation/)
 
 ## About the add-on
 The add-on uses [Dict.cc](https://www.dict.cc/) to translate words and phrases in any website, epub or pdf.
@@ -24,13 +24,13 @@ Version 4 has been heavily rewritten to work with the new SDK and support multi-
 - Rocker gestures are now supported out of the box.
 - There's an option to use https for secure requests (enabled by default)
 
-##About Dict.cc
+## About Dict.cc
 Dict.cc is a nice dictionary with mostly German English translations, but other languages are also available and growing. Dict.cc shows quite a lot of different possible results, instead of just one, so you have a better chance of finding the correct one.
 
 ## Help
 If you have problems, questions or other feedback, please [create an issue](https://github.com/Lusito/dict.cc-translation/issues) here on Github.
 
-If you like it, please [write a review](https://addons.mozilla.org/de/firefox/addon/dictcc-translation/).
+If you like it, please [write a review](https://addons.mozilla.org/firefox/addon/dictcc-translation/).
 
 I've received suggestions on how to improve the add-on, which can't be done without changes on dict.cc (The website):
 
@@ -40,4 +40,4 @@ I've received suggestions on how to improve the add-on, which can't be done with
 Until support for this has been added in the form of a RESTful API, there is little I can do.
 
 ## License
-The code of this add-on has been released under the [LGPL V3 License](https://github.com/Lusito/dict.cc-translation/blob/master/LICENSE)
+The code of this add-on has been released under the [zlib/libpng License](https://github.com/Lusito/dict.cc-translation/blob/master/LICENSE)
