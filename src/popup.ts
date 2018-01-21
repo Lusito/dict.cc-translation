@@ -4,7 +4,7 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
-import * as browser from 'webextension-polyfill';
+import { browser } from 'webextension-polyfill-ts';
 import { settings } from "./lib/settings";
 import * as request from "./lib/request";
 import { byId, createElement, on } from "./lib/htmlUtils";

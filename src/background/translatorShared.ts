@@ -4,7 +4,7 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
-import * as browser from 'webextension-polyfill';
+import { Tabs } from 'webextension-polyfill-ts';
 
 export interface RunConfig {
     languagePair?: string;
@@ -23,7 +23,7 @@ export interface VisualizerConfig {
     params?: string;
     protocol?: string;
     multiWindow?: boolean;
-    tab?: browser.tabs.Tab;
+    tab?: Tabs.Tab;
     incognito?: boolean;
 }
 

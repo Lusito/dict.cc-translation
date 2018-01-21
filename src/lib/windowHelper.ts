@@ -6,11 +6,11 @@
 
 // This file contains helpers to manage the popup windows (one for normal, one for incognito)
 
-import * as browser from 'webextension-polyfill';
+import { browser, Windows } from 'webextension-polyfill-ts';
 export let cache: { [s: string]: number } = {};
 
 export function openPopup(url: string, incognito: boolean, width: number, height: number) {
-    let config: browser.windows.CreateData = {
+    let config: Windows.CreateCreateDataType = {
         width: width,
         height: height
     };
@@ -23,9 +23,9 @@ export function openPopup(url: string, incognito: boolean, width: number, height
         if (navigator.userAgent.toLowerCase().indexOf("firefox") < 0) {
             config.type = "popup";
         }
-        browser.windows.create(config).then((window) => cache[cacheKey] = window.id);
+        browser.windows.create(config).then((window) => cache[cacheKey] = window.id || 0);
     } else {
-        config.focused = true;
+        // config.focused = true; //fixme: unsupported?
         browser.windows.update(popupId, config);
         browser.tabs.query({ windowId: popupId }).then((tabs) => {
             if (tabs.length > 0) {

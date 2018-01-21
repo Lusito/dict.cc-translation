@@ -6,7 +6,7 @@
 
 // This file is used to run translations as the user configured it
 
-import * as browser from 'webextension-polyfill';
+import { browser, Tabs } from 'webextension-polyfill-ts';
 import { settings } from "../lib/settings";
 import * as request from "../lib/request";
 import { synPopupVisualizer } from "./visualizers/synPopupVisualizer";
@@ -66,7 +66,7 @@ export function runDCC(text: string, languagePair: string | null, callback: (res
     });
 }
 
-export function run(config: RunConfig, isQuick: boolean, tab: browser.tabs.Tab) {
+export function run(config: RunConfig, isQuick: boolean, tab: Tabs.Tab) {
     let lp = config.languagePair || settings.getFirstLanguagePair();
     if (!lp)
         return;
