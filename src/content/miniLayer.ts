@@ -162,9 +162,12 @@ export class MiniLayer {
     private createResultEntry(def: DCCResultLink) {
         let link = createElement(this.idoc, null, "a", {
             textContent: def.label,
-            style: def.style
+            style: def.style,
+            href: def.href
         });
-        on(link, "click", () => {
+        on(link, "click", (e) => {
+            e.preventDefault();
+            e.stopImmediatePropagation();
             this.destroy();
             messageUtil.send('showTranslationResult', {
                 href: def.href
