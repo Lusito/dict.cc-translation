@@ -27,6 +27,6 @@
     "source-map-support": "^0.5.0",
     "typescript": "^2.5.3",
     "uglify-es": "^3.1.9",
-    "webextension-polyfill-ts": "^0.8.2"
+    "webextension-polyfill-ts": "^0.8.3"
   }
 }
