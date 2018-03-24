@@ -4,7 +4,7 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
-import * as browser from 'webextension-polyfill';
+import { browser, Tabs } from 'webextension-polyfill-ts';
 import { VisualizerConfig } from "../translatorShared";
 import { isFirefox, browserInfo } from "../../lib/browserInfo";
 
@@ -12,7 +12,7 @@ let lastTab: number | null = null;
 
 // Opens a tab (or updates it) using www.dict.cc
 export function tabVisualizer(config: VisualizerConfig) {
-    let tabConfig: browser.tabs.CreateProperties = {};
+    let tabConfig: Tabs.CreateCreatePropertiesType = {};
     if (config.tab && isFirefox && parseFloat(browserInfo.version) >= 57)
         tabConfig.openerTabId = config.tab.id;
     if (config.url)

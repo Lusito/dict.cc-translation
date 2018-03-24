@@ -4,7 +4,7 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
-import * as browser from 'webextension-polyfill';
+import { browser } from 'webextension-polyfill-ts';
 import * as messageUtil from "../lib/messageUtil";
 import { createElement, addLink, on, removeAllChildren } from "../lib/htmlUtils";
 import { DCCResultLink } from "../background/translatorShared";
@@ -162,9 +162,12 @@ export class MiniLayer {
     private createResultEntry(def: DCCResultLink) {
         let link = createElement(this.idoc, null, "a", {
             textContent: def.label,
-            style: def.style
+            style: def.style,
+            href: def.href
         });
-        on(link, "click", () => {
+        on(link, "click", (e) => {
+            e.preventDefault();
+            e.stopImmediatePropagation();
             this.destroy();
             messageUtil.send('showTranslationResult', {
                 href: def.href

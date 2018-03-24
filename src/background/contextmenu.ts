@@ -5,7 +5,7 @@
  */
 
 // This file creates and recreates the context menu (when settings changed)
-import * as browser from 'webextension-polyfill';
+import { browser, Menus, Tabs } from 'webextension-polyfill-ts';
 import * as messageUtil from "../lib/messageUtil";
 import * as translator from "./translator";
 import { settings } from "../lib/settings";
@@ -23,7 +23,7 @@ export function initContextMenu() {
     let wordUnderCursor: string | null = null;
     let lastCursorX = 0;
     let lastCursorY = 0;
-    const menuContexts = ["editable", "frame", "page", "link", "selection"];
+    const menuContexts:[Menus.ContextType] = ["editable", "frame", "page", "link", "selection"];
 
     messageUtil.receive('setWordUnderCursor', (data: WordUnderCursor) => {
         wordUnderCursor = data.text.trim();
@@ -52,7 +52,7 @@ export function initContextMenu() {
         });
     }
 
-    function createEntry(label: string, callback: (info: browser.contextMenus.OnClickData, tab: browser.tabs.Tab) => void) {
+    function createEntry(label: string, callback: (info: Menus.OnClickData, tab: Tabs.Tab) => void) {
         let options = {
             title: label,
             contexts: menuContexts,

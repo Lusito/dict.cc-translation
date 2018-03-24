@@ -7,7 +7,7 @@
 // This file intercepts clicks (if appropriate), detects words under the cursor and shows a mini in-page translation
 // Ideally, a popup panel would be used to show the translation, but that is not available in web-extensions.
 
-import * as browser from 'webextension-polyfill';
+import { browser } from 'webextension-polyfill-ts';
 import * as messageUtil from "../lib/messageUtil";
 import { DCCResult, VisualizerConfig } from "../background/translatorShared";
 import { SettingsSignature, TranslationEntry, TranslationMethod } from "../lib/settingsSignature";

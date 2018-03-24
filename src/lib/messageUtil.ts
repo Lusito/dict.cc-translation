@@ -6,7 +6,7 @@
 
 // This file contains communication helpers
 
-import * as browser from 'webextension-polyfill';
+import { browser, Tabs } from 'webextension-polyfill-ts';
 
 //fixme: types
 export type Callback = (params: any, sender?: any) => any;
@@ -64,7 +64,7 @@ export function sendToAllTabs(name: string, params: any) {
     }
 }
 
-export function sendToTab(tab: browser.tabs.Tab, name: string, params: any, callback?: (value: any) => any) {
+export function sendToTab(tab: Tabs.Tab, name: string, params: any, callback?: (value: any) => any) {
     let data = {
         action: name,
         params: params

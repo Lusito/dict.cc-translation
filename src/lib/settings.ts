@@ -6,7 +6,7 @@
 
 // This file manages all settings, their defaults and changes
 
-import * as browser from 'webextension-polyfill';
+import { browser, Storage } from 'webextension-polyfill-ts';
 import * as messageUtil from "./messageUtil";
 import { isFirefox } from "./browserInfo";
 import { TranslationMethod, TranslationEntry, SettingsTypeMap, SettingsSignature } from "./settingsSignature";
@@ -37,7 +37,7 @@ const defaultSettings: SettingsMap = {
 };
 
 class Settings {
-    private storage: browser.storage.StorageArea;
+    private storage: Storage.StorageArea;
     private map: SettingsMap = {};
     private readyCallbacks: Callback[] | null = [];
     public constructor() {
