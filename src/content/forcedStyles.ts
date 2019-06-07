@@ -27,12 +27,12 @@ export const OVERLAY_STYLES: StyleMap = {
     left: 0,
     right: 0,
     bottom: 0,
-    background: "rgba(128, 128, 128, 0.22)"
+    background: "rgba(0, 0, 0, 0.25)"
 };
 
 export const DEFAULT_PANEL_STYLES: StyleMap = {
     position: "fixed",
-    "box-shadow": "0 0 4px 1px #adadad"
+    "box-shadow": "rgba(0, 0, 0, 0.15) 0px 0px 2px 1px"
 };
 
 export const MICRO_PANEL_STYLES: StyleMap = {
