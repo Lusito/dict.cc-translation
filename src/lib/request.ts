@@ -6,7 +6,7 @@
 
 export function getHTML(url: string, onSuccess: (doc: Document | null) => void, onError: (this: XMLHttpRequest, ev: ErrorEvent) => any) {
     // @ts-ignore'
-    let xhr = new XMLHttpRequest({ mozAnon: true });
+    const xhr = new XMLHttpRequest({ mozAnon: true });
     // xhr.withCredentials = false;
     xhr.onload = () => onSuccess(xhr.responseXML);
     xhr.onerror = onError;

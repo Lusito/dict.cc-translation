@@ -4,7 +4,7 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
-import { Tabs } from 'webextension-polyfill-ts';
+import { Tabs } from "webextension-polyfill-ts";
 
 export interface RunConfig {
     languagePair?: string;

@@ -5,7 +5,7 @@
  */
 
 // This file creates and recreates the context menu (when settings changed)
-import { browser, Menus, Tabs } from 'webextension-polyfill-ts';
+import { browser, Menus, Tabs } from "webextension-polyfill-ts";
 import * as messageUtil from "../lib/messageUtil";
 import * as translator from "./translator";
 import { settings } from "../lib/settings";
@@ -23,9 +23,9 @@ export function initContextMenu() {
     let wordUnderCursor: string | null = null;
     let lastCursorX = 0;
     let lastCursorY = 0;
-    const menuContexts:[Menus.ContextType] = ["editable", "frame", "page", "link", "selection"];
+    const menuContexts: Menus.ContextType[] = ["editable", "frame", "page", "link", "selection"];
 
-    messageUtil.receive('setWordUnderCursor', (data: WordUnderCursor) => {
+    messageUtil.receive("setWordUnderCursor", (data: WordUnderCursor) => {
         wordUnderCursor = data.text.trim();
         lastCursorX = data.x;
         lastCursorY = data.y;
@@ -43,7 +43,7 @@ export function initContextMenu() {
         // browser.contextMenus.update("translationLabel", {title: title});
     });
 
-    messageUtil.receive('settingsChanged', recreate);
+    messageUtil.receive("settingsChanged", recreate);
 
     function createSeparator() {
         return browser.contextMenus.create({
@@ -53,7 +53,7 @@ export function initContextMenu() {
     }
 
     function createEntry(label: string, callback: (info: Menus.OnClickData, tab: Tabs.Tab) => void) {
-        let options = {
+        const options = {
             title: label,
             contexts: menuContexts,
             onclick: callback
@@ -62,9 +62,9 @@ export function initContextMenu() {
     }
 
     function createLabel(label: string, id: string) {
-        let options = {
+        const options = {
             title: label,
-            id: id,
+            id,
             contexts: menuContexts,
             enabled: false
         };
@@ -77,7 +77,7 @@ export function initContextMenu() {
             contexts: menuContexts,
             onclick: (info, tab) => {
                 translator.run({
-                    text: info.selectionText || wordUnderCursor || '',
+                    text: info.selectionText || wordUnderCursor || "",
                     languagePair: translation.k,
                     x: lastCursorX,
                     y: lastCursorY
@@ -88,13 +88,13 @@ export function initContextMenu() {
 
     function recreate() {
         browser.contextMenus.removeAll();
-        if (!settings.get('context.enabled'))
+        if (!settings.get("context.enabled"))
             return;
 
-        if (settings.get('context.simple')) {
-            let translations = settings.get('translation.list');
+        if (settings.get("context.simple")) {
+            const translations = settings.get("translation.list");
             if (translations.length) {
-                let t = translations[0];
+                const t = translations[0];
                 createTranslationEntry(t, browser.i18n.getMessage("translateAs", t.v));
             }
             return;
@@ -103,9 +103,9 @@ export function initContextMenu() {
         createLabel(browser.i18n.getMessage("translateTo"), "translationLabel");
         createSeparator();
 
-        let translations = settings.get('translation.list');
+        const translations = settings.get("translation.list");
         if (translations.length) {
-            for (let translation of translations) {
+            for (const translation of translations) {
                 createTranslationEntry(translation);
             }
 

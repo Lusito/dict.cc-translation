@@ -6,14 +6,14 @@
 
 // This file is used to run translations as the user configured it
 
-import { browser, Tabs } from 'webextension-polyfill-ts';
+import { browser, Tabs } from "webextension-polyfill-ts";
 import { settings } from "../lib/settings";
 import * as request from "../lib/request";
 import { synPopupVisualizer } from "./visualizers/synPopupVisualizer";
 import { pocketPopupVisualizer } from "./visualizers/pocketPopupVisualizer";
 import { tabVisualizer } from "./visualizers/tabVisualizer";
 import { inpageVisualizer } from "./visualizers/inpageVisualizer";
-import { DCCResultLink, RunConfig, DCCResult } from './translatorShared';
+import { DCCResultLink, RunConfig, DCCResult } from "./translatorShared";
 
 export let visualizers = [
     synPopupVisualizer,
@@ -27,8 +27,8 @@ export function runDCC(text: string, languagePair: string | null, callback: (res
         languagePair = settings.getFirstLanguagePair();
     if (!languagePair)
         return;
-    let params = settings.createParams(text, languagePair);
-    let url = settings.getProtocol() + 'www.dict.cc/dcc-gadget.php' + params;
+    const params = settings.createParams(text, languagePair);
+    const url = settings.getProtocol() + "www.dict.cc/dcc-gadget.php" + params;
 
     request.getHTML(url, (doc: Document | null) => {
         if (!doc) {
@@ -37,22 +37,22 @@ export function runDCC(text: string, languagePair: string | null, callback: (res
             });
             return;
         }
-        let elements = doc.getElementsByTagName("a");
-        let links: DCCResultLink[] = [];
+        const elements = doc.getElementsByTagName("a");
+        const links: DCCResultLink[] = [];
         for (let i = 0; i < elements.length; i++) {
-            let element = elements[i];
-            let style = element.getAttribute('style');
-            if (element.querySelector('u') !== null)
-                style = 'text-decoration:underline;' + style;
+            const element = elements[i];
+            let style = element.getAttribute("style");
+            if (element.querySelector("u") !== null)
+                style = "text-decoration:underline;" + style;
             links.push({
-                href: element.href + '&lp=' + languagePair,
-                label: element.textContent || '?',
-                style: style || ''
+                href: element.href + "&lp=" + languagePair,
+                label: element.textContent || "?",
+                style: style || ""
             });
         }
         if (links && links.length > 0) {
             callback({
-                links: links
+                links
             });
         } else {
             callback({
@@ -67,10 +67,10 @@ export function runDCC(text: string, languagePair: string | null, callback: (res
 }
 
 export function run(config: RunConfig, isQuick: boolean, tab: Tabs.Tab) {
-    let lp = config.languagePair || settings.getFirstLanguagePair();
+    const lp = config.languagePair || settings.getFirstLanguagePair();
     if (!lp)
         return;
-    let finalConfig = {
+    const finalConfig = {
         languagePair: lp,
         text: config.text,
         x: config.x || 0,
@@ -79,9 +79,9 @@ export function run(config: RunConfig, isQuick: boolean, tab: Tabs.Tab) {
         params: settings.createParams(config.text, lp),
         protocol: settings.getProtocol(),
         multiWindow: settings.getMultiWindow(isQuick),
-        tab: tab,
+        tab,
         incognito: tab.incognito
     };
-    let method = settings.getOpenMethod(isQuick);
+    const method = settings.getOpenMethod(isQuick);
     visualizers[method](finalConfig);
 }
