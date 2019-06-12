@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "web-ext run",
-    "release": "run-s build-release pack",
-    "all": "run-s build",
+    "release": "npm run build-release && npm run pack",
     "build": "webpack --mode=development",
     "build-release": "webpack --mode=production",
     "pack": "web-ext build -i src definitions *.json \"*.js\" \"dist/*.map\" -i !manifest.json",
@@ -21,7 +20,6 @@
     "css-loader": "^3.0.0",
     "mini-css-extract-plugin": "^0.7.0",
     "node-sass": "^4.12.0",
-    "npm-run-all": "^4.1.5",
     "sass-loader": "^7.1.0",
     "source-map-loader": "^0.2.4",
     "source-map-support": "^0.5.12",
