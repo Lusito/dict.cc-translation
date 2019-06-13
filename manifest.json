@@ -71,7 +71,7 @@
         "tabs"
     ],
     "web_accessible_resources": [
-        "dist/minilayer.css",
+        "dist/content.css",
         "icons/icon16.png"
     ]
 }

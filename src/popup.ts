@@ -4,10 +4,11 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
-import { browser } from 'webextension-polyfill-ts';
+import { browser } from "webextension-polyfill-ts";
 import { settings } from "./lib/settings";
 import * as request from "./lib/request";
 import { byId, createElement, on } from "./lib/htmlUtils";
+import "./styles/popup.scss";
 
 type DefinitionNode = {
     tagName?: string,
@@ -15,7 +16,7 @@ type DefinitionNode = {
 };
 
 interface Description {
-    href: string,
+    href: string;
     nodes: DefinitionNode[];
 }
 
@@ -27,48 +28,48 @@ type Definition = {
 };
 
 class Popup {
-    private lp = byId('lp') as HTMLInputElement; // dropdown language pair
-    private search = byId('search') as HTMLInputElement; // text input
-    private go = byId('go') as HTMLButtonElement; // go button
+    private lp = byId("lp") as HTMLInputElement; // dropdown language pair
+    private search = byId("search") as HTMLInputElement; // text input
+    private go = byId("go") as HTMLButtonElement; // go button
     private result: null | HTMLElement = null;
 
     public constructor() {
         // Translate text and create dropdown items
         this.search.placeholder = browser.i18n.getMessage("popup_placeholder");
         this.go.textContent = browser.i18n.getMessage("popup_button");
-        let translations = settings.get('translation.list');
-        for (let translation of translations) {
-            createElement(document, this.lp, 'option', {
+        const translations = settings.get("translation.list");
+        for (const translation of translations) {
+            createElement(document, this.lp, "option", {
                 textContent: translation.v,
                 value: translation.k
             });
         }
 
         // on enter or click, run search
-        on(this.search, 'keydown', (e) => {
+        on(this.search, "keydown", (e) => {
             if (e.keyCode === 13)
                 this.runSearch();
         });
-        on(this.go, 'click', this.runSearch.bind(this));
-        
+        on(this.go, "click", this.runSearch.bind(this));
+
         // workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=1338909
         setTimeout(() => this.search.focus(), 100);
     }
 
     private parseDescriptionNodes(parent: HTMLElement) {
-        let result: DefinitionNode[] = [];
-        let nodes = parent.childNodes;
+        const result: DefinitionNode[] = [];
+        const nodes = parent.childNodes;
         for (let i = 0; i < nodes.length; i++) {
-            let node = nodes[i];
-            let tagName = (node as HTMLElement).tagName;
+            const node = nodes[i];
+            const tagName = (node as HTMLElement).tagName;
             if (tagName) {
                 result.push({
-                    tagName: tagName,
-                    textContent: node.textContent || ''
+                    tagName,
+                    textContent: node.textContent || ""
                 });
             } else if (node.nodeType === 3) {
                 result.push({
-                    textContent: node.textContent || ''
+                    textContent: node.textContent || ""
                 });
             }
         }
@@ -76,22 +77,22 @@ class Popup {
     }
 
     private getSafeHref(a: HTMLAnchorElement, urlPrefix: string, urlSuffix: string) {
-        let href = a.getAttribute('href') || '';
-        if (href.indexOf('/?') === 0) {
+        let href = a.getAttribute("href") || "";
+        if (href.indexOf("/?") === 0) {
             href = urlPrefix + href + urlSuffix;
-        } else if (href.indexOf('?') === 0) {
-            href = urlPrefix + '/' + href + urlSuffix;
-        } else if (href.indexOf('http') !== 0) {
-            href = '#'; // not as expected, could be javascript, so override
+        } else if (href.indexOf("?") === 0) {
+            href = urlPrefix + "/" + href + urlSuffix;
+        } else if (href.indexOf("http") !== 0) {
+            href = "#"; // not as expected, could be javascript, so override
         }
         return href;
     }
 
     private parseDefinitionLists(doc: Document, languagePair: string) {
-        let lists = [];
-        let dls = doc.querySelectorAll("dl");
+        const lists = [];
+        const dls = doc.querySelectorAll("dl");
         for (let i = 0; i < dls.length; i++) {
-            let definitions = this.parseDefinitions(dls[i], languagePair);
+            const definitions = this.parseDefinitions(dls[i], languagePair);
             if (definitions.length > 0)
                 lists.push(definitions);
         }
@@ -99,19 +100,19 @@ class Popup {
     }
 
     private parseDefinitions(dl: HTMLDListElement, languagePair: string) {
-        let urlPrefix = settings.getProtocol() + 'www.dict.cc';
-        let urlSuffix = '&lp=' + languagePair;
+        const urlPrefix = settings.getProtocol() + "www.dict.cc";
+        const urlSuffix = "&lp=" + languagePair;
 
-        let rows = dl.querySelectorAll("dt,dd");
-        let definitions = [];
+        const rows = dl.querySelectorAll("dt,dd");
+        const definitions = [];
         let definition: Definition | null = null;
         for (let i = 0; i < rows.length; i++) {
-            let row = rows[i];
-            if (row.tagName === 'DT') {
-                let a = row.querySelector('a');
+            const row = rows[i];
+            if (row.tagName === "DT") {
+                const a = row.querySelector("a");
                 if (a) {
                     definition = {
-                        textContent: a.textContent || '',
+                        textContent: a.textContent || "",
                         href: this.getSafeHref(a, urlPrefix, urlSuffix),
                         descriptions: []
                     };
@@ -123,10 +124,10 @@ class Popup {
                     };
                     definitions.push(definition);
                 }
-            } else if (definition && row.tagName === 'DD') {
-                let links = row.querySelectorAll('a');
+            } else if (definition && row.tagName === "DD") {
+                const links = row.querySelectorAll("a");
                 for (let j = 0; j < links.length; j++) {
-                    let a: HTMLAnchorElement = links[j];
+                    const a: HTMLAnchorElement = links[j];
                     definition.descriptions.push({
                         href: this.getSafeHref(a, urlPrefix, urlSuffix),
                         nodes: this.parseDescriptionNodes(a)
@@ -137,29 +138,29 @@ class Popup {
         return definitions;
     }
 
-    private onFailedKWClick(e:MouseEvent) {
-        let href = (e.currentTarget as HTMLAnchorElement).href;
-        this.runSearchFor(href.replace('www.dict.cc', 'pocket.dict.cc'));
+    private onFailedKWClick(e: MouseEvent) {
+        const href = (e.currentTarget as HTMLAnchorElement).href;
+        this.runSearchFor(href.replace("www.dict.cc", "pocket.dict.cc"));
         e.stopImmediatePropagation();
         e.preventDefault();
     }
 
     private generateResult(result: HTMLElement, definitions: Definition[]) {
-        let onFailedKWClick = this.onFailedKWClick.bind(this);
-        for (let def of definitions) {
-            let dt = createElement(document, result, 'dt');
-            let dd = createElement(document, result, 'dd');
+        const onFailedKWClick = this.onFailedKWClick.bind(this);
+        for (const def of definitions) {
+            const dt = createElement(document, result, "dt");
+            const dd = createElement(document, result, "dd");
             if (def.href) {
-                let a = createElement(document, dt, 'a', {
+                const a = createElement(document, dt, "a", {
                     href: def.href,
-                    textContent: def.textContent || '?',
-                    target: '_blank'
+                    textContent: def.textContent || "?",
+                    target: "_blank"
                 });
-                if(def.href.indexOf('&failed_kw=') > 0)
+                if (def.href.indexOf("&failed_kw=") > 0)
                     a.onclick = onFailedKWClick;
             } else if (def.nodes) {
                 for (let k = 0; k < def.nodes.length; k++) {
-                    let node = def.nodes[k];
+                    const node = def.nodes[k];
                     if (node.tagName) {
                         createElement(document, dt, node.tagName, { textContent: node.textContent });
                     } else {
@@ -168,14 +169,14 @@ class Popup {
                 }
             }
             for (let j = 0; j < def.descriptions.length; j++) {
-                let desc = def.descriptions[j];
-                let a = createElement(document, dd, 'a', {
+                const desc = def.descriptions[j];
+                const a = createElement(document, dd, "a", {
                     href: desc.href,
-                    target: '_blank'
+                    target: "_blank"
                 });
-                if(desc.href.indexOf('&failed_kw=') > 0)
+                if (desc.href.indexOf("&failed_kw=") > 0)
                     a.onclick = onFailedKWClick;
-                for (let node of desc.nodes) {
+                for (const node of desc.nodes) {
                     if (node.tagName) {
                         createElement(document, a, node.tagName, { textContent: node.textContent });
                     } else {
@@ -183,7 +184,7 @@ class Popup {
                     }
                 }
                 if ((j + 1) < def.descriptions.length) {
-                    createElement(document, dd, 'br');
+                    createElement(document, dd, "br");
                 }
             }
         }
@@ -192,29 +193,29 @@ class Popup {
     // Makes a request to search pocket.dict.cc with the configured parameters.
     // Parses the resulting HTML and generates content for the popup html
     private runSearch() {
-        let word = this.search.value.trim();
-        if (word !== '') {
-            let url = settings.getProtocol() + 'pocket.dict.cc/' + settings.createParams(word, this.lp.value);
+        const word = this.search.value.trim();
+        if (word !== "") {
+            const url = settings.getProtocol() + "pocket.dict.cc/" + settings.createParams(word, this.lp.value);
             this.runSearchFor(url);
         }
     }
 
     private runSearchFor(url: string) {
         if (this.result === null)
-            this.result = createElement(document, document.body, 'div', { id: 'result' });
+            this.result = createElement(document, document.body, "div", { id: "result" });
         this.result.textContent = browser.i18n.getMessage("loading");
         request.getHTML(url, (doc: Document | null) => {
             if (!this.result || !doc)
                 return;
-            let languagePair = this.lp.value;
-            let definitionLists = this.parseDefinitionLists(doc, languagePair);
+            const languagePair = this.lp.value;
+            const definitionLists = this.parseDefinitionLists(doc, languagePair);
             if (!definitionLists.length) {
                 this.result.textContent = browser.i18n.getMessage("resultFailed");
             }
             else {
-                this.result.innerHTML = '';
-                for (let def of definitionLists) {
-                    let destination = createElement(document, this.result, 'dl');
+                this.result.innerHTML = "";
+                for (const def of definitionLists) {
+                    const destination = createElement(document, this.result, "dl");
                     this.generateResult(destination, def);
                 }
             }
