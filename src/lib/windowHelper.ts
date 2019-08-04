@@ -10,22 +10,26 @@ import { browser, Windows } from "webextension-polyfill-ts";
 export let cache: { [s: string]: number } = {};
 
 export function openPopup(url: string, incognito: boolean, width: number, height: number) {
-    const config: Windows.CreateCreateDataType = {
-        width,
-        height
-    };
     const cacheKey = incognito ? "1" : "0";
     const popupId = cache[cacheKey];
     if (!popupId) {
-        config.url = url;
-        config.incognito = incognito;
+        const config: Windows.CreateCreateDataType = {
+            width,
+            height,
+            url,
+            incognito
+        };
         // firefox popup scrollbar is broken, so using type=popup is not possible
         if (navigator.userAgent.toLowerCase().indexOf("firefox") < 0) {
             config.type = "popup";
         }
         browser.windows.create(config).then((window) => cache[cacheKey] = window.id || 0);
     } else {
-        // config.focused = true; //fixme: unsupported?
+        const config: Windows.UpdateUpdateInfoType = {
+            width,
+            height,
+            focused: true
+        };
         browser.windows.update(popupId, config);
         browser.tabs.query({ windowId: popupId }).then((tabs) => {
             if (tabs.length > 0) {

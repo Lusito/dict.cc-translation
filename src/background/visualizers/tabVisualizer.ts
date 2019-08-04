@@ -12,7 +12,7 @@ let lastTab: number | null = null;
 
 // Opens a tab (or updates it) using www.dict.cc
 export function tabVisualizer(config: VisualizerConfig) {
-    const tabConfig: Tabs.CreateCreatePropertiesType = {};
+    const tabConfig: Tabs.CreateCreatePropertiesType = { active: true };
     if (config.tab && isFirefox && parseFloat(browserInfo.version) >= 57)
         tabConfig.openerTabId = config.tab.id;
     if (config.url)
