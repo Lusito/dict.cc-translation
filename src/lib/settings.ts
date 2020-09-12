@@ -153,7 +153,7 @@ class Settings {
     }
 
     public createParams(text: string, languagePair: string) {
-        let params = `?lp=${languagePair}`;
+        let params = `?source=firefox-add-on&lp=${languagePair}`;
         if (text) params += `&s=${encodeURIComponent(text)}`;
         return params;
     }

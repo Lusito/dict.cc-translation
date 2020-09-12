@@ -79,31 +79,30 @@ class Popup {
         return result;
     }
 
-    private getSafeHref(a: HTMLAnchorElement, urlPrefix: string, urlSuffix: string) {
+    private getSafeHref(a: HTMLAnchorElement, urlPrefix: string) {
         let href = a.getAttribute("href") || "";
         if (href.indexOf("/?") === 0) {
-            href = urlPrefix + href + urlSuffix;
+            href = `${urlPrefix + href}&source=firefox-add-on`;
         } else if (href.indexOf("?") === 0) {
-            href = `${urlPrefix}/${href}${urlSuffix}`;
+            href = `${urlPrefix}/${href}&source=firefox-add-on`;
         } else if (href.indexOf("http") !== 0) {
             href = "#"; // not as expected, could be javascript, so override
         }
         return href;
     }
 
-    private parseDefinitionLists(doc: Document, languagePair: string) {
+    private parseDefinitionLists(doc: Document) {
         const lists = [];
         const dls = doc.querySelectorAll("dl");
         for (const dl of dls) {
-            const definitions = this.parseDefinitions(dl, languagePair);
+            const definitions = this.parseDefinitions(dl);
             if (definitions.length > 0) lists.push(definitions);
         }
         return lists;
     }
 
-    private parseDefinitions(dl: HTMLDListElement, languagePair: string) {
+    private parseDefinitions(dl: HTMLDListElement) {
         const urlPrefix = `${settings.getProtocol()}www.dict.cc`;
-        const urlSuffix = `&lp=${languagePair}`;
 
         const rows = dl.querySelectorAll("dt,dd");
         const definitions = [];
@@ -114,7 +113,7 @@ class Popup {
                 if (a) {
                     definition = {
                         textContent: a.textContent || "",
-                        href: this.getSafeHref(a, urlPrefix, urlSuffix),
+                        href: this.getSafeHref(a, urlPrefix),
                         descriptions: [],
                     };
                     definitions.push(definition);
@@ -129,7 +128,7 @@ class Popup {
                 const links = row.querySelectorAll("a");
                 for (const a of links) {
                     definition.descriptions.push({
-                        href: this.getSafeHref(a, urlPrefix, urlSuffix),
+                        href: this.getSafeHref(a, urlPrefix),
                         nodes: this.parseDescriptionNodes(a),
                     });
                 }
@@ -204,8 +203,7 @@ class Popup {
             url,
             (doc: Document | null) => {
                 if (!this.result || !doc) return;
-                const languagePair = this.lp.value;
-                const definitionLists = this.parseDefinitionLists(doc, languagePair);
+                const definitionLists = this.parseDefinitionLists(doc);
                 if (!definitionLists.length) {
                     this.result.textContent = browser.i18n.getMessage("resultFailed");
                 } else {

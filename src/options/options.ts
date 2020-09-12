@@ -399,8 +399,8 @@ function onLanguageListUpdate(languages: null | TranslationEntry[]) {
 
 function requestLanguageUpdate() {
     const protocol = input.translation_useHttps.checked ? "https://" : "http://";
-    const url = `${protocol}contribute.dict.cc/?action=buildup`;
-    const hrefPrefix = `${protocol}contribute.dict.cc/?action=buildup&targetlang=`;
+    const url = `${protocol}contribute.dict.cc/?source=firefox-add-on&action=buildup`;
+    const hrefPrefix = `${protocol}contribute.dict.cc/?source=firefox-add-on&action=buildup&targetlang=`;
     request.getHTML(
         url,
         (doc: Document | null) => {
