@@ -4,9 +4,14 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
-export function getHTML(url: string, onSuccess: (doc: Document | null) => void, onError: (this: XMLHttpRequest, ev: ErrorEvent) => any) {
+export function getHTML(
+    url: string,
+    onSuccess: (doc: Document | null) => void,
+    onError: (this: XMLHttpRequest, ev: ProgressEvent) => any
+) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore'
-    let xhr = new XMLHttpRequest({ mozAnon: true });
+    const xhr = new XMLHttpRequest({ mozAnon: true });
     // xhr.withCredentials = false;
     xhr.onload = () => onSuccess(xhr.responseXML);
     xhr.onerror = onError;

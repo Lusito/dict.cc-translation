@@ -4,12 +4,11 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
-@import "shared";
 html,
 body {
     margin: 0;
     padding: 0;
-    background: #FBFBFB;
+    background: #fbfbfb;
     font-family: "Open Sans", sans-serif;
     width: 100%;
     /*min-width: 700px;*/
@@ -20,7 +19,7 @@ body {
 
 body {
     max-width: 700px;
-    background: #F0F0F0;
+    background: #f0f0f0;
     padding: 0;
     box-sizing: border-box;
 }
@@ -29,8 +28,8 @@ body {
     padding: 10px;
 }
 
-body.firefox>#wrapper {
-    border: 1px solid #C1C1C1;
+body.firefox > #wrapper {
+    border: 1px solid #c1c1c1;
 }
 
 body:not(.firefox) {
@@ -40,22 +39,22 @@ body:not(.firefox) {
 label {
     margin-right: 2px;
 }
-label>input:disabled+span {
+label > input:disabled + span {
     color: gray;
 }
 
-input[type=checkbox],
-input[type=radio] {
+input[type="checkbox"],
+input[type="radio"] {
     margin-right: 3px;
 }
 
-label>input[type=checkbox],
-label>input[type=radio] {
+label > input[type="checkbox"],
+label > input[type="radio"] {
     vertical-align: middle;
 }
 
-label>input[type=checkbox]+span,
-label>input[type=radio]+span {
+label > input[type="checkbox"] + span,
+label > input[type="radio"] + span {
     vertical-align: middle;
 }
 
@@ -70,32 +69,32 @@ label>input[type=radio]+span {
 #pages {
     clear: both;
     flex-grow: 1;
-    border: 1px solid #A7A7A7;
+    border: 1px solid #a7a7a7;
     padding: 10px;
     margin: 0 0 10px 0;
     min-height: 280px;
     background: white;
-    >div {
+    > div {
         height: 100%;
         overflow: auto;
-        >div:first-child {
+        > div:first-child {
             margin-right: 10px;
         }
-        >div {
+        > div {
             width: 50%;
             flex-grow: 1;
             box-sizing: border-box;
             position: relative;
         }
-        >div>*:not(:first-child) {
+        > div > *:not(:first-child) {
             margin-top: 5px;
         }
     }
-    >div:not(:last-child) {
+    > div:not(:last-child) {
         display: flex;
         flex-direction: row;
     }
-    >div:not(.active) {
+    > div:not(.active) {
         display: none;
     }
 }
@@ -103,7 +102,7 @@ label>input[type=radio]+span {
 #buttons {
     flex-shrink: 0;
     text-align: right;
-    >#restore_defaults {
+    > #restore_defaults {
         float: left;
     }
 }
@@ -117,7 +116,7 @@ label>input[type=radio]+span {
 }
 
 fieldset {
-    border: 1px solid #A7A7A7;
+    border: 1px solid #a7a7a7;
     box-sizing: border-box;
 }
 
@@ -159,7 +158,7 @@ table {
 }
 
 #translationsTable {
-    border: 1px solid #A7A7A7;
+    border: 1px solid #a7a7a7;
     cursor: default;
     overflow-y: scroll;
     position: absolute;
@@ -207,22 +206,22 @@ table {
     left: 20px;
     right: 20px;
     top: 20px;
-    border: 1px solid #A7A7A7;
-    background: #FFFFE1;
+    border: 1px solid #a7a7a7;
+    background: #ffffe1;
     box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.59);
     padding: 10px;
 }
 
-.dialog.prompt>div>input {
+.dialog.prompt > div > input {
     width: 100%;
 }
 
-.dialog>h2,
+.dialog > h2,
 .dialogButtons {
     text-align: center;
 }
 
-.dialog>h2 {
+.dialog > h2 {
     margin: 0 0 10px 0;
 }
 
@@ -241,11 +240,11 @@ table {
 }
 
 .warning {
-    border: 1px solid #E88E00;
+    border: 1px solid #e88e00;
     margin-top: 2px;
     padding: 3px;
-    >span:first-child {
-        color: #E88E00;
+    > span:first-child {
+        color: #e88e00;
         font-weight: bold;
     }
 }
@@ -256,7 +255,7 @@ table {
     overflow: visible;
     display: flex;
     flex-direction: row;
-    >div {
+    > div {
         height: 29px;
         box-sizing: border-box;
         overflow: hidden;
@@ -265,26 +264,25 @@ table {
         user-select: none;
         -moz-user-select: none;
         background: lightgray;
-        border: 1px solid #A7A7A7;
+        border: 1px solid #a7a7a7;
         outline: 1px solid transparent;
         padding: 7px 12px;
     }
-    >div.active {
+    > div.active {
         background: white;
         border-bottom: none;
     }
-    >div:not(:last-child) {
+    > div:not(:last-child) {
         border-right: 0;
     }
 }
 
-
-input[type=radio],
-input[type=checkbox] {
+input[type="radio"],
+input[type="checkbox"] {
     display: none;
 }
-input[type=radio]+span:before,
-input[type=checkbox]+span:before {
+input[type="radio"] + span:before,
+input[type="checkbox"] + span:before {
     display: inline-block;
     content: "\02713";
     background-color: white;
@@ -295,7 +293,7 @@ input[type=checkbox]+span:before {
     transition: color 0.2s, background-color 0.2s, border 0.2s;
     box-sizing: border-box;
 }
-input[type=checkbox]+span:before {
+input[type="checkbox"] + span:before {
     width: 17px;
     height: 17px;
     border-radius: 4px;
@@ -303,7 +301,7 @@ input[type=checkbox]+span:before {
     box-shadow: 0 0 1px 1px gray;
     margin-left: 2px;
 }
-input[type=radio]+span:before {
+input[type="radio"] + span:before {
     width: 15px;
     height: 15px;
     border-radius: 10px;
@@ -313,32 +311,32 @@ input[type=radio]+span:before {
     position: relative;
     top: 4px;
 }
-input[type=checkbox]:disabled+span:before {
+input[type="checkbox"]:disabled + span:before {
     background: gray;
 }
-input[type=checkbox]:hover+span:before,
-input[type=radio]:hover+span:before {
+input[type="checkbox"]:hover + span:before,
+input[type="radio"]:hover + span:before {
     box-shadow: 0 0 1px 2px #5095ea;
 }
-input[type=checkbox]:disabled+span:before,
-input[type=radio]:disabled+span:before {
+input[type="checkbox"]:disabled + span:before,
+input[type="radio"]:disabled + span:before {
     box-shadow: none;
 }
-input[type=radio]:disabled+span:before {
+input[type="radio"]:disabled + span:before {
     border-color: gray;
 }
-input[type=radio]:disabled:not(:checked)+span:before {
+input[type="radio"]:disabled:not(:checked) + span:before {
     background-color: gray;
 }
-input[type=radio]:checked+span:before {
+input[type="radio"]:checked + span:before {
     background-color: #5095ea;
 }
-input[type=radio]:disabled:checked+span:before {
+input[type="radio"]:disabled:checked + span:before {
     background-color: white;
 }
-input[type=checkbox]:disabled:checked+span:before {
+input[type="checkbox"]:disabled:checked + span:before {
     color: white;
 }
-input[type=checkbox]:checked+span:before {
+input[type="checkbox"]:checked + span:before {
     color: #5095ea;
 }

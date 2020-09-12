@@ -13,7 +13,7 @@ export enum TranslationMethod {
     SYN_WINDOW,
     POCKET_WINDOW,
     TAB,
-    INPAGE
+    INPAGE,
 }
 
 export interface SettingsTypeMap {
@@ -36,4 +36,4 @@ export interface SettingsTypeMap {
     "quick.rocker": boolean;
 }
 
-export type SettingsSignature = {[K in keyof SettingsTypeMap]: SettingsTypeMap[K]};
+export type SettingsSignature = { [K in keyof SettingsTypeMap]: SettingsTypeMap[K] };

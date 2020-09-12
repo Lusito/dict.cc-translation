@@ -6,39 +6,45 @@
 
 // This file contains helpers to manage the popup windows (one for normal, one for incognito)
 
-import { browser, Windows } from 'webextension-polyfill-ts';
-export let cache: { [s: string]: number } = {};
+import { browser, Windows } from "webextension-polyfill-ts";
+
+export const cache: { [s: string]: number } = {};
 
 export function openPopup(url: string, incognito: boolean, width: number, height: number) {
-    let config: Windows.CreateCreateDataType = {
-        width: width,
-        height: height
-    };
-    let cacheKey = incognito ? '1' : '0';
-    let popupId = cache[cacheKey];
+    const cacheKey = incognito ? "1" : "0";
+    const popupId = cache[cacheKey];
     if (!popupId) {
-        config.url = url;
-        config.incognito = incognito;
-        //firefox popup scrollbar is broken, so using type=popup is not possible
-        if (navigator.userAgent.toLowerCase().indexOf("firefox") < 0) {
+        const config: Windows.CreateCreateDataType = {
+            width,
+            height,
+            url,
+            incognito,
+        };
+        // firefox popup scrollbar is broken, so using type=popup is not possible
+        if (!navigator.userAgent.toLowerCase().includes("firefox")) {
             config.type = "popup";
         }
-        browser.windows.create(config).then((window) => cache[cacheKey] = window.id || 0);
+        browser.windows.create(config).then((window) => {
+            cache[cacheKey] = window.id || 0;
+        });
     } else {
-        // config.focused = true; //fixme: unsupported?
+        const config: Windows.UpdateUpdateInfoType = {
+            width,
+            height,
+            focused: true,
+        };
         browser.windows.update(popupId, config);
         browser.tabs.query({ windowId: popupId }).then((tabs) => {
             if (tabs.length > 0) {
-                let id = tabs[0].id;
-                if (id)
-                    browser.tabs.update(id, { url: url, active: true });
+                const { id } = tabs[0];
+                if (id) browser.tabs.update(id, { url, active: true });
             }
         });
     }
 }
 
 browser.windows.onRemoved.addListener((windowId) => {
-    for (let key in cache) {
+    for (const key in cache) {
         if (cache[key] === windowId) {
             delete cache[key];
             break;

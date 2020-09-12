@@ -4,62 +4,61 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
-import { browser } from 'webextension-polyfill-ts';
+import { browser } from "webextension-polyfill-ts";
 
 export function byId(id: string) {
     return document.getElementById(id);
 }
 
-export function on<K extends keyof HTMLElementEventMap>(node: Node, event: K, callback: (this: HTMLInputElement, ev: HTMLElementEventMap[K]) => any) {
-    node.addEventListener(event, callback);
+export function on<T extends keyof HTMLElementEventMap>(
+    node: Node,
+    event: T,
+    callback: (this: HTMLInputElement, ev: HTMLElementEventMap[T]) => any
+) {
+    node.addEventListener(event, callback as EventListener);
 }
 
 export function translateElement(element: HTMLElement) {
-    let id = element.dataset.l10nId;
+    const id = element.dataset.l10nId;
     if (id) {
-        let content = browser.i18n.getMessage(id);
-        if (content)
-            element.textContent = content;
-        let title = browser.i18n.getMessage(id + "__title");
-        if (title)
-            element.title = title;
+        const content = browser.i18n.getMessage(id);
+        if (content) element.textContent = content;
+        const title = browser.i18n.getMessage(`${id}__title`);
+        if (title) element.title = title;
     }
 }
 
-export function translateChildren(parent: NodeSelector) {
-    let elements = parent.querySelectorAll('[data-l10n-id]');
-    for (let i = 0; i < elements.length; i++)
-        translateElement(elements[i] as HTMLElement);
+export function translateChildren(parent: HTMLElement | Document) {
+    const elements = parent.querySelectorAll("[data-l10n-id]");
+    for (const element of elements) translateElement(element as HTMLElement);
 }
 
 export function removeAllChildren(node: HTMLElement) {
     if (node.hasChildNodes()) {
-        while (node.firstChild)
-            node.removeChild(node.firstChild);
+        while (node.firstChild) node.removeChild(node.firstChild);
     }
 }
 
 type ElementAttributes = { [s: string]: string | number | boolean };
 
 export function createElement(doc: Document, parent: HTMLElement | null, tagName: string, params?: ElementAttributes) {
-    let e = doc.createElement(tagName);
+    const e = doc.createElement(tagName);
     if (params) {
-        for (let key in params) {
+        for (const key of Object.keys(params)) {
             (e as any)[key] = params[key];
         }
     }
-    if (parent)
-        parent.appendChild(e);
+    if (parent) parent.appendChild(e);
     return e;
 }
 
 export function addLink(doc: Document, path: string) {
-    let head = doc.querySelector('head');
+    const head = doc.querySelector("head");
     if (head) {
-        createElement(doc, head, 'link', {
+        createElement(doc, head, "link", {
             href: browser.runtime.getURL(path),
             type: "text/css",
-            rel: "stylesheet"
+            rel: "stylesheet",
         });
     }
 }
@@ -67,8 +66,8 @@ export function addLink(doc: Document, path: string) {
 export type MouseEventCallback = (this: HTMLInputElement, ev: MouseEvent) => any;
 
 export function createButton(labelL10nKey: string, callback: MouseEventCallback) {
-    let button = document.createElement('button');
-    button.setAttribute('data-l10n-id', labelL10nKey);
-    on(button, 'click', callback);
+    const button = document.createElement("button");
+    button.setAttribute("data-l10n-id", labelL10nKey);
+    on(button, "click", callback);
     return button;
 }

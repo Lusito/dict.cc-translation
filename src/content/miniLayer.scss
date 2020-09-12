@@ -15,7 +15,7 @@ body:not(.measuring) * {
     overflow: hidden;
 }
 
-body>div {
+body > div {
     display: flex;
     flex-direction: row;
 }
@@ -23,9 +23,9 @@ body>div {
 body {
     padding: 5px;
     white-space: nowrap;
-    color: #000;
+    color: #000000;
     font: 13px Arial;
-    background: #F0F0F0;
+    background: #f0f0f0;
 }
 
 #logo {
@@ -46,7 +46,7 @@ a:hover {
 
 a,
 a:hover {
-    color: #666;
+    color: #666666;
 }
 
 #result {
@@ -57,7 +57,7 @@ a:hover {
 
 #extra {
     display: none;
-    border-top: 1px dotted #C8C8C8;
+    border-top: 1px dotted #c8c8c8;
     margin: 0;
 }
 

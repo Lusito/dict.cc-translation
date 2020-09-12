@@ -4,7 +4,8 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
-import { browser, Tabs } from 'webextension-polyfill-ts';
+import { browser, Tabs } from "webextension-polyfill-ts";
+
 import { VisualizerConfig } from "../translatorShared";
 import { isFirefox, browserInfo } from "../../lib/browserInfo";
 
@@ -12,13 +13,10 @@ let lastTab: number | null = null;
 
 // Opens a tab (or updates it) using www.dict.cc
 export function tabVisualizer(config: VisualizerConfig) {
-    let tabConfig: Tabs.CreateCreatePropertiesType = {};
-    if (config.tab && isFirefox && parseFloat(browserInfo.version) >= 57)
-        tabConfig.openerTabId = config.tab.id;
-    if (config.url)
-        tabConfig.url = config.url;
-    else
-        tabConfig.url = config.protocol + 'www.dict.cc/' + config.params;
+    const tabConfig: Tabs.CreateCreatePropertiesType = { active: true };
+    if (config.tab && isFirefox && parseFloat(browserInfo.version) >= 57) tabConfig.openerTabId = config.tab.id;
+    if (config.url) tabConfig.url = config.url;
+    else tabConfig.url = `${config.protocol}www.dict.cc/${config.params}`;
     if (config.multiWindow || !lastTab) {
         lastTab = null;
         browser.tabs.create(tabConfig).then((tab) => {
@@ -30,6 +28,5 @@ export function tabVisualizer(config: VisualizerConfig) {
 }
 
 browser.tabs.onRemoved.addListener((tabId) => {
-    if (tabId === lastTab)
-        lastTab = null;
+    if (tabId === lastTab) lastTab = null;
 });

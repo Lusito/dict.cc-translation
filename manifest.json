@@ -1,77 +1,68 @@
 {
-    "manifest_version": 2,
-    "name": "__MSG_extensionName__",
-    "description": "__MSG_extensionDescription__",
-    "author": "Santo Pfingsten",
-    "default_locale": "en",
-    "version": "5.3.2",
-    "applications": {
-        "gecko": {
-            "id": "searchdictcc@roughael",
-            "strict_min_version": "50.0"
-        }
+  "manifest_version": 2,
+  "name": "__MSG_extensionName__",
+  "description": "__MSG_extensionDescription__",
+  "author": "Santo Pfingsten",
+  "default_locale": "en",
+  "version": "5.4.0",
+  "applications": {
+    "gecko": {
+      "id": "searchdictcc@roughael",
+      "strict_min_version": "50.0"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "64": "icons/icon64.png",
+    "96": "icons/icon96.png",
+    "128": "icons/icon128.png"
+  },
+  "browser_action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "64": "icons/icon64.png",
+      "96": "icons/icon96.png",
+      "128": "icons/icon128.png"
     },
-    "icons": {
-        "16": "icons/icon16.png",
-        "32": "icons/icon32.png",
-        "48": "icons/icon48.png",
-        "64": "icons/icon64.png",
-        "96": "icons/icon96.png",
-        "128": "icons/icon128.png"
-    },
-    "browser_action": {
-        "default_icon": {
-            "16": "icons/icon16.png",
-            "32": "icons/icon32.png",
-            "48": "icons/icon48.png",
-            "64": "icons/icon64.png",
-            "96": "icons/icon96.png",
-            "128": "icons/icon128.png"
-        },
-        "default_popup": "templates/popup.html",
-        "default_title": "__MSG_actionTitle__"
-    },
-    "background": {
-        "scripts": [
-            "dist/background.js"
-        ]
-    },
-    "content_scripts": [
-        {
-            "all_frames": true,
-            "js": [
-                "dist/content.js"
-            ],
-            "matches": [
-                "*://*/*"
-            ]
-        }
-    ],
-    "commands": {
-        "_execute_browser_action": {
-            "suggested_key": {
-                "default": "Alt+Q"
-            }
-        }
-    },
-    "options_ui": {
-        "page": "templates/options.html"
-    },
-    "permissions": [
-        "http://www.dict.cc/",
-        "https://www.dict.cc/",
-        "http://syn.dict.cc/",
-        "https://syn.dict.cc/",
-        "http://pocket.dict.cc/",
-        "https://pocket.dict.cc/",
-        "http://contribute.dict.cc/",
-        "https://contribute.dict.cc/",
-        "contextMenus",
-        "storage",
-        "tabs"
-    ],
-    "web_accessible_resources": [
-        "dist/minilayer.css",
-        "icons/icon16.png"
-    ]
+    "default_popup": "data/popup.html",
+    "default_title": "__MSG_actionTitle__"
+  },
+  "background": {
+    "scripts": ["data/background.js"]
+  },
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "js": ["data/content.js"],
+      "matches": ["*://*/*"]
+    }
+  ],
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Alt+Q"
+      }
+    }
+  },
+  "options_ui": {
+    "page": "data/options.html"
+  },
+  "permissions": [
+    "http://www.dict.cc/",
+    "https://www.dict.cc/",
+    "http://syn.dict.cc/",
+    "https://syn.dict.cc/",
+    "http://pocket.dict.cc/",
+    "https://pocket.dict.cc/",
+    "http://contribute.dict.cc/",
+    "https://contribute.dict.cc/",
+    "contextMenus",
+    "storage",
+    "tabs"
+  ],
+  "web_accessible_resources": ["data/content.css", "icons/icon16.png"]
 }

@@ -5,12 +5,12 @@
  */
 
 button,
-input[type='button'],
-input[type='submit'],
+input[type="button"],
+input[type="submit"],
 select {
-    background-color: #EDEDED;
+    background-color: #ededed;
     border: 1px solid rgba(0, 0, 0, 0.25);
-    color: #444;
+    color: #444444;
     font: inherit;
     margin: 0 3px 0 0px;
     outline: none;
@@ -18,17 +18,17 @@ select {
 }
 
 button:hover,
-input[type='button']:hover,
-input[type='submit']:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
 select:hover {
-    background-color: #F4F4F4;
+    background-color: #f4f4f4;
     color: black;
     border-color: rgba(0, 0, 0, 0.298039);
 }
 
 button,
-input[type='button'],
-input[type='submit'],
+input[type="button"],
+input[type="submit"],
 select {
     padding: 2px 8px;
     height: 26px;
@@ -62,8 +62,8 @@ input:not([type]) {
     height: 26px;
 }
 
-input[type='checkbox'],
-input[type='radio'] {
+input[type="checkbox"],
+input[type="radio"] {
     position: relative;
     vertical-align: middle;
     height: 15px;
@@ -71,14 +71,14 @@ input[type='radio'] {
     margin-top: 2px;
 }
 
-input[type='radio'] {
+input[type="radio"] {
     border-radius: 100%;
 }
 
-input[type='radio']:checked::before {
-    background-color: #666;
+input[type="radio"]:checked::before {
+    background-color: #666666;
     border-radius: 100%;
-    content: '';
+    content: "";
     display: block;
     position: absolute;
 }
@@ -93,14 +93,14 @@ select:focus {
 }
 
 button,
-input[type='button'],
-input[type='submit'] {
+input[type="button"],
+input[type="submit"] {
     position: relative;
 }
 
 button:after,
-input[type='button']:after,
-input[type='submit']:after {
+input[type="button"]:after,
+input[type="submit"]:after {
     display: block;
     content: "";
     position: absolute;
@@ -113,30 +113,30 @@ input[type='submit']:after {
     background-position: 50%;
     transform: scale(1, 1);
     opacity: 0;
-    transition: transform .25s, opacity 1s;
+    transition: transform 0.25s, opacity 1s;
     pointer-events: none;
 }
 
 button:active:after,
-input[type='button']:active:after,
-input[type='submit']:active:after {
+input[type="button"]:active:after,
+input[type="submit"]:active:after {
     transition: 0s;
     transform: scale(0, 0);
-    opacity: .3;
+    opacity: 0.3;
 }
 
 select {
     padding: 2px 24px 2px 8px;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-color: #EDEDED;
-    background-image: url(../icons/downarrow.svg);
+    background-color: #ededed;
+    background-image: url(./downarrow.svg);
     background-position: calc(100% - -1px) -1px, left top;
     background-size: 27px 27px, 100% 100%;
     background-repeat: no-repeat;
 }
 
 select:hover {
-    background-color: #F4F4F4;
-    background-image: url(../icons/downarrow.svg);
+    background-color: #f4f4f4;
+    background-image: url(./downarrow.svg);
 }
