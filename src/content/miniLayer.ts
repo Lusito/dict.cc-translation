@@ -5,16 +5,24 @@
  */
 
 import { browser } from "webextension-polyfill-ts";
+
 import * as messageUtil from "../lib/messageUtil";
 import { createElement, addLink, on, removeAllChildren } from "../lib/htmlUtils";
 import { DCCResultLink } from "../background/translatorShared";
-import { applyForcedStyles, DEFAULT_PANEL_STYLES, MICRO_PANEL_STYLES, COMMON_STYLES, OVERLAY_STYLES } from "./forcedStyles";
+import {
+    applyForcedStyles,
+    DEFAULT_PANEL_STYLES,
+    MICRO_PANEL_STYLES,
+    COMMON_STYLES,
+    OVERLAY_STYLES,
+} from "./forcedStyles";
 import { TranslationEntry } from "../lib/settingsSignature";
+import "./miniLayer.scss";
 
 function getTopLeftFromIframe() {
     let left = 0;
     let top = 0;
-    let win = window;
+    let win: Window = window;
     let element = window.frameElement as HTMLElement;
 
     do {
@@ -43,17 +51,29 @@ function createPanelOverlay() {
 
 export class MiniLayer {
     public onLoad: () => void;
+
     public onDestroy: () => void;
+
     public overlay: HTMLDivElement;
+
     public y: number;
+
     public x: number;
+
     public tdoc: Document;
+
     public iframe: HTMLIFrameElement;
+
     public idoc?: Document;
+
     public ibody?: HTMLElement;
+
     public resultNode?: HTMLElement;
+
     public extraNode?: HTMLElement;
+
     public translations?: TranslationEntry[];
+
     constructor(x: number, y: number, onLoad: () => void, onDestroy: () => void, translations?: TranslationEntry[]) {
         // If in a frame, add frame position
         if (window.top !== window.self) {
@@ -80,12 +100,13 @@ export class MiniLayer {
     }
 
     private onIframeLoad() {
-        this.idoc = this.iframe.contentDocument || this.iframe.contentWindow!.document;
+        this.idoc = this.iframe.contentDocument || this.iframe.contentWindow?.document;
+        if (!this.idoc) return;
+
         this.ibody = this.idoc.body;
-        addLink(this.idoc, "dist/content.css");
+        addLink(this.idoc, "data/content.css");
         on(this.idoc, "keydown", (e) => {
-            if (e.keyCode === 27)
-                this.destroy();
+            if (e.keyCode === 27) this.destroy();
         });
 
         const ihead = this.idoc.querySelector("head");
@@ -104,55 +125,55 @@ export class MiniLayer {
     }
 
     private updateSize() {
-        const last = this.ibody!.className;
-        this.ibody!.className += " measuring";
+        const { ibody } = this;
+        if (!ibody) return;
+
+        const last = ibody.className;
+        ibody.className += " measuring";
         applyForcedStyles(this.iframe, {
             width: "50px",
-            height: "20px"
+            height: "20px",
         });
         setTimeout(() => {
-            const calculatedWidth = this.ibody!.scrollWidth;
-            const calculatedHeight = this.ibody!.scrollHeight;
-            this.ibody!.className = last;
+            const calculatedWidth = ibody.scrollWidth;
+            const calculatedHeight = ibody.scrollHeight;
+            ibody.className = last;
 
             applyForcedStyles(this.iframe, {
-                width: calculatedWidth + "px",
-                height: calculatedHeight + "px"
+                width: `${calculatedWidth}px`,
+                height: `${calculatedHeight}px`,
             });
             const vw = Math.max(this.tdoc.documentElement.clientWidth, window.innerWidth || 0);
             const vh = Math.max(this.tdoc.documentElement.clientHeight, window.innerHeight || 0);
-            let left = (this.x + 5);
-            if ((left + calculatedWidth) >= vw)
-                left = (this.x - calculatedWidth - 5);
-            let top = (this.y + 5);
-            if ((top + calculatedHeight) >= vh)
-                top = (this.y - calculatedHeight - 5);
+            let left = this.x + 5;
+            if (left + calculatedWidth >= vw) left = this.x - calculatedWidth - 5;
+            let top = this.y + 5;
+            if (top + calculatedHeight >= vh) top = this.y - calculatedHeight - 5;
             applyForcedStyles(this.iframe, {
-                left: left + "px",
-                top: top + "px"
+                left: `${left}px`,
+                top: `${top}px`,
             });
         }, 10);
     }
 
     private setup(text: string | null, extraNodes: HTMLElement[] | null) {
-        removeAllChildren(this.resultNode!);
-        if (text)
-            this.resultNode!.appendChild(this.idoc!.createTextNode(text));
-        else
-            this.resultNode!.innerHTML = "";
+        if (!this.resultNode || !this.idoc || !this.ibody) return;
+
+        removeAllChildren(this.resultNode);
+        if (text) this.resultNode.appendChild(this.idoc.createTextNode(text));
+        else this.resultNode.innerHTML = "";
         if (!extraNodes) {
-            this.ibody!.className = "";
-        } else {
-            this.ibody!.className = "menu";
-            removeAllChildren(this.extraNode!);
-            for (const node of extraNodes)
-                this.extraNode!.appendChild(node);
+            this.ibody.className = "";
+        } else if (this.extraNode) {
+            this.ibody.className = "menu";
+            removeAllChildren(this.extraNode);
+            for (const node of extraNodes) this.extraNode.appendChild(node);
         }
     }
 
-    private createMenuEntry(text: string, translation: TranslationEntry) {
-        const link = createElement(this.idoc!, null, "a", {
-            textContent: translation.v
+    private createMenuEntry(idoc: Document, text: string, translation: TranslationEntry) {
+        const link = createElement(idoc, null, "a", {
+            textContent: translation.v,
         });
         on(link, "click", () => {
             this.translateQuick(text, translation.k);
@@ -160,34 +181,33 @@ export class MiniLayer {
         return link;
     }
 
-    private createResultEntry(def: DCCResultLink) {
-        const link = createElement(this.idoc!, null, "a", {
+    private createResultEntry(idoc: Document, def: DCCResultLink) {
+        const link = createElement(idoc, null, "a", {
             textContent: def.label,
             style: def.style,
-            href: def.href
+            href: def.href,
         });
         on(link, "click", (e) => {
             e.preventDefault();
             e.stopImmediatePropagation();
             this.destroy();
             messageUtil.send("showTranslationResult", {
-                href: def.href
+                href: def.href,
             });
         });
         return link;
     }
 
     public showMenu(label: string, text: string) {
-        if (!this.translations)
-            return;
-        const extraNodes = [];
+        if (!this.translations || !this.idoc) return;
+        const extraNodes: HTMLElement[] = [];
         for (const translation of this.translations) {
-            const raquo = createElement(this.idoc!, null, "span", {
-                innerHTML: "&#187; "
+            const raquo = createElement(this.idoc, null, "span", {
+                innerHTML: "&#187; ",
             });
             extraNodes.push(raquo);
-            extraNodes.push(this.createMenuEntry(text, translation));
-            extraNodes.push(this.idoc!.createElement("br"));
+            extraNodes.push(this.createMenuEntry(this.idoc, text, translation));
+            extraNodes.push(this.idoc.createElement("br"));
         }
         this.setup(label, extraNodes);
         this.updateSize();
@@ -195,11 +215,11 @@ export class MiniLayer {
 
     public showResult(links: DCCResultLink[]) {
         this.setup(null, null);
+        if (!this.resultNode || !this.idoc) return;
         for (let i = 0; i < links.length; i++) {
-            const link = this.createResultEntry(links[i]);
-            this.resultNode!.appendChild(link);
-            if (i < (links.length - 1))
-                this.resultNode!.appendChild(this.idoc!.createTextNode(", "));
+            const link = this.createResultEntry(this.idoc, links[i]);
+            this.resultNode.appendChild(link);
+            if (i < links.length - 1) this.resultNode.appendChild(this.idoc.createTextNode(", "));
         }
         this.updateSize();
     }
@@ -218,7 +238,7 @@ export class MiniLayer {
         messageUtil.send("requestQuickTranslation", {
             text,
             languagePair,
-            dcc: true
+            dcc: true,
         });
     }
 

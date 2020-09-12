@@ -6,10 +6,10 @@
 
 // This file contains communication helpers
 
-import { browser, Tabs } from "webextension-polyfill-ts";
+import { browser, Runtime, Tabs } from "webextension-polyfill-ts";
 
 // fixme: types
-export type Callback = (params: any, sender?: any) => any;
+export type Callback = (params: any, sender?: Runtime.MessageSender) => any;
 // export type Callback = (params: any, sender?: browser.runtime.MessageSender) => any;
 
 type CallbacksMap = { [s: string]: Callback };
@@ -17,26 +17,25 @@ type CallbacksMap = { [s: string]: Callback };
 let callbacks: CallbacksMap | null = null;
 
 function init() {
-    const callbacks: CallbacksMap = {};
+    const result: CallbacksMap = {};
     browser.runtime.onMessage.addListener((request, sender) => {
-        if (callbacks) {
-            const callback = callbacks[request.action];
+        if (result) {
+            const callback = result[request.action];
             if (callback) {
                 return callback(request.params, sender);
             }
         }
     });
-    return callbacks;
+    return result;
 }
 
 export function send(name: string, params?: any, callback?: (value: any) => any) {
     const data = {
         action: name,
-        params
+        params,
     };
     const promise = browser.runtime.sendMessage(data);
-    if (callback)
-        promise.then(callback);
+    if (callback) promise.then(callback);
 }
 
 export function sendSelf(name: string, params: any) {
@@ -52,13 +51,12 @@ export function sendToAllTabs(name: string, params: any) {
     if (browser.tabs) {
         const data = {
             action: name,
-            params
+            params,
         };
         browser.tabs.query({}).then((tabs) => {
             for (const tab of tabs) {
-                const id = tab.id;
-                if (id)
-                    browser.tabs.sendMessage(id, data);
+                const { id } = tab;
+                if (id) browser.tabs.sendMessage(id, data);
             }
         });
     }
@@ -67,12 +65,11 @@ export function sendToAllTabs(name: string, params: any) {
 export function sendToTab(tab: Tabs.Tab, name: string, params: any, callback?: (value: any) => any) {
     const data = {
         action: name,
-        params
+        params,
     };
     if (tab.id) {
         const promise = browser.tabs.sendMessage(tab.id, data);
-        if (callback)
-            promise.then(callback);
+        if (callback) promise.then(callback);
     }
 }
 

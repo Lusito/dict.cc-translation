@@ -4,7 +4,6 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
-@import "shared";
 html,
 body {
     padding: 0;
@@ -22,13 +21,13 @@ body {
 #form {
     display: flex;
     flex-direction: row;
-    >input {
+    > input {
         flex-grow: 1;
     }
-    >* {
+    > * {
         margin-right: 5px;
     }
-    >*:last-child {
+    > *:last-child {
         margin-right: 0;
     }
 }
@@ -69,16 +68,16 @@ dt:not(:first-child) {
 
 dd {
     margin-left: 20px;
-    line-height: 18px
+    line-height: 18px;
 }
 
 var {
-    color: #36c;
+    color: #3366cc;
     font-style: normal;
 }
 
 kbd {
-    color: #039;
+    color: #003399;
     font-family: serif, arial, helvetica, sans-serif;
     font-size: 10pt;
 }

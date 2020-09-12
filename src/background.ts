@@ -4,50 +4,52 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
-import * as messageUtil from "../lib/messageUtil";
-import * as translator from "./translator";
-import { openPopup } from "../lib/windowHelper";
-import { settings } from "../lib/settings";
-import { VisualizerConfig } from "./translatorShared";
-import { tabVisualizer } from "./visualizers/tabVisualizer";
-import { initContextMenu } from "./contextmenu";
+import * as messageUtil from "./lib/messageUtil";
+import * as translator from "./background/translator";
+import { openPopup } from "./lib/windowHelper";
+import { settings } from "./lib/settings";
+import { VisualizerConfig } from "./background/translatorShared";
+import { tabVisualizer } from "./background/visualizers/tabVisualizer";
+import { initContextMenu } from "./background/contextmenu";
 
 messageUtil.receive("requestQuickTranslation", (data, sender) => {
-    if (data.dcc) {
-        translator.runDCC(data.text, data.languagePair, (response: any) => {
-            messageUtil.sendToTab(sender.tab, "showMiniLayerResult", response);
-        });
-        return true;
-    } else {
-        translator.run(data, true, sender.tab);
-        return undefined;
+    const tab = sender?.tab;
+    if (tab) {
+        if (data.dcc) {
+            translator.runDCC(data.text, data.languagePair, (response: any) => {
+                messageUtil.sendToTab(tab, "showMiniLayerResult", response);
+            });
+            return true;
+        }
+        translator.run(data, true, tab);
     }
+    return undefined;
 });
 
 messageUtil.receive("showPopup", (data, sender) => {
-    const incognito = sender.tab && sender.tab.incognito;
-    openPopup(data.url, incognito, data.width, data.height);
+    const tab = sender?.tab;
+    if (tab) openPopup(data.url, tab.incognito, data.width, data.height);
 });
 
 messageUtil.receive("contentScriptLoaded", (data, sender) => {
-    messageUtil.sendToTab(sender.tab, "contentStartup", settings.getAll());
+    const tab = sender?.tab;
+    if (tab) messageUtil.sendToTab(tab, "contentStartup", settings.getAll());
 });
 
 messageUtil.receive("showTranslationResult", (data, sender) => {
     const index = data.href.indexOf("?");
     const config: VisualizerConfig = {
-        multiWindow: settings.get("quick.multiWindow")
+        multiWindow: settings.get("quick.multiWindow"),
     };
     if (index >= 0) {
         if (!config.languagePair) {
             config.languagePair = settings.getFirstLanguagePair();
-            if (!config.languagePair)
-                return;
+            if (!config.languagePair) return;
         }
         config.params = data.href.substr(index);
         config.protocol = settings.getProtocol();
-        config.tab = sender.tab;
-        config.incognito = sender.tab && sender.tab.incognito;
+        config.tab = sender?.tab;
+        config.incognito = sender?.tab?.incognito;
 
         const method = settings.get("micro.method");
         translator.visualizers[method](config);

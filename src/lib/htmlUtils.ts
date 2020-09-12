@@ -10,7 +10,11 @@ export function byId(id: string) {
     return document.getElementById(id);
 }
 
-export function on<K extends keyof HTMLElementEventMap>(node: Node, event: K, callback: (this: HTMLInputElement, ev: HTMLElementEventMap[K]) => any) {
+export function on<T extends keyof HTMLElementEventMap>(
+    node: Node,
+    event: T,
+    callback: (this: HTMLInputElement, ev: HTMLElementEventMap[T]) => any
+) {
     node.addEventListener(event, callback as EventListener);
 }
 
@@ -18,24 +22,20 @@ export function translateElement(element: HTMLElement) {
     const id = element.dataset.l10nId;
     if (id) {
         const content = browser.i18n.getMessage(id);
-        if (content)
-            element.textContent = content;
-        const title = browser.i18n.getMessage(id + "__title");
-        if (title)
-            element.title = title;
+        if (content) element.textContent = content;
+        const title = browser.i18n.getMessage(`${id}__title`);
+        if (title) element.title = title;
     }
 }
 
 export function translateChildren(parent: HTMLElement | Document) {
     const elements = parent.querySelectorAll("[data-l10n-id]");
-    for (let i = 0; i < elements.length; i++)
-        translateElement(elements[i] as HTMLElement);
+    for (const element of elements) translateElement(element as HTMLElement);
 }
 
 export function removeAllChildren(node: HTMLElement) {
     if (node.hasChildNodes()) {
-        while (node.firstChild)
-            node.removeChild(node.firstChild);
+        while (node.firstChild) node.removeChild(node.firstChild);
     }
 }
 
@@ -44,12 +44,11 @@ type ElementAttributes = { [s: string]: string | number | boolean };
 export function createElement(doc: Document, parent: HTMLElement | null, tagName: string, params?: ElementAttributes) {
     const e = doc.createElement(tagName);
     if (params) {
-        for (const key in params) {
+        for (const key of Object.keys(params)) {
             (e as any)[key] = params[key];
         }
     }
-    if (parent)
-        parent.appendChild(e);
+    if (parent) parent.appendChild(e);
     return e;
 }
 
@@ -59,7 +58,7 @@ export function addLink(doc: Document, path: string) {
         createElement(doc, head, "link", {
             href: browser.runtime.getURL(path),
             type: "text/css",
-            rel: "stylesheet"
+            rel: "stylesheet",
         });
     }
 }

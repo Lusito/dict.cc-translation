@@ -17,7 +17,7 @@ export const COMMON_STYLES: StyleMap = {
     "height": "auto",
     "outline": "none",
     "box-shadow": "none",
-    "background": "none"
+    "background": "none",
 };
 
 export const OVERLAY_STYLES: StyleMap = {
@@ -27,12 +27,12 @@ export const OVERLAY_STYLES: StyleMap = {
     "left": 0,
     "right": 0,
     "bottom": 0,
-    "background": "rgba(128, 128, 128, 0.22)"
+    "background": "rgba(128, 128, 128, 0.22)",
 };
 
 export const DEFAULT_PANEL_STYLES: StyleMap = {
     "position": "fixed",
-    "box-shadow": "0 0 4px 1px #adadad"
+    "box-shadow": "0 0 4px 1px #adadad",
 };
 
 export const MICRO_PANEL_STYLES: StyleMap = {
@@ -42,12 +42,12 @@ export const MICRO_PANEL_STYLES: StyleMap = {
     "bottom": "auto",
     "width": "50px",
     "height": "20px",
-    "border-radius": "3px"
+    "border-radius": "3px",
 };
 
 export function applyForcedStyles(elem: HTMLElement, ...stylesArgs: StyleMap[]) {
     for (const styles of stylesArgs) {
-        for (const key in styles) {
+        for (const key of Object.keys(styles)) {
             elem.style.setProperty(key, styles[key].toString(), "important");
         }
     }

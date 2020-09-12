@@ -9,13 +9,13 @@ const allowedAscii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345
 function isWordChar(str: string, i: number) {
     const code = str.charCodeAt(i);
     // unicode
-    if (code >= 127)
-        return code !== 160; // nbsp;
+    if (code >= 127) return code !== 160; // nbsp;
     // ascii
-    return allowedAscii.indexOf(str.charAt(i)) !== -1;
+    return allowedAscii.includes(str.charAt(i));
 }
 
 // Add definitions
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare global {
     interface MouseEvent {
         rangeParent: Node;
@@ -36,8 +36,13 @@ export function detectWordFromEvent(evt: MouseEvent) {
         rangeOffset = evt.rangeOffset;
     } else if (document.caretPositionFromPoint) {
         const pos = document.caretPositionFromPoint(evt.clientX, evt.clientY);
-        rangeParent = pos!.offsetNode;
-        rangeOffset = pos!.offset;
+        if (pos) {
+            rangeParent = pos.offsetNode;
+            rangeOffset = pos.offset;
+        } else {
+            console.error("caretPositionFromPoint returned null");
+            return "";
+        }
     } else if (document.caretRangeFromPoint) {
         const pos = document.caretRangeFromPoint(evt.clientX, evt.clientY);
         rangeParent = pos.startContainer;

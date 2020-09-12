@@ -9,12 +9,13 @@ import { sendToTab } from "../../lib/messageUtil";
 
 // Shows a mini translation layer above the current website.
 export function inpageVisualizer(config: VisualizerConfig) {
-    if (config.tab) { // fixme: else
+    if (config.tab) {
+        // fixme: else
         sendToTab(config.tab, "showMiniLayer", {
             x: config.x,
             y: config.y,
             text: config.text,
-            languagePair: config.languagePair
+            languagePair: config.languagePair,
         });
     }
 }

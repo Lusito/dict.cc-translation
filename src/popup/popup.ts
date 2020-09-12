@@ -5,14 +5,16 @@
  */
 
 import { browser } from "webextension-polyfill-ts";
-import { settings } from "./lib/settings";
-import * as request from "./lib/request";
-import { byId, createElement, on } from "./lib/htmlUtils";
-import "./styles/popup.scss";
+
+import { settings } from "../lib/settings";
+import * as request from "../lib/request";
+import { byId, createElement, on } from "../lib/htmlUtils";
+import "../shared.scss";
+import "./popup.scss";
 
 type DefinitionNode = {
-    tagName?: string,
-    textContent: string
+    tagName?: string;
+    textContent: string;
 };
 
 interface Description {
@@ -21,16 +23,19 @@ interface Description {
 }
 
 type Definition = {
-    textContent?: string,
+    textContent?: string;
     href?: string;
     nodes?: DefinitionNode[];
-    descriptions: Description[]
+    descriptions: Description[];
 };
 
 class Popup {
     private lp = byId("lp") as HTMLInputElement; // dropdown language pair
+
     private search = byId("search") as HTMLInputElement; // text input
+
     private go = byId("go") as HTMLButtonElement; // go button
+
     private result: null | HTMLElement = null;
 
     public constructor() {
@@ -41,14 +46,13 @@ class Popup {
         for (const translation of translations) {
             createElement(document, this.lp, "option", {
                 textContent: translation.v,
-                value: translation.k
+                value: translation.k,
             });
         }
 
         // on enter or click, run search
         on(this.search, "keydown", (e) => {
-            if (e.keyCode === 13)
-                this.runSearch();
+            if (e.keyCode === 13) this.runSearch();
         });
         on(this.go, "click", this.runSearch.bind(this));
 
@@ -59,17 +63,16 @@ class Popup {
     private parseDescriptionNodes(parent: HTMLElement) {
         const result: DefinitionNode[] = [];
         const nodes = parent.childNodes;
-        for (let i = 0; i < nodes.length; i++) {
-            const node = nodes[i];
-            const tagName = (node as HTMLElement).tagName;
+        for (const node of nodes) {
+            const { tagName } = node as HTMLElement;
             if (tagName) {
                 result.push({
                     tagName,
-                    textContent: node.textContent || ""
+                    textContent: node.textContent || "",
                 });
             } else if (node.nodeType === 3) {
                 result.push({
-                    textContent: node.textContent || ""
+                    textContent: node.textContent || "",
                 });
             }
         }
@@ -81,7 +84,7 @@ class Popup {
         if (href.indexOf("/?") === 0) {
             href = urlPrefix + href + urlSuffix;
         } else if (href.indexOf("?") === 0) {
-            href = urlPrefix + "/" + href + urlSuffix;
+            href = `${urlPrefix}/${href}${urlSuffix}`;
         } else if (href.indexOf("http") !== 0) {
             href = "#"; // not as expected, could be javascript, so override
         }
@@ -91,46 +94,43 @@ class Popup {
     private parseDefinitionLists(doc: Document, languagePair: string) {
         const lists = [];
         const dls = doc.querySelectorAll("dl");
-        for (let i = 0; i < dls.length; i++) {
-            const definitions = this.parseDefinitions(dls[i], languagePair);
-            if (definitions.length > 0)
-                lists.push(definitions);
+        for (const dl of dls) {
+            const definitions = this.parseDefinitions(dl, languagePair);
+            if (definitions.length > 0) lists.push(definitions);
         }
         return lists;
     }
 
     private parseDefinitions(dl: HTMLDListElement, languagePair: string) {
-        const urlPrefix = settings.getProtocol() + "www.dict.cc";
-        const urlSuffix = "&lp=" + languagePair;
+        const urlPrefix = `${settings.getProtocol()}www.dict.cc`;
+        const urlSuffix = `&lp=${languagePair}`;
 
         const rows = dl.querySelectorAll("dt,dd");
         const definitions = [];
         let definition: Definition | null = null;
-        for (let i = 0; i < rows.length; i++) {
-            const row = rows[i];
+        for (const row of rows) {
             if (row.tagName === "DT") {
                 const a = row.querySelector("a");
                 if (a) {
                     definition = {
                         textContent: a.textContent || "",
                         href: this.getSafeHref(a, urlPrefix, urlSuffix),
-                        descriptions: []
+                        descriptions: [],
                     };
                     definitions.push(definition);
                 } else {
                     definition = {
                         nodes: this.parseDescriptionNodes(row as HTMLElement),
-                        descriptions: []
+                        descriptions: [],
                     };
                     definitions.push(definition);
                 }
             } else if (definition && row.tagName === "DD") {
                 const links = row.querySelectorAll("a");
-                for (let j = 0; j < links.length; j++) {
-                    const a: HTMLAnchorElement = links[j];
+                for (const a of links) {
                     definition.descriptions.push({
                         href: this.getSafeHref(a, urlPrefix, urlSuffix),
-                        nodes: this.parseDescriptionNodes(a)
+                        nodes: this.parseDescriptionNodes(a),
                     });
                 }
             }
@@ -139,7 +139,7 @@ class Popup {
     }
 
     private onFailedKWClick(e: MouseEvent) {
-        const href = (e.currentTarget as HTMLAnchorElement).href;
+        const { href } = e.currentTarget as HTMLAnchorElement;
         this.runSearchFor(href.replace("www.dict.cc", "pocket.dict.cc"));
         e.stopImmediatePropagation();
         e.preventDefault();
@@ -154,13 +154,11 @@ class Popup {
                 const a = createElement(document, dt, "a", {
                     href: def.href,
                     textContent: def.textContent || "?",
-                    target: "_blank"
+                    target: "_blank",
                 });
-                if (def.href.indexOf("&failed_kw=") > 0)
-                    a.onclick = onFailedKWClick;
+                if (def.href.indexOf("&failed_kw=") > 0) a.onclick = onFailedKWClick;
             } else if (def.nodes) {
-                for (let k = 0; k < def.nodes.length; k++) {
-                    const node = def.nodes[k];
+                for (const node of def.nodes) {
                     if (node.tagName) {
                         createElement(document, dt, node.tagName, { textContent: node.textContent });
                     } else {
@@ -172,10 +170,9 @@ class Popup {
                 const desc = def.descriptions[j];
                 const a = createElement(document, dd, "a", {
                     href: desc.href,
-                    target: "_blank"
+                    target: "_blank",
                 });
-                if (desc.href.indexOf("&failed_kw=") > 0)
-                    a.onclick = onFailedKWClick;
+                if (desc.href.indexOf("&failed_kw=") > 0) a.onclick = onFailedKWClick;
                 for (const node of desc.nodes) {
                     if (node.tagName) {
                         createElement(document, a, node.tagName, { textContent: node.textContent });
@@ -183,7 +180,7 @@ class Popup {
                         a.appendChild(document.createTextNode(node.textContent));
                     }
                 }
-                if ((j + 1) < def.descriptions.length) {
+                if (j + 1 < def.descriptions.length) {
                     createElement(document, dd, "br");
                 }
             }
@@ -195,34 +192,34 @@ class Popup {
     private runSearch() {
         const word = this.search.value.trim();
         if (word !== "") {
-            const url = settings.getProtocol() + "pocket.dict.cc/" + settings.createParams(word, this.lp.value);
+            const url = `${settings.getProtocol()}pocket.dict.cc/${settings.createParams(word, this.lp.value)}`;
             this.runSearchFor(url);
         }
     }
 
     private runSearchFor(url: string) {
-        if (this.result === null)
-            this.result = createElement(document, document.body, "div", { id: "result" });
+        if (this.result === null) this.result = createElement(document, document.body, "div", { id: "result" });
         this.result.textContent = browser.i18n.getMessage("loading");
-        request.getHTML(url, (doc: Document | null) => {
-            if (!this.result || !doc)
-                return;
-            const languagePair = this.lp.value;
-            const definitionLists = this.parseDefinitionLists(doc, languagePair);
-            if (!definitionLists.length) {
-                this.result.textContent = browser.i18n.getMessage("resultFailed");
-            }
-            else {
-                this.result.innerHTML = "";
-                for (const def of definitionLists) {
-                    const destination = createElement(document, this.result, "dl");
-                    this.generateResult(destination, def);
+        request.getHTML(
+            url,
+            (doc: Document | null) => {
+                if (!this.result || !doc) return;
+                const languagePair = this.lp.value;
+                const definitionLists = this.parseDefinitionLists(doc, languagePair);
+                if (!definitionLists.length) {
+                    this.result.textContent = browser.i18n.getMessage("resultFailed");
+                } else {
+                    this.result.innerHTML = "";
+                    for (const def of definitionLists) {
+                        const destination = createElement(document, this.result, "dl");
+                        this.generateResult(destination, def);
+                    }
                 }
+            },
+            () => {
+                if (this.result) this.result.textContent = browser.i18n.getMessage("resultFailed");
             }
-        }, () => {
-            if (this.result)
-                this.result.textContent = browser.i18n.getMessage("resultFailed");
-        });
+        );
     }
 }
 

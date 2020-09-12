@@ -8,12 +8,12 @@
 // Ideally, a popup panel would be used to show the translation, but that is not available in web-extensions.
 
 import { browser } from "webextension-polyfill-ts";
-import * as messageUtil from "../lib/messageUtil";
-import { DCCResult, VisualizerConfig } from "../background/translatorShared";
-import { SettingsSignature, TranslationEntry, TranslationMethod } from "../lib/settingsSignature";
-import { detectWordFromEvent } from "./wordDetection";
-import { MiniLayer } from "./miniLayer";
-import "../styles/minilayer.scss";
+
+import * as messageUtil from "./lib/messageUtil";
+import { DCCResult, VisualizerConfig } from "./background/translatorShared";
+import { SettingsSignature, TranslationEntry, TranslationMethod } from "./lib/settingsSignature";
+import { detectWordFromEvent } from "./content/wordDetection";
+import { MiniLayer } from "./content/miniLayer";
 
 export interface Config {
     method?: number;
@@ -38,7 +38,7 @@ let miniLayer: MiniLayer | null = null;
 function updateWordUnderCursor(e: MouseEvent) {
     // get the selection text
     const selection = window.getSelection();
-    let text = (config.selected && selection) ? selection.toString() : "";
+    let text = config.selected && selection ? selection.toString() : "";
     // try to get the word from the mouse event
     if (!text) {
         text = detectWordFromEvent(e);
@@ -46,7 +46,7 @@ function updateWordUnderCursor(e: MouseEvent) {
     messageUtil.send("setWordUnderCursor", {
         text,
         x: e.clientX,
-        y: e.clientY
+        y: e.clientY,
     });
     return text;
 }
@@ -55,10 +55,12 @@ function getQuickAction(e: MouseEvent) {
     let action = null;
     // Using modifiers
     if (config.quickEnabled) {
-        if ((config.ctrl || config.shift || config.alt)
-            && e.ctrlKey === config.ctrl
-            && e.shiftKey === config.shift
-            && e.altKey === config.alt) {
+        if (
+            (config.ctrl || config.shift || config.alt) &&
+            e.ctrlKey === config.ctrl &&
+            e.shiftKey === config.shift &&
+            e.altKey === config.alt
+        ) {
             if (e.which === 1) {
                 action = "instant";
             } else if (config.menu && e.which === 3) {
@@ -71,9 +73,8 @@ function getQuickAction(e: MouseEvent) {
     if (config.rocker) {
         if (!action && (leftDown || rightDown)) {
             const currentTime = Date.now();
-            if (e.which === 1 && rightDown !== false && (currentTime - rightDown) < 1000)
-                action = "instant";
-            else if (config.menu && e.which === 3 && leftDown !== false && (currentTime - leftDown) < 1000)
+            if (e.which === 1 && rightDown !== false && currentTime - rightDown < 1000) action = "instant";
+            else if (config.menu && e.which === 3 && leftDown !== false && currentTime - leftDown < 1000)
                 action = "menu";
         }
     }
@@ -92,10 +93,8 @@ function preventMouseEventAfterAction(e: MouseEvent) {
 }
 
 function updateRocker(which: number, value: false | number) {
-    if (which === 1)
-        leftDown = value;
-    else if (which === 3)
-        rightDown = value;
+    if (which === 1) leftDown = value;
+    else if (which === 3) rightDown = value;
 }
 
 function onMouseUp(e: MouseEvent) {
@@ -112,17 +111,22 @@ function onMouseDown(e: MouseEvent) {
         lastActionTime = currentTime;
         if (text) {
             if (config.method === TranslationMethod.INPAGE || action === "menu") {
-                miniLayer = new MiniLayer(e.clientX, e.clientY, () => {
-                    if (!miniLayer)
-                        return;
-                    if (action === "menu")
-                        miniLayer.showMenu(browser.i18n.getMessage("translateTo"), text);
-                    else
-                        miniLayer.translateQuick(text);
-                }, () => miniLayer = null, config.translations);
+                miniLayer = new MiniLayer(
+                    e.clientX,
+                    e.clientY,
+                    () => {
+                        if (!miniLayer) return;
+                        if (action === "menu") miniLayer.showMenu(browser.i18n.getMessage("translateTo"), text);
+                        else miniLayer.translateQuick(text);
+                    },
+                    () => {
+                        miniLayer = null;
+                    },
+                    config.translations
+                );
             } else {
                 messageUtil.send("requestQuickTranslation", {
-                    text
+                    text,
                 });
             }
         }
@@ -139,24 +143,28 @@ function onMouseDown(e: MouseEvent) {
 }
 
 function destroyPanels() {
-    if (miniLayer)
-        miniLayer.destroy();
+    if (miniLayer) miniLayer.destroy();
 }
 
 function showMiniLayer(cfg: VisualizerConfig) {
     destroyPanels();
-    miniLayer = new MiniLayer(cfg.x || 0, cfg.y || 0, () => {
-        if (miniLayer && cfg.text)
-            miniLayer.translateQuick(cfg.text, cfg.languagePair);
-    }, () => miniLayer = null, config.translations);
+    miniLayer = new MiniLayer(
+        cfg.x || 0,
+        cfg.y || 0,
+        () => {
+            if (miniLayer && cfg.text) miniLayer.translateQuick(cfg.text, cfg.languagePair);
+        },
+        () => {
+            miniLayer = null;
+        },
+        config.translations
+    );
 }
 
 function showMiniLayerResult(response: DCCResult) {
     if (miniLayer) {
-        if (response.error)
-            miniLayer.showMessage(response.error);
-        else if (response.links)
-            miniLayer.showResult(response.links);
+        if (response.error) miniLayer.showMessage(response.error);
+        else if (response.links) miniLayer.showResult(response.links);
     }
 }
 
@@ -172,10 +180,9 @@ function onSettingsChanged(settings: SettingsSignature) {
         shift: settings["quick.shift"],
         alt: settings["quick.alt"],
         menu: settings["quick.right"],
-        rocker: settings["quick.rocker"]
+        rocker: settings["quick.rocker"],
     };
-    if (miniLayer)
-        miniLayer.setTranslations(config.translations);
+    if (miniLayer) miniLayer.setTranslations(config.translations);
 }
 
 messageUtil.receive("contentStartup", (settings) => {
