@@ -24,7 +24,7 @@
     "lint:style": "npm run lint:style:base -- --check",
     "lint:style:base": "prettier \"{src,_locales}/**/*.{ts,tsx,js,json,scss}\" \"./*.{ts,tsx,js,json,scss}\" --quote-props consistent",
     "lint:style:fix": "npm run lint:style:base -- --write",
-    "release": "npm run clean && npm run copy && npm run build && npm run build:zip && npm pack",
+    "release": "npm run build:all && npm pack",
     "start": "web-ext run -s build"
   },
   "browserslist": [
