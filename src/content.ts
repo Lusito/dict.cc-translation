@@ -51,36 +51,6 @@ function updateWordUnderCursor(e: MouseEvent) {
     return text;
 }
 
-function getQuickAction(e: MouseEvent) {
-    let action = null;
-    // Using modifiers
-    if (config.quickEnabled) {
-        if (
-            (config.ctrl || config.shift || config.alt) &&
-            e.ctrlKey === config.ctrl &&
-            e.shiftKey === config.shift &&
-            e.altKey === config.alt
-        ) {
-            if (e.which === 1) {
-                action = "instant";
-            } else if (config.menu && e.which === 3) {
-                action = "menu";
-            }
-        }
-    }
-
-    // Support for rocker gestures
-    if (config.rocker) {
-        if (!action && (leftDown || rightDown)) {
-            const currentTime = Date.now();
-            if (e.which === 1 && rightDown !== false && currentTime - rightDown < 1000) action = "instant";
-            else if (config.menu && e.which === 3 && leftDown !== false && currentTime - leftDown < 1000)
-                action = "menu";
-        }
-    }
-    return action;
-}
-
 function preventMouseEventAfterAction(e: MouseEvent) {
     const currentTime = Date.now();
     const deltaTime = currentTime - lastActionTime;
@@ -92,54 +62,90 @@ function preventMouseEventAfterAction(e: MouseEvent) {
     return true;
 }
 
-function updateRocker(which: number, value: false | number) {
-    if (which === 1) leftDown = value;
-    else if (which === 3) rightDown = value;
+function performAction(e: MouseEvent, action: string) {
+    lastActionTime = Date.now();
+    leftDown = false;
+    rightDown = false;
+
+    const text = updateWordUnderCursor(e);
+    if (text) {
+        if (config.method === TranslationMethod.INPAGE || action === "menu") {
+            miniLayer = new MiniLayer(
+                e.clientX,
+                e.clientY,
+                () => {
+                    if (!miniLayer) return;
+                    if (action === "menu") miniLayer.showMenu(browser.i18n.getMessage("translateTo"), text);
+                    else miniLayer.translateQuick(text);
+                },
+                () => {
+                    miniLayer = null;
+                },
+                config.translations
+            );
+        } else {
+            messageUtil.send("requestQuickTranslation", {
+                text,
+            });
+        }
+    }
+
+    e.preventDefault();
+    e.stopPropagation();
+    return true;
+}
+
+function handleMouse(e: MouseEvent, down: boolean) {
+    const { which } = e;
+
+    // Using modifiers
+    if (down && config.quickEnabled) {
+        if (
+            (config.ctrl || config.shift || config.alt) &&
+            e.ctrlKey === config.ctrl &&
+            e.shiftKey === config.shift &&
+            e.altKey === config.alt
+        ) {
+            if (which === 1) {
+                return performAction(e, "instant");
+            }
+            if (config.menu && which === 3) {
+                return performAction(e, "menu");
+            }
+        }
+    }
+
+    // Support for rocker gestures
+    if (config.rocker) {
+        const currentTime = Date.now();
+
+        if (which === 1) {
+            leftDown = down ? currentTime : false;
+            if (rightDown !== false && currentTime - rightDown < 1000) {
+                return performAction(e, "instant");
+            }
+        } else if (which === 3) {
+            rightDown = down ? currentTime : false;
+            if (leftDown !== false && currentTime - leftDown < 1000) {
+                return performAction(e, "menu");
+            }
+        }
+    }
+    return false;
 }
 
 function onMouseUp(e: MouseEvent) {
-    updateRocker(e.which, false);
-    return preventMouseEventAfterAction(e);
+    return !handleMouse(e, false) || preventMouseEventAfterAction(e);
 }
 
 function onMouseDown(e: MouseEvent) {
     destroyPanels();
-    const currentTime = Date.now();
-    const action = getQuickAction(e);
-    if (action) {
-        const text = updateWordUnderCursor(e);
-        lastActionTime = currentTime;
-        if (text) {
-            if (config.method === TranslationMethod.INPAGE || action === "menu") {
-                miniLayer = new MiniLayer(
-                    e.clientX,
-                    e.clientY,
-                    () => {
-                        if (!miniLayer) return;
-                        if (action === "menu") miniLayer.showMenu(browser.i18n.getMessage("translateTo"), text);
-                        else miniLayer.translateQuick(text);
-                    },
-                    () => {
-                        miniLayer = null;
-                    },
-                    config.translations
-                );
-            } else {
-                messageUtil.send("requestQuickTranslation", {
-                    text,
-                });
-            }
-        }
-
-        e.preventDefault();
-        e.stopPropagation();
-    } else if (e.which === 3 && config.contextEnabled) {
+    if (handleMouse(e, true)) return false;
+    if (e.which === 3 && config.contextEnabled) {
         updateWordUnderCursor(e);
     }
 
-    updateRocker(e.which, currentTime);
-
-    return action === null;
+    return true;
 }
 
 function destroyPanels() {
