@@ -24,6 +24,21 @@ Results can be shown as a pop-up or in a new tab or as an in-page translation la
 ## About Dict.cc
 Dict.cc is a nice dictionary with mostly German English translations, but other languages are also available and growing. Dict.cc shows quite a lot of different possible results, instead of just one, so you have a better chance of finding the correct one.
 
+## Rocker Gestures
+
+A rocker gesture is the use of one mouse button followed by the other mouse button.
+For example, this triggers the rocker gesture for a quick translation:
+- right mouse down
+- left mouse down
+- left mouse up
+- right mouse up
+
+The opposite direction will give you a context menu, where you can select the language:
+- left mouse down
+- right mouse down
+- right mouse up
+- left mouse up
+
 ## Help
 If you have problems, questions or other feedback, please [create an issue](https://github.com/Lusito/dict.cc-translation/issues) here on Github.
 
