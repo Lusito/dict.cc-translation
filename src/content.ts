@@ -124,9 +124,9 @@ function handleMouse(e: MouseEvent, down: boolean) {
             if (rightDown !== false && currentTime - rightDown < 1000) {
                 return performAction(e, "instant");
             }
-        } else if (config.menu && which === 3) {
+        } else if (which === 3) {
             rightDown = down ? currentTime : false;
-            if (leftDown !== false && currentTime - leftDown < 1000) {
+            if (config.menu && leftDown !== false && currentTime - leftDown < 1000) {
                 return performAction(e, "menu");
             }
         }
