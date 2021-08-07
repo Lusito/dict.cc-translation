@@ -15,11 +15,15 @@ body {
     font-size: 13px;
     display: flex;
     flex-direction: column;
+
+    @media (prefers-color-scheme: dark) {
+        background: #23222b;
+        color: #f6f6fa;
+    }
 }
 
 body {
     max-width: 700px;
-    background: #f0f0f0;
     padding: 0;
     box-sizing: border-box;
 }
@@ -30,6 +34,10 @@ body {
 
 body.firefox > #wrapper {
     border: 1px solid #c1c1c1;
+
+    @media (prefers-color-scheme: dark) {
+        border-color: #7291cf;
+    }
 }
 
 body:not(.firefox) {
@@ -97,6 +105,10 @@ label > input[type="radio"] + span {
     > div:not(.active) {
         display: none;
     }
+
+    @media (prefers-color-scheme: dark) {
+        background: #23222b;
+    }
 }
 
 #buttons {
@@ -118,6 +130,10 @@ label > input[type="radio"] + span {
 fieldset {
     border: 1px solid #a7a7a7;
     box-sizing: border-box;
+
+    @media (prefers-color-scheme: dark) {
+        border-color: #7291cf;
+    }
 }
 
 th,
@@ -174,6 +190,10 @@ table {
     tr.active {
         background: highlight;
     }
+
+    @media (prefers-color-scheme: dark) {
+        border-color: #7291cf;
+    }
 }
 
 #translationsTableHead {
@@ -210,6 +230,11 @@ table {
     background: #ffffe1;
     box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.59);
     padding: 10px;
+
+    @media (prefers-color-scheme: dark) {
+        background: #023757;
+        border-color: #7291cf;
+    }
 }
 
 .dialog.prompt > div > input {
@@ -267,10 +292,18 @@ table {
         border: 1px solid #a7a7a7;
         outline: 1px solid transparent;
         padding: 7px 12px;
+
+        @media (prefers-color-scheme: dark) {
+            background: #2f2d3a;
+        }
     }
     > div.active {
         background: white;
         border-bottom: none;
+
+        @media (prefers-color-scheme: dark) {
+            background: #23222b;
+        }
     }
     > div:not(:last-child) {
         border-right: 0;
@@ -339,4 +372,13 @@ input[type="checkbox"]:disabled:checked + span:before {
 }
 input[type="checkbox"]:checked + span:before {
     color: #5095ea;
+}
+
+a {
+    color: black;
+    font-weight: bold;
+
+    @media (prefers-color-scheme: dark) {
+        color: #f6f6fa;
+    }
 }

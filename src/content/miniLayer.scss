@@ -26,6 +26,11 @@ body {
     color: #000000;
     font: 13px Arial;
     background: #f0f0f0;
+
+    @media (prefers-color-scheme: dark) {
+        background: #23222b;
+        color: #f6f6fa;
+    }
 }
 
 #logo {
@@ -47,6 +52,12 @@ a:hover {
 a,
 a:hover {
     color: #666666;
+
+    @media (prefers-color-scheme: dark) {
+        &:not(#logo) {
+            filter: invert(1);
+        }
+    }
 }
 
 #result {
