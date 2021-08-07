@@ -4,7 +4,7 @@
  * @see https://github.com/Lusito/dict.cc-translation
  */
 
-import { browser, Tabs } from "webextension-polyfill-ts";
+import browser, { Tabs } from "webextension-polyfill";
 
 import { VisualizerConfig } from "../translatorShared";
 import { isFirefox, browserInfo } from "../../lib/browserInfo";

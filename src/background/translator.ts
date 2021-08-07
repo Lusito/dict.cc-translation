@@ -6,7 +6,7 @@
 
 // This file is used to run translations as the user configured it
 
-import { browser, Tabs } from "webextension-polyfill-ts";
+import browser, { Tabs } from "webextension-polyfill";
 
 import { settings } from "../lib/settings";
 import * as request from "../lib/request";

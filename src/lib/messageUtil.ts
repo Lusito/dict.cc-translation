@@ -6,7 +6,7 @@
 
 // This file contains communication helpers
 
-import { browser, Runtime, Tabs } from "webextension-polyfill-ts";
+import browser, { Runtime, Tabs } from "webextension-polyfill";
 
 // fixme: types
 export type Callback = (params: any, sender?: Runtime.MessageSender) => any;

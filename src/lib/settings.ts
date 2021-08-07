@@ -6,7 +6,7 @@
 
 // This file manages all settings, their defaults and changes
 
-import { browser, Storage } from "webextension-polyfill-ts";
+import browser, { Storage } from "webextension-polyfill";
 
 import * as messageUtil from "./messageUtil";
 import { isFirefox } from "./browserInfo";

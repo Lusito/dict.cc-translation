@@ -5,7 +5,7 @@
  */
 
 // This file creates and recreates the context menu (when settings changed)
-import { browser, Menus, Tabs } from "webextension-polyfill-ts";
+import browser, { Menus, Tabs } from "webextension-polyfill";
 
 import * as messageUtil from "../lib/messageUtil";
 import * as translator from "./translator";

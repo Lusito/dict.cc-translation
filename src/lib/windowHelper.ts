@@ -6,7 +6,7 @@
 
 // This file contains helpers to manage the popup windows (one for normal, one for incognito)
 
-import { browser, Windows } from "webextension-polyfill-ts";
+import browser, { Windows } from "webextension-polyfill";
 
 export const cache: { [s: string]: number } = {};
 
